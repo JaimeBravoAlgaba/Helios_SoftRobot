@@ -1,7 +1,7 @@
 {
   "board": {
-    "active_layer": 0,
-    "active_layer_preset": "",
+    "active_layer": 37,
+    "active_layer_preset": "All Copper Layers",
     "auto_track_width": true,
     "hidden_nets": [],
     "high_contrast_mode": 0,
@@ -33,6 +33,7 @@
       3,
       4,
       5,
+      8,
       9,
       10,
       11,
@@ -61,11 +62,11 @@
       35,
       36
     ],
-    "visible_layers": "8001200_7fffffff",
+    "visible_layers": "fffffff_ffffffff",
     "zone_display_mode": 0
   },
   "meta": {
-    "filename": "Helios_PCB.kicad_prl",
+    "filename": "Helios_PCB_emitter.kicad_prl",
     "version": 3
   },
   "project": {
