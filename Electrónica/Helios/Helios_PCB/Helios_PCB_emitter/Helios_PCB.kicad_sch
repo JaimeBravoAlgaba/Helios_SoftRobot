@@ -1491,7 +1491,7 @@
   (symbol (lib_id "power:GND") (at 38.1 140.97 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 062bb37c-0b34-45bf-a3bb-61501cc11844)
-    (property "Reference" "#PWR?" (id 0) (at 38.1 147.32 0)
+    (property "Reference" "#PWR0104" (id 0) (at 38.1 147.32 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 38.227 145.3642 0))
@@ -1507,7 +1507,7 @@
   (symbol (lib_id "Device:R") (at 153.67 99.06 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 0c5a3185-120f-43f8-bc82-7edbf44849a1)
-    (property "Reference" "R3" (id 0) (at 155.448 99.4938 0)
+    (property "Reference" "R5" (id 0) (at 155.448 99.4938 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Rpd" (id 1) (at 155.448 100.7622 0)
@@ -1566,7 +1566,7 @@
   (symbol (lib_id "power:VCC") (at 76.2 106.68 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 24c2d2cf-16de-462d-8fd4-151ef01fc97c)
-    (property "Reference" "#PWR?" (id 0) (at 76.2 110.49 0)
+    (property "Reference" "#PWR0102" (id 0) (at 76.2 110.49 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "VCC" (id 1) (at 76.581 102.2858 0))
@@ -1640,7 +1640,7 @@
   (symbol (lib_id "Device:R") (at 168.91 41.91 180) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 9210b7d5-4a3c-42da-a207-c6563600611c)
-    (property "Reference" "R2" (id 0) (at 170.688 42.3438 0)
+    (property "Reference" "R4" (id 0) (at 170.688 42.3438 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "RL" (id 1) (at 170.688 43.6122 0)
@@ -1678,7 +1678,7 @@
   (symbol (lib_id "power:GND") (at 88.9 140.97 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid b4420c8d-3935-4603-a990-13c1cb4fecdb)
-    (property "Reference" "#PWR?" (id 0) (at 88.9 147.32 0)
+    (property "Reference" "#PWR0101" (id 0) (at 88.9 147.32 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 89.027 145.3642 0))
@@ -1729,7 +1729,7 @@
   (symbol (lib_id "power:GND") (at 76.2 121.92 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid bd363a98-b7ff-4a61-853f-37ae7b18e643)
-    (property "Reference" "#PWR?" (id 0) (at 76.2 128.27 0)
+    (property "Reference" "#PWR0103" (id 0) (at 76.2 128.27 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 76.327 126.3142 0))
@@ -1761,7 +1761,7 @@
   (symbol (lib_id "power:GND") (at 50.8 121.92 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid d1ca6120-06c9-4651-995d-ca0be7881930)
-    (property "Reference" "#PWR?" (id 0) (at 50.8 128.27 0)
+    (property "Reference" "#PWR0105" (id 0) (at 50.8 128.27 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 50.927 126.3142 0))
@@ -1836,6 +1836,21 @@
   )
 
   (symbol_instances
+    (path "/b4420c8d-3935-4603-a990-13c1cb4fecdb"
+      (reference "#PWR0101") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/24c2d2cf-16de-462d-8fd4-151ef01fc97c"
+      (reference "#PWR0102") (unit 1) (value "VCC") (footprint "")
+    )
+    (path "/bd363a98-b7ff-4a61-853f-37ae7b18e643"
+      (reference "#PWR0103") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/062bb37c-0b34-45bf-a3bb-61501cc11844"
+      (reference "#PWR0104") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/d1ca6120-06c9-4651-995d-ca0be7881930"
+      (reference "#PWR0105") (unit 1) (value "GND") (footprint "")
+    )
     (path "/00000000-0000-0000-0000-000062e1e0ee"
       (reference "#PWR0106") (unit 1) (value "VCC") (footprint "")
     )
@@ -1856,21 +1871,6 @@
     )
     (path "/b519207b-f790-45ec-93f9-cd9d9e707bc2"
       (reference "#PWR0115") (unit 1) (value "VCC") (footprint "")
-    )
-    (path "/062bb37c-0b34-45bf-a3bb-61501cc11844"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/24c2d2cf-16de-462d-8fd4-151ef01fc97c"
-      (reference "#PWR?") (unit 1) (value "VCC") (footprint "")
-    )
-    (path "/b4420c8d-3935-4603-a990-13c1cb4fecdb"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/bd363a98-b7ff-4a61-853f-37ae7b18e643"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/d1ca6120-06c9-4651-995d-ca0be7881930"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
     )
     (path "/9b6b6cbf-1b99-4cd5-865d-032611ca9f97"
       (reference "D0") (unit 1) (value "LED") (footprint "LED_SMD:LED_PLCC-2")
@@ -1908,14 +1908,14 @@
     (path "/471934c8-9a10-4d31-ba56-0bc40113c0db"
       (reference "R2") (unit 1) (value "Rf") (footprint "Helios:RS_0805")
     )
-    (path "/9210b7d5-4a3c-42da-a207-c6563600611c"
-      (reference "R2") (unit 1) (value "RL") (footprint "Helios:RS_0805")
-    )
-    (path "/0c5a3185-120f-43f8-bc82-7edbf44849a1"
-      (reference "R3") (unit 1) (value "Rpd") (footprint "Helios:RS_0805")
-    )
     (path "/e25a04ec-21c5-43dd-9303-6ad094206daf"
       (reference "R3") (unit 1) (value "Rf") (footprint "Helios:RS_0805")
+    )
+    (path "/9210b7d5-4a3c-42da-a207-c6563600611c"
+      (reference "R4") (unit 1) (value "RL") (footprint "Helios:RS_0805")
+    )
+    (path "/0c5a3185-120f-43f8-bc82-7edbf44849a1"
+      (reference "R5") (unit 1) (value "Rpd") (footprint "Helios:RS_0805")
     )
     (path "/00000000-0000-0000-0000-000062e1e0e7"
       (reference "U0") (unit 1) (value "OPA2380") (footprint "Helios:OPA2380")
