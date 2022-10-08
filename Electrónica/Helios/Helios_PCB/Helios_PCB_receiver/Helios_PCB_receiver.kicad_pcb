@@ -107,7 +107,7 @@
     (property "Sheetname" "")
     (path "/1b3b7816-1958-4d51-90f5-a12d16cf0fb8")
     (attr smd)
-    (fp_text reference "U1" (at 0 -4) (layer "F.SilkS")
+    (fp_text reference "U1" (at 0.1 -0.1) (layer "F.SilkS") hide
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp f5e7f372-36f3-4244-bcfd-77d6c043882e)
     )
@@ -232,7 +232,7 @@
     (property "Sheetname" "")
     (path "/00000000-0000-0000-0000-000062e1e0e7")
     (attr smd)
-    (fp_text reference "U0" (at 0 -4) (layer "F.SilkS")
+    (fp_text reference "U0" (at 0 -0.1) (layer "F.SilkS") hide
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 368d6979-3255-40c8-8139-76218f4c4485)
     )
