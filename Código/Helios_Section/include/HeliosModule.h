@@ -1,5 +1,5 @@
 #pragma once
-//PINOUT:
+#include <Arduino.h>
 
 // Photodiodes Sensing Pins:
 #define P0 A0
@@ -10,7 +10,11 @@
 #define P5 A5
 #define P6 A6
 #define P7 A7
-#define P8 A8
 
 // LED Control Pin
 #define LED 5
+
+// Communication Functions
+void initCommunications();
+boolean commandAvailable();
+byte readCommand();
