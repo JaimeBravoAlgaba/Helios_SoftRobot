@@ -12,9 +12,29 @@
 #define P7 A7
 
 // LED Control Pin
-#define LED 5
+#define LED 9
+#define LED_ON_TIME 50 //ms
+
+// Data structure
+struct HeliosData
+{
+    uint16_t p0;
+    uint16_t p1;
+    uint16_t p2;
+    uint16_t p3;
+};
+
+union HeliosData_union
+{
+   HeliosData data;   
+   char data_bytes[sizeof(data)];
+};
 
 // Communication Functions
 void initCommunications();
 boolean commandAvailable();
 byte readCommand();
+
+// Sensing Functions
+void heliosInit();
+HeliosData readSensors();
