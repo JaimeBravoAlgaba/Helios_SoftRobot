@@ -10,6 +10,9 @@ void setup () {
 }
 
 void loop () {
-   hd.data = readSensors();
-   delay(50);
+   if(digitalRead(SS))
+   {  
+      hd.data = readSensors();
+      delay(20);
+   }
 }
