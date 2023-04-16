@@ -26,3 +26,12 @@ uint16_t HeliosSensor :: getReading(uint8_t i)
 {
   return _currReading.data[i];
 }
+
+void HeliosSensor :: print()
+{
+    for(uint8_t i=0; i<3; ++i)
+    {
+      Serial.print(_currReading.data[i]); Serial.print(",");
+    }
+    Serial.println(_currReading.data[3]);
+}

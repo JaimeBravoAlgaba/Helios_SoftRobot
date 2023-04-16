@@ -44,6 +44,7 @@
       HeliosSensor(uint8_t ssPin);  // Constructor
       HeliosData update();
       uint16_t getReading(uint8_t i);
+      void print();
 
     private:
       uint8_t _ssPin;
