@@ -1,4 +1,6 @@
 #pragma once
+  #include <Arduino.h>
+  #include <SPI.h>
 	#include <stdint.h>
   #include "motion.h"
   #include "kinematics.h"
@@ -22,12 +24,28 @@
   static const uint8_t READ_DELAY = 5;
   static const uint8_t STEP_DELAY = 1000;
 
+  // Data structure for sensor readings.
   union HeliosData
   {
-    struct structData
-    {
-      uint16_t p0, p1, p2, p3;
-    } data;
-    
+    uint16_t data[4] = {0, 0, 0, 0};    
     char data_bytes[sizeof(data)];
+  };
+
+  // Data structure to manage the coordinates of a PCC section.
+  struct CoordsPCC
+  {
+    float theta, phi;
+  };
+
+  class HeliosSensor : SPIClass
+  {
+    public:
+      HeliosSensor(uint8_t ssPin);
+      HeliosData update();
+      uint16_t getReading(uint8_t i);
+
+    private:
+      uint8_t _ssPin;
+      uint8_t _buffLen;
+      HeliosData _currReading;
   };
