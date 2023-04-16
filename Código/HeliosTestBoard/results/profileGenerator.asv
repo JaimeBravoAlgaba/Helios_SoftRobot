@@ -1,0 +1,41 @@
+%% CONFIGURATION
+t_period = 1;
+t_end = 1;
+peak = 3500;
+s = 10;
+
+%% PROFILE GENERATION
+[pp, p, t] = sinusoidal(t_period, t_end, peak, s);
+
+steps = [0, round(diff(pp)/s)];
+k = find(steps);
+t_flank = t(k);
+
+prof.t = [0, diff(t_flank)*1e6;
+prof.d = steps(k)>=0;
+
+%% PLOTTING
+figure; set(gcf, 'Color', 'w');
+    ax1=subplot(221); grid on; hold on;
+        plot(t, p);
+        stairs(t, pp);
+
+    ax2=subplot(222); grid on; hold on;
+        plot(t, prof.t);
+        
+    ax3=subplot(223); grid on; hold on;
+        stairs(t, steps);
+
+    ax4=subplot(224); grid on; hold on;
+        plot(t, prof.d);
+linkaxes([ax1, ax3], 'x');
+linkaxes([ax2, ax4], 'x');
+
+%% FUNCTIONS
+function [pp, p, t] = sinusoidal(t_period, t_end, peak, s)
+    N = 1e6;
+    f = @(t) peak*sin(2*pi*t/t_period);
+    t = 0:t_end/N:t_end;
+    p = f(t);
+    pp = round(p/s)*s;
+end
