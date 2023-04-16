@@ -7,8 +7,7 @@ HeliosData hd;
 TaskHandle_t task_sensors;
 TaskHandle_t task_loop;
 
-
-Section heliosSection(1, 0.05, 0.0225, 0.006);
+ContinuumSection heliosSection(1, 0.05, 0.0225, 0.006);
 
 void readSensors(void * pvParameters)
 {
@@ -26,9 +25,7 @@ void readSensors(void * pvParameters)
 
 void mainLoop(void * pvParameters)
 {
-  CoordsPCC ref;
-  ref.theta = M_PI/6.0;
-  ref.phi = 0;
+  CoordsPCC ref = {M_PI/6.0, 0};
 
   float l1_ini = 0.05;
   float l3_ini = 0.05;
@@ -36,8 +33,8 @@ void mainLoop(void * pvParameters)
 
   for(;;)
   {
-    int n1 = heliosSection.length2steps(l1_ini-heliosSection.cableIKine(ref.theta, ref.phi, 1));
-    int n3 = heliosSection.length2steps(l3_ini-heliosSection.cableIKine(ref.theta, ref.phi, 3));
+    int n1 = heliosSection.length2steps(l1_ini-heliosSection.cableIKine(ref, 1));
+    int n3 = heliosSection.length2steps(l3_ini-heliosSection.cableIKine(ref, 3));
 
     uint8_t dir1 = n1<0;
     uint8_t dir3 = n3<0;

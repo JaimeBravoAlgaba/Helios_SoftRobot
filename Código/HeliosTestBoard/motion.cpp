@@ -15,7 +15,6 @@ void testBenchInit()
   pinMode(STP_C, OUTPUT);
   pinMode(STP_D, OUTPUT);
 
-  pinMode(SS0, OUTPUT);
   pinMode(SS1, OUTPUT);
 }
 

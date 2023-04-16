@@ -3,6 +3,8 @@
 HeliosSensor :: HeliosSensor(uint8_t ssPin)
 {
   _ssPin = ssPin;
+  pinMode(_ssPin, OUTPUT);
+
   _buffLen = sizeof(HeliosData);
   SPIClass::begin(SCK, MISO, MOSI, _ssPin);
   SPIClass::setClockDivider(SPI_CLOCK_DIV32);

@@ -1,5 +1,6 @@
-#include "kinematics.h"
-Section::Section(int N, float L, float rc, float rp)
+#include "HeliosTestBoard.h"
+
+ContinuumSection::ContinuumSection(int N, float L, float rc, float rp)
 {
   _nSegments = N;
   _length = L;
@@ -11,12 +12,12 @@ Section::Section(int N, float L, float rc, float rp)
   _delta[3] = 3*M_PI/2.0;
 }
 
-float Section::cableIKine(float theta, float phi, uint8_t i)
+float ContinuumSection::cableIKine(CoordsPCC coords, uint8_t i)
 {
-  return 2*sin(theta/(2.0*_nSegments))*(_length*_nSegments/theta-_rc*sin(phi+_delta[i]));
+  return 2*sin(coords.theta/(2.0*_nSegments))*(_length*_nSegments/coords.theta-_rc*sin(coords.phi+_delta[i]));
 }
 
-int Section::length2steps(float l)
+int ContinuumSection::length2steps(float l)
 {
   return l/(_rp*ANGLE_PER_STEP);
 }
