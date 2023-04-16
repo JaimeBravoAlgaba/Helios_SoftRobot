@@ -51,6 +51,21 @@
       HeliosData _currReading;
   };
 
+  class Actuator
+  {
+    public:
+      Actuator(uint8_t dir, uint8_t stp, uint8_t en, int spr, float pulleyRadius);
+      void step(int steps, uint32_t stepDelay);
+
+    private:
+      uint8_t _dir; // Direction pin.
+      uint8_t _stp; // Step pin.
+      uint8_t _en;  // Enable pin.
+      int _spr;     // Steps per revolution.
+      float _pulleyRadius;
+      bool _reverse;
+  };
+
   class ContinuumSection
   {
     public:

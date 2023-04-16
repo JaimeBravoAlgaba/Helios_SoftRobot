@@ -4,6 +4,9 @@
 HeliosSensor hSensor(SS0);
 HeliosData hd;
 
+Actuator motorA(DIR_A, STP_A, EN_MOT, STEPS_PER_REVOLUTION, 6);
+Actuator motorC(DIR_C, STP_C, EN_MOT, STEPS_PER_REVOLUTION, 6);
+
 TaskHandle_t task_sensors;
 TaskHandle_t task_loop;
 
@@ -35,20 +38,9 @@ void mainLoop(void * pvParameters)
   {
     int n1 = heliosSection.length2steps(l1_ini-heliosSection.cableIKine(ref, 1));
     int n3 = heliosSection.length2steps(l3_ini-heliosSection.cableIKine(ref, 3));
-
-    uint8_t dir1 = n1<0;
-    uint8_t dir3 = n3<0;
-    n1 = abs(n1);
-    n3 = abs(n3);
-
-    for(int c=0; c<n3; c++)
-    {
-      moveStepper('C', 1, dir3, STEP_DELAY);
-    }
-    for(int c=0; c<n1; c++)
-    {
-      moveStepper('A', 1, dir1, STEP_DELAY);
-    }
+    
+    motorC.step(n3, STEP_DELAY);
+    motorA.step(n1, STEP_DELAY);
 
     //disableMotors();
     vTaskDelete(task_sensors);
