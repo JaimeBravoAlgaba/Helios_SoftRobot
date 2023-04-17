@@ -22,7 +22,7 @@
 	static const uint8_t LED_IND = 6;
 
   static const uint8_t READ_DELAY = 5;
-  static const uint8_t STEP_DELAY = 1000;
+  static const uint8_t STEP_DELAY = 5000;
 
   // Data structure for sensor readings.
   union HeliosData
@@ -76,9 +76,9 @@
       int length2steps(float l);
 
     private:
-      int _nSegments;         // Number of segments.
-      float _length;           // Segment length.
+      int _nSegments;     // Number of segments.
+      float _length;      // Segment length.
       float _rc;          // Cable disposition radius.
       float _rp;          // Pulley radius.
-      float _delta[4];  // Cable offset angle.
+      float _offset[4];   // Cable offset angle.
   };

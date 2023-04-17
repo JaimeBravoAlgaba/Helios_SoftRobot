@@ -17,7 +17,12 @@ void readSensors(void * pvParameters)
   for(;;)
   {
     hd = hSensor.update();
-    hSensor.print();
+
+    for(uint8_t i=0; i<3; ++i)
+    {
+      Serial.print(hd.data[i]); Serial.print(",");
+    }
+    Serial.println(hd.data[3]);
   }
 }
 
@@ -49,7 +54,7 @@ void setup()
   digitalWrite(SS0, HIGH);    // disable Slave Select
   digitalWrite(SS1, HIGH);    // disable Slave Select
 
-  Serial.begin(115200);
+  Serial.begin(57600);
 
   int mainCore = xPortGetCoreID();
 
