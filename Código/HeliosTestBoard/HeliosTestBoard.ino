@@ -2,7 +2,6 @@
 #include <SPI.h>
 
 HeliosSensor hSensor(SS0);
-HeliosData hd;
 
 Actuator motorA(DIR_A, STP_A, EN_MOT, STEPS_PER_REVOLUTION, 6);
 Actuator motorC(DIR_C, STP_C, EN_MOT, STEPS_PER_REVOLUTION, 6);
@@ -16,13 +15,9 @@ void readSensors(void * pvParameters)
 {
   for(;;)
   {
-    hd = hSensor.update();
-
-    for(uint8_t i=0; i<3; ++i)
-    {
-      Serial.print(hd.data[i]); Serial.print(",");
-    }
-    Serial.println(hd.data[3]);
+    hSensor.update();
+    hSensor.print();
+    delay(50);
   }
 }
 
@@ -32,6 +27,7 @@ void mainLoop(void * pvParameters)
 
   float l1_ini = 0.05;
   float l3_ini = 0.05;
+  delay(5000);
   enableMotors();
 
   for(;;)
@@ -43,18 +39,15 @@ void mainLoop(void * pvParameters)
     motorA.step(n1, STEP_DELAY);
 
     //disableMotors();
-    vTaskDelete(task_sensors);
+    //vTaskDelete(task_sensors);
     vTaskDelete(task_loop);
   }
 }
 
 void setup()
 {
+  Serial.begin(115200);
   testBenchInit();
-  digitalWrite(SS0, HIGH);    // disable Slave Select
-  digitalWrite(SS1, HIGH);    // disable Slave Select
-
-  Serial.begin(57600);
 
   int mainCore = xPortGetCoreID();
 

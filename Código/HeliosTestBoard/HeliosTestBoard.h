@@ -24,12 +24,8 @@
   static const uint8_t READ_DELAY = 5;
   static const uint8_t STEP_DELAY = 5000;
 
-  // Data structure for sensor readings.
-  union HeliosData
-  {
-    uint16_t data[4] = {0, 0, 0, 0};    
-    char data_bytes[sizeof(data)];
-  };
+  // Data type for sensor readings
+  typedef uint16_t SensorData;
 
   // Data structure to manage the coordinates of a PCC section.
   struct CoordsPCC
@@ -37,19 +33,28 @@
     float theta, phi;
   };
 
+  const uint8_t SPI_REQ_A  = lowByte(0x1);
+  const uint8_t SPI_REQ_B  = lowByte(0x3);
+  const uint8_t SPI_REQ_C  = lowByte(0x5);
+  const uint8_t SPI_REQ_D  = lowByte(0x7);
+  const uint8_t SPI_OK     = lowByte(0xE);
+  const uint8_t SPI_ERR    = lowByte(0xF); 
+
   // Class for managing the Helios Sensor.
   class HeliosSensor : SPIClass
   {
     public:
       HeliosSensor(uint8_t ssPin);  // Constructor
-      HeliosData update();
-      uint16_t getReading(uint8_t i);
+      uint8_t reqByte(uint8_t msg);
+      uint8_t reqData(uint8_t req, SensorData* data, uint8_t len, uint8_t ttl);
+      void update();
+      SensorData getReading(uint8_t i);
       void print();
 
     private:
       uint8_t _ssPin;
       uint8_t _buffLen;
-      HeliosData _currReading;
+      SensorData _currReading[4] = {0,0,0,0};
   };
 
   class Actuator
