@@ -1,12 +1,14 @@
 #pragma once
   #include <Arduino.h>
-  #include <SPI.h>
+  #include <Wire.h>
 	#include <stdint.h>
   #include "motion.h"
   #include <math.h>
 
   #define STEPS_PER_REVOLUTION 7000
   #define ANGLE_PER_STEP 2*M_PI/(STEPS_PER_REVOLUTION*1.0)
+
+  const byte I2C_ADDR_HS0 = 0x0A;
 	
 	static const uint8_t DIR_A  = 32;
 	static const uint8_t STP_A  = 33;
@@ -16,8 +18,6 @@
 	static const uint8_t STP_C  = 14;
 	static const uint8_t DIR_D  = 12;
 	static const uint8_t STP_D  = 13;
-	static const uint8_t SS1    =  5;
-	static const uint8_t SS0    =  4;
 	static const uint8_t EN_MOT =  0;
 	static const uint8_t LED_IND = 6;
 
@@ -33,26 +33,16 @@
     float theta, phi;
   };
 
-  const uint8_t SPI_REQ_A  = lowByte(0x1);
-  const uint8_t SPI_REQ_B  = lowByte(0x3);
-  const uint8_t SPI_REQ_C  = lowByte(0x5);
-  const uint8_t SPI_REQ_D  = lowByte(0x7);
-  const uint8_t SPI_OK     = lowByte(0xE);
-  const uint8_t SPI_ERR    = lowByte(0xF); 
-
   // Class for managing the Helios Sensor.
-  class HeliosSensor : SPIClass
+  class HeliosSensor
   {
     public:
-      HeliosSensor(uint8_t ssPin);  // Constructor
-      uint8_t reqByte(uint8_t msg);
-      uint8_t reqData(uint8_t req, SensorData* data, uint8_t len, uint8_t ttl);
+      HeliosSensor();  // Constructor
       void update();
       SensorData getReading(uint8_t i);
       void print();
 
     private:
-      uint8_t _ssPin;
       uint8_t _buffLen;
       SensorData _currReading[4] = {0,0,0,0};
   };

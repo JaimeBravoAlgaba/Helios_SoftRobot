@@ -1,7 +1,7 @@
 #include "HeliosTestBoard.h"
 #include <SPI.h>
 
-HeliosSensor hSensor(SS0);
+HeliosSensor hSensor;
 
 Actuator motorA(DIR_A, STP_A, EN_MOT, STEPS_PER_REVOLUTION, 6);
 Actuator motorC(DIR_C, STP_C, EN_MOT, STEPS_PER_REVOLUTION, 6);

@@ -14,8 +14,6 @@ void testBenchInit()
   pinMode(STP_B, OUTPUT);
   pinMode(STP_C, OUTPUT);
   pinMode(STP_D, OUTPUT);
-
-  pinMode(SS1, OUTPUT);
 }
 
 void moveStepper(char mot, int nSteps, int dir, int stepDelay)

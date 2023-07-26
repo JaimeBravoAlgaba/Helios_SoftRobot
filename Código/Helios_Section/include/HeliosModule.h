@@ -1,5 +1,9 @@
 #pragma once
 #include <Arduino.h>
+#include <Wire.h>
+
+// I2C Address
+const byte I2C_ADDR = 0x0A;
 
 // Photodiodes Sensing Pins:
 #define P0 A0
@@ -21,17 +25,9 @@ typedef uint16_t SensorData;
 // Periods for moving average filter
 #define MVA_PERIODS 5.0
 
-// Protocol codes
-const uint8_t SPI_REQ_A  = lowByte(0x1);
-const uint8_t SPI_REQ_B  = lowByte(0x3);
-const uint8_t SPI_REQ_C  = lowByte(0x5);
-const uint8_t SPI_REQ_D  = lowByte(0x7);
-const uint8_t SPI_OK     = lowByte(0xE);
-const uint8_t SPI_ERR    = lowByte(0xF); 
-
-
 // Communication Functions
 void initCommunications();
+void requestEvent();
 
 // Sensing Functions
 void heliosInit();
