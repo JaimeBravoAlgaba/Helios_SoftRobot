@@ -14,7 +14,7 @@ ContinuumSection::ContinuumSection(int N, float L, float rc, float rp)
 
 float ContinuumSection::cableIKine(CoordsPCC coords, uint8_t i)
 {
-  return 2*sin(coords.theta/(2.0*_nSegments))*(_length*_nSegments/coords.theta-_rc*sin(coords.phi+_offset[i]));
+  return 2*sin(coords.theta/(2.0*_nSegments))*(_length*_nSegments/coords.theta-_rc*sin(coords.phi+M_PI/2.0+_offset[i]));
 }
 
 int ContinuumSection::length2steps(float l)
