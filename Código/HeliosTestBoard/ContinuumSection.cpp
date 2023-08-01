@@ -59,6 +59,16 @@ void ContinuumSection::move(CoordsPCC ref)
   }
 }
 
+void ContinuumSection::enableMotors()
+{
+  _actuator.enable();
+}
+
+void ContinuumSection::disableMotors()
+{
+  _actuator.disable();
+}
+
 void ContinuumSection::updateSensor()
 {
   _sensor.update();

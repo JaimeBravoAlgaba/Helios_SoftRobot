@@ -56,3 +56,21 @@ void ActuatorBench :: step(int sA, int sB, int sC, int sD, float stepDelay)
     digitalWrite(_stpD, LOW);
     delayMicroseconds(stepDelay/2);
 }
+
+void ActuatorBench::enable()
+{
+  digitalWrite(_en, LOW);
+}
+
+void ActuatorBench::disable()
+{
+  digitalWrite(_en, HIGH);
+  digitalWrite(_stpA, LOW);
+  digitalWrite(_dirA, LOW);
+  digitalWrite(_stpB, LOW);
+  digitalWrite(_dirB, LOW);
+  digitalWrite(_stpC, LOW);
+  digitalWrite(_dirC, LOW);
+  digitalWrite(_stpD, LOW);
+  digitalWrite(_dirD, LOW);
+}

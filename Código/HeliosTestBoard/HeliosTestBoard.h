@@ -2,7 +2,6 @@
   #include <Arduino.h>
   #include <Wire.h>
 	#include <stdint.h>
-  #include "motion.h"
   #include <math.h>
 
   #define STEPS_PER_REVOLUTION 6400
@@ -67,6 +66,8 @@
       ActuatorBench(uint8_t dirA, uint8_t stpA, uint8_t dirB, uint8_t stpB, uint8_t dirC, uint8_t stpC, uint8_t dirD, uint8_t stpD, uint8_t en, int spr, float pulleyRadius);
       void init();
       void step(int sA, int sB, int sC, int sD, float stepDelay);
+      void enable();
+      void disable();
 
     private:
       uint8_t _dirA, _dirB, _dirC, _dirD; // Direction pins.
@@ -83,8 +84,12 @@
       ContinuumSection(ActuatorBench actuator, HeliosSensor sensor, int N, float L, float rc, float rp);
       void init();
       float cableIKine(CoordsPCC coords, uint8_t i);
-      int length2steps(float l);
+      int  length2steps(float l);
+      
       void move(CoordsPCC ref);
+      void enableMotors();
+      void disableMotors();
+      
       void updateSensor();
       void printSensor();
 

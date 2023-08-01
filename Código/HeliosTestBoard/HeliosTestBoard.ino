@@ -20,7 +20,7 @@ void mainLoop(void * pvParameters)
 {
   CoordsPCC ref = {M_PI/4.0, 0};
   delay(1000);
-  enableMotors();
+  heliosSection.enableMotors();
 
   for(;;)
   {
@@ -42,6 +42,4 @@ void setup()
   xTaskCreatePinnedToCore(mainLoop, "MainLoop", 10000, NULL, 2, &task_loop, mainCore);
 }
 
-void loop()
-{
-}
+void loop(){}
