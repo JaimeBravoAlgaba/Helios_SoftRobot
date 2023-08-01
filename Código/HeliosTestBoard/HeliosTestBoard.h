@@ -7,7 +7,6 @@
 
   #define STEPS_PER_REVOLUTION 6400
   #define ANGLE_PER_STEP 2*M_PI/(STEPS_PER_REVOLUTION*1.0)
-  #define V_MAX 3000.0 // Steps per second
 
   #define REVERSE_A false
   #define REVERSE_B false
@@ -29,6 +28,13 @@
 
   static const uint8_t READ_DELAY = 5;
   static const float STEP_DELAY = 200.0;
+
+  #define ACTUATOR_CONFIG_A DIR_A, STP_A, DIR_B, STP_B, DIR_C, STP_C, DIR_D, STP_D, EN_MOT, STEPS_PER_REVOLUTION, 6
+
+  static const float SEGMENTS_NUM = 1.0;     // Number of segments in a section
+  static const float SEGMENTS_LEN = 0.048;   // Length [m] of a segment
+  static const float SEGMENTS_RC  = 0.0225;  // Radius [m] of the cable distribution circunference
+  static const float SEGMENTS_RP  = 0.006;   // Radius [m] of the actuator pulley
 
   // Data type for sensor readings
   typedef uint16_t SensorData;

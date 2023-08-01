@@ -3,8 +3,7 @@
 
 HeliosSensor hSensor;
 
-ActuatorBench actuator(DIR_A, STP_A, DIR_B, STP_B, DIR_C, STP_C, DIR_D, STP_D, EN_MOT, STEPS_PER_REVOLUTION, 6);
-ContinuumSection heliosSection(actuator, 1.0, 0.048, 0.0225, 0.006);
+ContinuumSection heliosSection(ActuatorBench(ACTUATOR_CONFIG_A), SEGMENTS_NUM, SEGMENTS_LEN, SEGMENTS_RC, SEGMENTS_RP);
 
 TaskHandle_t task_sensors;
 TaskHandle_t task_loop;
@@ -15,6 +14,7 @@ void readSensors(void * pvParameters)
   {
     hSensor.update();
     hSensor.print();
+    delay(10);
   }
 }
 
@@ -28,9 +28,8 @@ void mainLoop(void * pvParameters)
   {
     for(float phi=0.0; phi<2*M_PI; phi = phi+M_PI/100.0)
       heliosSection.move(CoordsPCC{M_PI/6.0, phi});
-    //disableMotors();
-    //vTaskDelete(task_sensors);
-    //vTaskDelete(task_loop);
+    delay(1000);
+    heliosSection.move(CoordsPCC{0.001, 0});
   }
 }
 
