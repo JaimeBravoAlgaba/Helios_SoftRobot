@@ -1,5 +1,7 @@
 #include "HeliosTestBoard.h"
 
+ActuatorBench :: ActuatorBench(){}
+
 ActuatorBench :: ActuatorBench(uint8_t dirA, uint8_t stpA, uint8_t dirB, uint8_t stpB, uint8_t dirC, uint8_t stpC, uint8_t dirD, uint8_t stpD, uint8_t en, int spr, float pulleyRadius)
 {
   _dirA = dirA;
