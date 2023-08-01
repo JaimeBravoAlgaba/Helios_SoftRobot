@@ -80,14 +80,17 @@
   class ContinuumSection
   {
     public:
-      ContinuumSection(ActuatorBench actuator, int N, float L, float rc, float rp);
+      ContinuumSection(ActuatorBench actuator, HeliosSensor sensor, int N, float L, float rc, float rp);
       void init();
       float cableIKine(CoordsPCC coords, uint8_t i);
       int length2steps(float l);
       void move(CoordsPCC ref);
+      void updateSensor();
+      void printSensor();
 
     private:
       ActuatorBench _actuator;
+      HeliosSensor _sensor;
 
       int _nSegments;     // Number of segments.
       float _length;      // Segment length.

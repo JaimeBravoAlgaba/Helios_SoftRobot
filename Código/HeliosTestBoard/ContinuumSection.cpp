@@ -1,8 +1,9 @@
 #include "HeliosTestBoard.h"
 
-ContinuumSection::ContinuumSection(ActuatorBench actuator, int N, float L, float rc, float rp)
+ContinuumSection::ContinuumSection(ActuatorBench actuator, HeliosSensor sensor, int N, float L, float rc, float rp)
 {
   _actuator = actuator;
+  _sensor = sensor;
   _nSegments = N;
   _length = L;
   _rc = rc;
@@ -56,4 +57,14 @@ void ContinuumSection::move(CoordsPCC ref)
     }
     _actuator.step(s[0], s[1], s[2], s[3], STEP_DELAY);
   }
+}
+
+void ContinuumSection::updateSensor()
+{
+  _sensor.update();
+}
+
+void ContinuumSection::printSensor()
+{
+  _sensor.print();
 }

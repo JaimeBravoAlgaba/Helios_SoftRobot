@@ -1,9 +1,7 @@
 #include "HeliosTestBoard.h"
 #include <SPI.h>
 
-HeliosSensor hSensor;
-
-ContinuumSection heliosSection(ActuatorBench(ACTUATOR_CONFIG_A), SEGMENTS_NUM, SEGMENTS_LEN, SEGMENTS_RC, SEGMENTS_RP);
+ContinuumSection heliosSection(ActuatorBench(ACTUATOR_CONFIG_A), HeliosSensor(), SEGMENTS_NUM, SEGMENTS_LEN, SEGMENTS_RC, SEGMENTS_RP);
 
 TaskHandle_t task_sensors;
 TaskHandle_t task_loop;
@@ -12,8 +10,8 @@ void readSensors(void * pvParameters)
 {
   for(;;)
   {
-    hSensor.update();
-    hSensor.print();
+    heliosSection.updateSensor();
+    heliosSection.printSensor();
     delay(10);
   }
 }
