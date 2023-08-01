@@ -16,6 +16,11 @@ ContinuumSection::ContinuumSection(ActuatorBench actuator, int N, float L, float
     _cableLengths[i] = _length;
 }
 
+void ContinuumSection::init()
+{
+  _actuator.init();
+}
+
 float ContinuumSection::cableIKine(CoordsPCC coords, uint8_t i)
 {
   return 2*sin(coords.theta/(2.0*float(_nSegments)))*(_length*float(_nSegments)/coords.theta+_rc*sin(coords.phi+_offset[i]))*1.115;

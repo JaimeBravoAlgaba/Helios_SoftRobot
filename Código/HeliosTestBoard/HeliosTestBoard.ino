@@ -36,10 +36,9 @@ void mainLoop(void * pvParameters)
 void setup()
 {
   Serial.begin(115200);
-  testBenchInit();
+  heliosSection.init();
 
   int mainCore = xPortGetCoreID();
-
   xTaskCreatePinnedToCore(readSensors, "TaskSensors", 10000, NULL, 2, &task_sensors, !mainCore);
   delay(10);
   xTaskCreatePinnedToCore(mainLoop, "MainLoop", 10000, NULL, 2, &task_loop, mainCore);

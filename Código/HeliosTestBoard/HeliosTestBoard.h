@@ -32,7 +32,7 @@
   #define ACTUATOR_CONFIG_A DIR_A, STP_A, DIR_B, STP_B, DIR_C, STP_C, DIR_D, STP_D, EN_MOT, STEPS_PER_REVOLUTION, 6
 
   static const float SEGMENTS_NUM = 1.0;     // Number of segments in a section
-  static const float SEGMENTS_LEN = 0.048;   // Length [m] of a segment
+  static const float SEGMENTS_LEN = 0.05;    // Length [m] of a segment
   static const float SEGMENTS_RC  = 0.0225;  // Radius [m] of the cable distribution circunference
   static const float SEGMENTS_RP  = 0.006;   // Radius [m] of the actuator pulley
 
@@ -65,6 +65,7 @@
     public:
       ActuatorBench();
       ActuatorBench(uint8_t dirA, uint8_t stpA, uint8_t dirB, uint8_t stpB, uint8_t dirC, uint8_t stpC, uint8_t dirD, uint8_t stpD, uint8_t en, int spr, float pulleyRadius);
+      void init();
       void step(int sA, int sB, int sC, int sD, float stepDelay);
 
     private:
@@ -80,7 +81,7 @@
   {
     public:
       ContinuumSection(ActuatorBench actuator, int N, float L, float rc, float rp);
-
+      void init();
       float cableIKine(CoordsPCC coords, uint8_t i);
       int length2steps(float l);
       void move(CoordsPCC ref);

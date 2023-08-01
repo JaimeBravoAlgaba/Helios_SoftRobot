@@ -17,7 +17,10 @@ ActuatorBench :: ActuatorBench(uint8_t dirA, uint8_t stpA, uint8_t dirB, uint8_t
   _en = en;
   _spr = spr;
   _pulleyRadius = pulleyRadius;
+}
 
+void ActuatorBench :: init()
+{
   pinMode(_dirA, OUTPUT);
   pinMode(_dirB, OUTPUT);
   pinMode(_dirC, OUTPUT);
