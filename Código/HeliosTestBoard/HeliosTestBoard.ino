@@ -1,5 +1,4 @@
 #include "HeliosTestBoard.h"
-#include <SPI.h>
 
 ContinuumSection heliosSection(ActuatorBench(ACTUATOR_CONFIG_A), HeliosSensor(), SEGMENTS_NUM, SEGMENTS_LEN, SEGMENTS_RC, SEGMENTS_RP);
 
