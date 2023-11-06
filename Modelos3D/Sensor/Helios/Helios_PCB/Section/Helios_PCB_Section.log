@@ -1,5 +1,5 @@
 Conversión de OBJ en Solid Edge
-Fecha: jueves,noviembre 02,2023 12:10
+Fecha: lunes,noviembre 06,2023 02:53
 Archivo fuente:D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Section\Helios_PCB_Section.obj
 Autor: Desconocido
 Organización: Desconocido
@@ -23,6 +23,6 @@ Crear operación base: Activado
 Habilitar registro de anotaciones: Activado
 
 Avance en la conversión:
-Warn: Unrecognized statement: "s" was seen 1 times.
+Warn: Unrecognized statement: "s" was seen 465 times.
 Proceso de conversión completado
-Tiempo total requerido para convertir y posprocesar:00 : 00 : 23
+Tiempo total requerido para convertir y posprocesar:00 : 01 : 07
