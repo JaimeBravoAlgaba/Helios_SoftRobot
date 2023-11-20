@@ -1,0 +1,22 @@
+%TF.GenerationSoftware,KiCad,Pcbnew,(7.0.0)*%
+%TF.CreationDate,2023-11-14T12:39:04+01:00*%
+%TF.ProjectId,Helios_PCB_panel,48656c69-6f73-45f5-9043-425f70616e65,rev?*%
+%TF.SameCoordinates,Original*%
+%TF.FileFunction,Legend,Bot*%
+%TF.FilePolarity,Positive*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW (7.0.0)) date 2023-11-14 12:39:04*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+%ADD10C,0.150000*%
+G04 APERTURE END LIST*
+D10*
+X128000000Y-100000000D02*
+G75*
+G03*
+X128000000Y-100000000I-18000000J0D01*
+G01*
+M02*
