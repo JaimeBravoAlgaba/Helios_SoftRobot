@@ -1,4 +1,4 @@
-21526545966554904
+21529946888674387
 Arduino
 Sparkfun_Pro_Micro
 Sparkfun Pro Micro
@@ -20,6 +20,13 @@ audio belton reverb
 0
 7
 7
+BNO_055
+BNO_055
+
+
+0
+10
+10
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -78770,6 +78777,13 @@ TO-264-5 Vertical RM 3.81mm
 0
 5
 5
+Pololu
+PololuMotor
+
+
+0
+2
+2
 Potentiometer_SMD
 Potentiometer_ACP_CA6-VSMD_Vertical
 Potentiometer, vertical, ACP CA6-VSMD, http://www.acptechnologies.com/wp-content/uploads/2017/06/01-ACP-CA6.pdf
