@@ -1,6 +1,8 @@
-#include "HeliosTestBoard.h"
+// BOARD: "DOIT ESP32 DEVKIT V1"
 
-ContinuumSection heliosSection(ActuatorBench(ACTUATOR_CONFIG_A), HeliosSensor(), SEGMENTS_NUM, SEGMENTS_LEN, SEGMENTS_RC, SEGMENTS_RP);
+#include "HeliosPanel.h"
+
+ContinuumSection heliosSection(ActuatorBench(ACTUATOR_CONFIG_0), HeliosSensor(), SEGMENTS_NUM, SEGMENTS_LEN, SEGMENTS_RC, SEGMENTS_RP);
 
 TaskHandle_t task_sensors;
 TaskHandle_t task_loop;

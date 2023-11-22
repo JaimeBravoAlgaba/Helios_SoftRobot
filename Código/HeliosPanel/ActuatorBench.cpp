@@ -1,4 +1,4 @@
-#include "HeliosTestBoard.h"
+#include "HeliosPanel.h"
 
 ActuatorBench :: ActuatorBench(){}
 

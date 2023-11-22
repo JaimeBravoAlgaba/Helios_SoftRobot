@@ -1,4 +1,4 @@
-#include "HeliosTestBoard.h"
+#include "HeliosPanel.h"
 
 ContinuumSection::ContinuumSection(ActuatorBench actuator, HeliosSensor sensor, int N, float L, float rc, float rp)
 {

@@ -14,21 +14,45 @@
 
   const byte I2C_ADDR_HS0 = 0x0A;
 	
-	static const uint8_t DIR_A  = 32;
-	static const uint8_t STP_A  = 33;
-	static const uint8_t DIR_B  = 25;
-	static const uint8_t STP_B  = 26;
-	static const uint8_t DIR_C  = 27;
-	static const uint8_t STP_C  = 14;
-	static const uint8_t DIR_D  = 12;
-	static const uint8_t STP_D  = 13;
-	static const uint8_t EN_MOT =  0;
-	static const uint8_t LED_IND = 6;
+  // PINOUT
+    // Motor Drivers
+    static const uint8_t EN0 = 34; // Section 0  motor drivers enable.
+    static const uint8_t EN1 = 35; // Section 1  motor drivers enable.
+    static const uint8_t EN2 = 32; // Section 2  motor drivers enable.
+
+    static const uint8_t S0  = 33; // Step pin for MX_0 motors.
+    static const uint8_t S1  = 25; // Step pin for MX_1 motors.
+    static const uint8_t S2  = 26; // Step pin for MX_2 motors.
+    static const uint8_t S3  = 27; // Step pin for MX_3 motors.
+
+    static const uint8_t D0  = 14; // Direction pin for MX_0 motors.
+    static const uint8_t D1  = 12; // Direction pin for MX_1 motors.
+    static const uint8_t D2  = 13; // Direction pin for MX_2 motors.
+    static const uint8_t D3  = 15; // Direction pin for MX_3 motors.
+
+    // I2C interface    
+    static const uint8_t I2C_SDA = 21;
+    static const uint8_t I2C_SCL = 22;
+
+    // Buzzer
+    static const uint8_t BUZZ = 24; // Buzzer control pin.
+
+    // Extra GPIO interface
+    static const uint8_t GPIO_0 = 0;
+    static const uint8_t GPIO_1 = 4;
+    static const uint8_t GPIO_2 = 16;
+    static const uint8_t GPIO_3 = 17;
+
+    // SPI interface
+    static const uint8_t SPI_MOSI = 23;
+    static const uint8_t SPI_MISO = 19;
+    static const uint8_t SPI_SCK  = 18;
+    static const uint8_t SPI_CS   = 5;
 
   static const uint8_t READ_DELAY = 5;
   static const float STEP_DELAY = 200.0;
 
-  #define ACTUATOR_CONFIG_A DIR_A, STP_A, DIR_B, STP_B, DIR_C, STP_C, DIR_D, STP_D, EN_MOT, STEPS_PER_REVOLUTION, 6
+  #define ACTUATOR_CONFIG_0 D0, S0, D1, S1, D2, S2, D3, S3, EN0, STEPS_PER_REVOLUTION, 6
 
   static const float SEGMENTS_NUM = 1.0;     // Number of segments in a section
   static const float SEGMENTS_LEN = 0.05;    // Length [m] of a segment
