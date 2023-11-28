@@ -1,76 +1,133 @@
 #include "HeliosPanel.h"
 
-ActuatorBench :: ActuatorBench(){}
+float cableLengths[3][4] = {{0,0,0},{0,0,0},{0,0,0}};
+float cableOffsets[3] = {0,0,0}; // REVIEW!!!!
 
-ActuatorBench :: ActuatorBench(uint8_t dirA, uint8_t stpA, uint8_t dirB, uint8_t stpB, uint8_t dirC, uint8_t stpC, uint8_t dirD, uint8_t stpD, uint8_t en, int spr, float pulleyRadius)
+void initActuator()
 {
-  _dirA = dirA;
-  _dirB = dirB;
-  _dirC = dirC;
-  _dirD = dirD;
+  pinMode(EN0, OUTPUT); 
+  pinMode(EN1, OUTPUT);
+  pinMode(EN2, OUTPUT); 
 
-  _stpA = stpA;
-  _stpB = stpB;
-  _stpC = stpC;
-  _stpD = stpD;
-
-  _en = en;
-  _spr = spr;
-  _pulleyRadius = pulleyRadius;
+  pinMode(S0, OUTPUT);
+  pinMode(S1, OUTPUT);
+  pinMode(S2, OUTPUT);
+  pinMode(S3, OUTPUT);
+  
+  pinMode(D0, OUTPUT);
+  pinMode(D1, OUTPUT);
+  pinMode(D2, OUTPUT);
+  pinMode(D3, OUTPUT);
 }
 
-void ActuatorBench :: init()
+float cableIKine(CoordsPCC coords, uint8_t i)
 {
-  pinMode(_dirA, OUTPUT);
-  pinMode(_dirB, OUTPUT);
-  pinMode(_dirC, OUTPUT);
-  pinMode(_dirD, OUTPUT);
+  return 2*sin(coords.theta/(2.0*float(SEGMENTS_NUM)))*(SEGMENTS_LEN*float(SEGMENTS_NUM)/coords.theta+SEGMENTS_RC*sin(coords.phi+cableOffsets[i]))*1.115;
+}
 
-  pinMode(_stpA, OUTPUT);
-  pinMode(_stpB, OUTPUT);
-  pinMode(_stpC, OUTPUT);
-  pinMode(_stpD, OUTPUT);
+int length2steps(float l)
+{
+  return l/(SEGMENTS_RP*ANGLE_PER_STEP);
+}
 
-  pinMode(_en, OUTPUT);  
+void enableSection(uint8_t sec)
+{
+  switch (sec)
+  {
+    case 0:
+      digitalWrite(EN0, LOW);
+      break;
+
+    case 1:
+      digitalWrite(EN1, LOW);
+      break;
+
+    case 2:
+      digitalWrite(EN2, LOW);
+      break;
+
+    default:
+      digitalWrite(EN0, LOW);
+      digitalWrite(EN1, LOW);
+      digitalWrite(EN2, LOW);
+      break;
+  }
+}
+
+void disableSection(uint8_t sec)
+{
+  switch (sec)
+  {
+    case 0:
+      digitalWrite(EN0, HIGH);
+      break;
+
+    case 1:
+      digitalWrite(EN1, HIGH);
+      break;
+
+    case 2:
+      digitalWrite(EN2, HIGH);
+      break;
+
+    default:
+      digitalWrite(EN0, HIGH);
+      digitalWrite(EN1, HIGH);
+      digitalWrite(EN2, HIGH);
+      break;
+  }
 }
 
 // Execute one step in desired motors. 
-void ActuatorBench :: step(int sA, int sB, int sC, int sD, float stepDelay)
+void stepSection(uint8_t sec, int s0, int s1, int s2, int s3, float stepDelay)
 {
+  disableSection(SEC_ALL);
+  enableSection(sec);
   // Set direction for each motor:
-    digitalWrite(_dirA, REVERSE_A?!sA<0:sA<0);
-    digitalWrite(_dirB, REVERSE_B?!sB<0:sB<0);
-    digitalWrite(_dirC, REVERSE_C?!sC<0:sC<0);
-    digitalWrite(_dirD, REVERSE_D?!sD<0:sD<0);
+    digitalWrite(D0, REVERSE_0?!s0<0:s0<0);
+    digitalWrite(D1, REVERSE_1?!s1<0:s1<0);
+    digitalWrite(D2, REVERSE_2?!s2<0:s2<0);
+    digitalWrite(D3, REVERSE_3?!s3<0:s3<0);
 
   // Execute steps:
-    digitalWrite(_stpA, sA!=0);
-    digitalWrite(_stpB, sB!=0);
-    digitalWrite(_stpC, sC!=0);
-    digitalWrite(_stpD, sD!=0);
+    digitalWrite(S0, s0!=0);
+    digitalWrite(S1, s1!=0);
+    digitalWrite(S2, s2!=0);
+    digitalWrite(S3, s3!=0);
     delayMicroseconds(stepDelay/2);
     
-    digitalWrite(_stpA, LOW);
-    digitalWrite(_stpB, LOW);
-    digitalWrite(_stpC, LOW);
-    digitalWrite(_stpD, LOW);
+  enableSection(SEC_ALL);
+    
+    digitalWrite(S0, LOW);
+    digitalWrite(S1, LOW);
+    digitalWrite(S2, LOW);
+    digitalWrite(S3, LOW);
     delayMicroseconds(stepDelay/2);
 }
 
-void ActuatorBench::enable()
-{
-  digitalWrite(_en, LOW);
-}
+void moveSection(uint8_t sec, CoordsPCC ref)
+{ 
+  int dn[4];
+  for(uint8_t i=0; i<4; ++i)
+  {
+    float aux =  cableIKine(ref, i);
+    dn[i] = length2steps(aux-cableLengths[sec][i]);
+    cableLengths[sec][i] = aux;
+  }
 
-void ActuatorBench::disable()
-{
-  digitalWrite(_en, HIGH);
-  digitalWrite(_stpA, LOW);
-  digitalWrite(_dirA, LOW);
-  digitalWrite(_stpB, LOW);
-  digitalWrite(_dirB, LOW);
-  digitalWrite(_stpC, LOW);
-  digitalWrite(_dirC, LOW);
-  digitalWrite(_stpD, LOW);
-  digitalWrite(_dirD, LOW);
+  int N = max({abs(dn[0]), abs(dn[1]), abs(dn[2]), abs(dn[3])});
+  float v[4] = {dn[0]/(N*STEP_DELAY), dn[1]/(N*STEP_DELAY), dn[2]/(N*STEP_DELAY), dn[3]/(N*STEP_DELAY)};
+  float r[4] = {0, 0, 0, 0};
+  int   s[4] = {0, 0, 0, 0};
+
+  for (int i=0; i<N; ++i)
+  {
+    for(uint8_t i=0; i<4; ++i)
+    {
+      r[i] = r[i] + v[i]*STEP_DELAY;
+      s[i] = floor(r[i]);
+      r[i] = r[i] - float(s[i]);
+    }
+    stepSection(sec, s[0], s[1], s[2], s[3], STEP_DELAY);
+  }
 }

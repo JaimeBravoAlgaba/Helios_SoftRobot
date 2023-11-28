@@ -1,17 +1,19 @@
 #include "HeliosPanel.h"
 
-HeliosSensor :: HeliosSensor()
+SensorData currReading[4] = {0,0,0,0};
+uint8_t buffLen = sizeof(currReading);
+
+void initSensor()
 {
-  _buffLen = sizeof(_currReading);
   Wire.begin();
 }
 
-void HeliosSensor :: update()
+void updateSensor()
 {
-  Wire.requestFrom(I2C_ADDR_HS0, _buffLen);
+  Wire.requestFrom(I2C_ADDR_HS0, buffLen);
 
   uint8_t index = 0;
-  byte* pointer = (byte*)_currReading;
+  byte* pointer = (byte*)currReading;
   while (Wire.available())
   {
     *(pointer + index) = (byte)Wire.read();
@@ -19,17 +21,17 @@ void HeliosSensor :: update()
   }
 }
 
-SensorData HeliosSensor :: getReading(uint8_t i)
+SensorData getSensorReading(uint8_t i)
 {
-  return _currReading[i];
+  return currReading[i];
 }
 
-void HeliosSensor :: print()
+void printSensor()
 {
     Serial.print(0); Serial.print(",");
     for(uint8_t i=0; i<3; ++i)
     {
-      Serial.print(_currReading[i]); Serial.print(",");
+      Serial.print(currReading[i]); Serial.print(",");
     }
-    Serial.println(_currReading[3]);
+    Serial.println(currReading[3]);
 }
