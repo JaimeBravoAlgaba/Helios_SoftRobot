@@ -7,21 +7,23 @@ void heliosInit()
     pinMode(P2, INPUT);
     pinMode(P3, INPUT);
     pinMode(LED, OUTPUT);
-}
-
-HeliosData readSensors()
-{
-    HeliosData data;
     
     digitalWrite(LED, HIGH);
-    delay(LED_ON_TIME);
+}
 
-    data.p0 = analogRead(P0);
-    data.p1 = analogRead(P1);
-    data.p2 = analogRead(P2);
-    data.p3 = analogRead(P3);
+void readSensors(SensorData* hd)
+{
+    hd[0] = hd[0]*(MVA_PERIODS-1)/MVA_PERIODS + analogRead(P0)/MVA_PERIODS;
+    hd[1] = hd[1]*(MVA_PERIODS-1)/MVA_PERIODS + analogRead(P1)/MVA_PERIODS;
+    hd[2] = hd[2]*(MVA_PERIODS-1)/MVA_PERIODS + analogRead(P2)/MVA_PERIODS;
+    hd[3] = hd[3]*(MVA_PERIODS-1)/MVA_PERIODS + analogRead(P3)/MVA_PERIODS;
+}
 
-    digitalWrite(LED, LOW);
-
-    return data;
+void printSensors(SensorData* hd)
+{
+    // print out data
+    Serial.print(hd[0]); Serial.print(',');
+    Serial.print(hd[1]); Serial.print(',');
+    Serial.print(hd[2]); Serial.print(',');
+    Serial.println(hd[3]);
 }

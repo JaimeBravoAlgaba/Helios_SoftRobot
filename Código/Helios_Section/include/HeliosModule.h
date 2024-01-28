@@ -1,40 +1,54 @@
 #pragma once
 #include <Arduino.h>
+#include <Wire.h>
+#include <SoftWire.h>
+#include <AsyncDelay.h>
+
+// I2C Communications
+const byte I2C_ADDR = 0x0A; // I2C Address of the board
+const byte IMU_ADDR = 0x68; // SW I2C Address of the IMU (MPU6050 module)
+const uint8_t SW_SDA = 16;  // SW I2C SDA pin
+const uint8_t SW_SCL = 10;  // SW I2C SCL pin
 
 // Photodiodes Sensing Pins:
 #define P0 A0
 #define P1 A1
 #define P2 A2
 #define P3 A3
-#define P4 A4
-#define P5 A5
-#define P6 A6
-#define P7 A7
+#define P4 4
+#define P5 6
+#define P6 8
+#define P7 9
 
 // LED Control Pin
-#define LED 9
-#define LED_ON_TIME 50 //ms
+#define LED 15
+#define LED_ON_TIME 100 //ms
 
-// Data structure
-struct HeliosData
+// Data type for sensor readings
+typedef uint16_t SensorData;
+
+// Data structure for IMU readings
+struct ImuData
 {
-    uint16_t p0;
-    uint16_t p1;
-    uint16_t p2;
-    uint16_t p3;
+    int16_t acc_x, acc_y, acc_z;    // variables for accelerometer raw data
+    int16_t gyr_x, gyr_y, gyr_z;    // variables for gyro raw data
+    int16_t temp;                   // variable for temperature data
 };
 
-union HeliosData_union
-{
-   HeliosData data;   
-   char data_bytes[sizeof(data)];
-};
+// Periods for moving average filter
+#define MVA_PERIODS 5.0
 
 // Communication Functions
 void initCommunications();
-boolean commandAvailable();
-byte readCommand();
+void requestEvent();
 
 // Sensing Functions
 void heliosInit();
-HeliosData readSensors();
+void readSensors(SensorData*);
+void printSensors(SensorData*);
+
+// IMU functions
+char* convert_int16_to_str(int16_t);
+void initIMU();
+void readIMU(ImuData*);
+void printIMU(ImuData*);

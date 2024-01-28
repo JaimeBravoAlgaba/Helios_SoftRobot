@@ -1,15 +1,32 @@
 #include <HeliosModule.h>
 
-volatile byte command = 0x00;
+SensorData data[4] = {0, 0, 0, 0};     // Sample vector
+ImuData imu_data;
 
-HeliosData_union hd;
+AsyncDelay imu_read_interval;
 
-void setup () {
+void setup ()
+{
+   Serial.begin(9600);
+
    initCommunications();
    heliosInit();
+   initIMU();   
+   imu_read_interval.start(100, AsyncDelay::MILLIS);
 }
 
-void loop () {
-   hd.data = readSensors();
-   delay(50);
+void loop ()
+{
+   if (imu_read_interval.isExpired())
+   {
+      readIMU(&imu_data);
+      //printIMU(&imu_data);
+      imu_read_interval.restart();
+   }
+
+   else
+   {
+      readSensors(data);
+      printSensors(data);
+   }
 }

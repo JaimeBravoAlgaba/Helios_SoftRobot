@@ -1,0 +1,28 @@
+Conversión de OBJ en Solid Edge
+Fecha: lunes,noviembre 06,2023 02:53
+Archivo fuente:D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Section\Helios_PCB_Section.obj
+Autor: Desconocido
+Organización: Desconocido
+Sistema fuente: DEX
+
+Hardware:
+Procesador: AMD A12-9700P RADEON R7, 10 COMPUTE CORES 4C+6G
+Sistema operativo: Windows 10
+Memoria instalada: 6.95 GB
+
+Información sobre el software:
+Versión de Parasolid: 35.0.149
+Versión de PSBodyShop: 35.0.82
+Versión del adaptador OBJ: 11.0.82
+Versión de Solid Edge: 223.00.00.101 x64
+
+Opciones de importación de OBJ 
+Dividir grupos: Desactivado
+Reparar fallos en la malla: Desactivado
+Crear operación base: Activado
+Habilitar registro de anotaciones: Activado
+
+Avance en la conversión:
+Warn: Unrecognized statement: "s" was seen 465 times.
+Proceso de conversión completado
+Tiempo total requerido para convertir y posprocesar:00 : 01 : 07
