@@ -7,21 +7,21 @@
 // I2C Communications
 const byte I2C_ADDR = 0x0A; // I2C Address of the board
 const byte IMU_ADDR = 0x68; // SW I2C Address of the IMU (MPU6050 module)
-const uint8_t SW_SDA = 14;  // SW I2C SDA pin
-const uint8_t SW_SCL = 15;  // SW I2C SCL pin
+const uint8_t SW_SDA = 16;  // SW I2C SDA pin
+const uint8_t SW_SCL = 10;  // SW I2C SCL pin
 
 // Photodiodes Sensing Pins:
 #define P0 A0
 #define P1 A1
 #define P2 A2
 #define P3 A3
-#define P4 A4
-#define P5 A5
-#define P6 A6
-#define P7 A7
+#define P4 4
+#define P5 6
+#define P6 8
+#define P7 9
 
 // LED Control Pin
-#define LED 9
+#define LED 15
 #define LED_ON_TIME 100 //ms
 
 // Data type for sensor readings
@@ -45,9 +45,10 @@ void requestEvent();
 // Sensing Functions
 void heliosInit();
 void readSensors(SensorData*);
+void printSensors(SensorData*);
 
 // IMU functions
-char* convert_int16_to_str(int16_t i);
+char* convert_int16_to_str(int16_t);
 void initIMU();
-void readIMU(ImuData* imu_data);
-void printIMU(ImuData* imu_data);
+void readIMU(ImuData*);
+void printIMU(ImuData*);

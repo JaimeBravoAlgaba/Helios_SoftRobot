@@ -20,12 +20,13 @@ void loop ()
    if (imu_read_interval.isExpired())
    {
       readIMU(&imu_data);
-      printIMU(&imu_data);
+      //printIMU(&imu_data);
       imu_read_interval.restart();
    }
 
    else
    {
       readSensors(data);
+      printSensors(data);
    }
 }
