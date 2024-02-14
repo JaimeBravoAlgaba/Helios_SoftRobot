@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP LTC4316CMS#PBF
+D Interface - Specialized 1x I2C/SMBus Address Translator
+K
+F https://www.analog.com/media/en/technical-documentation/data-sheets/4316fa.pdf
+$ENDCMP
+#
+#End Doc Library

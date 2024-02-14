@@ -1,0 +1,23 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ADS112C04IPW
+D Self Calibrating, 16 Bit, I2C, 4 Channel - TSSOP-16
+F http://www.ti.com/lit/ds/symlink/ads112c04.pdf
+$ENDCMP
+#
+$CMP ADS112C04IPWR
+D Self Calibrating, 16 Bit, I2C, 4 Channel - TSSOP16
+F http://www.ti.com/lit/ds/symlink/ads112c04.pdf
+$ENDCMP
+#
+$CMP ADS112C04IRTER
+D Self Calibrating, 16 Bit, I2C, 4 Channel - WQFN-16
+F http://www.ti.com/lit/ds/symlink/ads112c04.pdf
+$ENDCMP
+#
+$CMP ADS112C04IRTET
+D Self Calibrating, 16 Bit, I2C, 4 Channel - WQFN-16
+F http://www.ti.com/lit/ds/symlink/ads112c04.pdf
+$ENDCMP
+#
+#End Doc Library
