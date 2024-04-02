@@ -7,10 +7,10 @@
   #define STEPS_PER_REVOLUTION 6400
   #define ANGLE_PER_STEP 2*M_PI/(STEPS_PER_REVOLUTION*1.0)
 
-  #define REVERSE_0 false
-  #define REVERSE_1 false
-  #define REVERSE_2 false
-  #define REVERSE_3 false
+  #define REVERSE_0 true
+  #define REVERSE_1 true
+  #define REVERSE_2 true
+  #define REVERSE_3 true
 
   const byte I2C_ADDR_HS0 = 0x0A;
 
