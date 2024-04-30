@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-python.isort",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-ceintl.vscode-language-pack-es",
+        "mathworks.language-matlab",
+        "ms-vscode.vscode-serial-monitor"
+    ]
+  }
