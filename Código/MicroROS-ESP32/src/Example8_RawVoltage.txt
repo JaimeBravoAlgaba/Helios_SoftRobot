@@ -1,0 +1,39 @@
+#include <Wire.h>
+#include "SparkFun_ADS122C04_ADC_Arduino_Library.h" // Modded library for compatibility with Helios project
+#define ADDRESS 0x4A
+
+SFE_ADS122C04 mySensor;
+
+float raw_0 = 0;
+float raw_1 = 0;
+
+void setup(void)
+{
+  Serial.begin(115200);
+  while (!Serial); //Wait for user to open terminal
+  Serial.println(F("Helios reading example"));
+
+  Wire.begin();
+
+  if (mySensor.begin(ADDRESS) == false) //Connect to the PT100 using the defaults: Address 0x45 and the Wire port
+  {
+    Serial.println(F("Helios Module not detected. Please check wiring. Freezing."));
+    while (1);
+  }
+
+  mySensor.configureADCmode(ADS122C04_RAW_MODE); // Configure the PT100 for 3-wire mode
+  mySensor.setGain(ADS122C04_GAIN_16);
+  //mySensor.enableDebugging(); //Uncomment this line to enable debug messages on Serial
+}
+
+void loop()
+{
+    mySensor.setInputMultiplexer(ADS122C04_MUX_AIN0_AIN2);
+    raw_0 = mySensor.readRawVoltage() / 4096000.0;
+
+    mySensor.setInputMultiplexer(ADS122C04_MUX_AIN1_AIN3);
+    raw_1 = mySensor.readRawVoltage() / 4096000.0;
+
+    Serial.print(raw_0); Serial.print(",");
+    Serial.println(raw_1);
+}
