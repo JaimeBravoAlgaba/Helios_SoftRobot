@@ -515,8 +515,8 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
-      "svg": "",
+      "step": "Helios_emt.step",
+      "svg": "../../../../Modelos3D/Sensor/Helios/Helios_PCB/",
       "vrml": "Helios_PCB_emitter.wrl"
     },
     "page_layout_descr_file": ""

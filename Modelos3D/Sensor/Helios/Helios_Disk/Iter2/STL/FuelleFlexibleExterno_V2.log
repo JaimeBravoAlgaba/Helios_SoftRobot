@@ -1,0 +1,28 @@
+Conversión de Solid Edge en STL
+Fecha: Sunday,August 04,2024 06:36PM
+Archivo fuente:D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_Disk\Iter2\FuelleFlexibleExterno_V2.par
+Sistema fuente: SOLID EDGE
+
+Hardware:
+Procesador: AMD Ryzen 7 5800X 8-Core Processor             
+Sistema operativo: Windows 10 Professional
+Memoria instalada: 31.92 GB
+
+Información sobre el software:
+Versión de Parasolid: 36.0.142
+Versión de PSBodyShop: 36.0.108
+Versión del adaptador STL: 13.0.193
+Versión de Solid Edge: 224.00.00.101 x64
+
+Opciones de exportación de STL:
+Formato de la carpeta de salida:BINARY
+Exportar las piezas visualizadas: Desactivado
+Opción estructural: Monolithic
+Unidades de exportación: Millimeter
+Valor de la tolerancia de exportación:0.050000
+Tipo de tolerancia de exportación: Custom
+Valor del ángulo plano de superficie de exportación:0.523599
+
+Avance en la conversión:
+Se completó el proceso de conversión
+Tiempo necesario para convertir:00 : 00 : 00
