@@ -1,0 +1,369 @@
+Conversión de STEP a Solid Edge
+Fecha: Sunday,August 04,2024 07:05PM
+Archivo fuente: D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx.step
+Autor: Unknown
+Organización: Unknown
+Sistema de origen: Autodesk Translation Framework v13.14.0.145
+
+Equipo:
+Procesador: AMD Ryzen 7 5800X 8-Core Processor             
+Sistema operativo: Windows 11 Professional Version:23H2 Build:22631 System Type:64-bit
+Memoria instalada: 31.92 GB
+
+Información del programa
+Versión de Parasolid: 36.0.142
+Versión de PSBodyShop: 36.0.108
+Versión del adaptador Step: 13.0.163
+Versión de Solid Edge: 224.00.00.101 x64
+
+Opciones de importación de STEP
+Importar cuerpos facetados: Activado
+Importar cuerpos revisados: Desactivado
+Importar curvas: Activado
+Importar sin guardar: Activado
+Importar varios cuerpos como archivo de una pieza: Activado
+Optimización de la importación: Desactivado
+Importar superficies unidas: Activado
+Importar sólidos booleanos: Activado
+Crear operación base: Activado
+Simplificar geometría: Activado
+Importar curvas para sobreimpresión: Activado
+Importar unidad de disco: C:
+Importar superficies unidas: Activado
+Importar superficies: Activado
+Importar vía de acceso de salida: D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP
+Importar con vía de acceso de salida predeterminada habilitada: Activado
+Importar PMI: Desactivado.
+Importar como componentes internos: Desactivado
+Importar vía de acceso: 
+
+Convirtiendo a tipos de datos Parasolid...
++Empezar conjunto: 1
++Creado archivo de conjunto SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx.asm
+|--+Empezar conjunto: 2
+|--+Creado archivo de conjunto SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\MSOP-8_3x3mm_P0.65mm.asm
+|  |--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\MSOP_8_3x3mm_P065mm.par
+|--+Piezas totales: 2
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 2
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Creado archivo de conjunto SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\C_0805_2012Metric.asm
+|  |--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\C_0805_2012Metric_1.par
+|--+Piezas totales: 2
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 2
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Creado archivo de conjunto SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\R_0805_2012Metric.asm
+|  |--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\R_0805_2012Metric_1.par
+|--+Piezas totales: 2
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 2
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Creado archivo de conjunto SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\SFH_2704_20190402_geometry.asm
+|  |--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\(Sin guardar).par
+|--+Piezas totales: 2
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 2
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\SFH_2704_20190402_geometry.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\R_0805_2012Metric.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\MSOP-8_3x3mm_P0.65mm.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\SFH_2704_20190402_geometry.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\SFH_2704_20190402_geometry.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\R_0805_2012Metric.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\R_0805_2012Metric.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\R_0805_2012Metric.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Creado archivo de conjunto SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\TSSOP-16_4.4x5mm_P0.65mm.asm
+|  |--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\TSSOP_16_44x5mm_P065mm.par
+|--+Piezas totales: 2
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 2
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Empezar conjunto: 2
+|--+Reutilizando archivo D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\R_0805_2012Metric.asm
+|--+Piezas totales: 0
+|--+Conjuntos: 0
+|--+Cuerpos sólidos: 0
+|--+Cuerpos de hoja: 0
+|--+Terminar conjunto: 2
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_1.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_2.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_3.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_4.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_5.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_6.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_7.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_8.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_9.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_10.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_11.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_12.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_13.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_14.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_15.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_16.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_17.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_18.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_19.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_20.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_21.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_22.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_23.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_24.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_25.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_26.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_27.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_28.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_29.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_30.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_31.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_32.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_33.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_34.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_35.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_36.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_37.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_38.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_39.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_40.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_41.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_42.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_43.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_44.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_45.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_46.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_47.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_48.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_49.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_50.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_51.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_52.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_53.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_54.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_55.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_56.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_57.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_58.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_59.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_60.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_61.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_62.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_63.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_64.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_65.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_66.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_67.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_68.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_69.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_70.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_71.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_72.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_73.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_74.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_75.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_76.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_77.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_79.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_80.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_81.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_82.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_83.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_84.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_86.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_87.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_88.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_89.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_90.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_91.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_92.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_94.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_95.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_96.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_99.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_100.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_101.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_102.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_103.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_104.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_105.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_106.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_107.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_108.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_109.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_110.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_111.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_112.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_113.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_114.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_115.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_116.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_117.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_track_118.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_zone_1.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_zone_2.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_zone_3.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_zone_4.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_1.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_2.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_3.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_4.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_5.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_6.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_7.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_8.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_9.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_10.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_11.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_12.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_13.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_14.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_15.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_16.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_17.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_18.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_19.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_20.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_21.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_22.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_23.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_24.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_25.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_26.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_27.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_28.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_29.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_30.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_31.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_32.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_33.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_34.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_35.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_36.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_37.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_38.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_39.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_40.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_41.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_42.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_43.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_44.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_45.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_46.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_47.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_48.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_49.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_50.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_51.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_52.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_53.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_54.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_55.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_56.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_57.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_58.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_59.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_60.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_61.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_62.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_63.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_64.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_65.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_66.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_67.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_68.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_69.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_70.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_71.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_72.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_73.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_74.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_75.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_76.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_77.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_78.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_79.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_80.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_81.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_82.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_83.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_84.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_85.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_86.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_87.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_88.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_89.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_90.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_91.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_92.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_93.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_94.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_95.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_96.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_97.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_98.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_pad_99.par
+|--+Creado archivo de pieza SE D:\Repositorios\Helios_SoftRobot\Modelos3D\Sensor\Helios\Helios_PCB\Helios_rcv\STEP\Helios_rcv_00xx_PCB.par
++Piezas totales: 441
++Conjuntos: 5
++Cuerpos sólidos: 436
++Cuerpos de hoja: 0
++Terminar conjunto: 1
+Proceso de conversión completado
+Tiempo total requerido para convertir y posprocesar:00 : 00 : 11
