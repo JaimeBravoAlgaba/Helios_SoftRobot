@@ -1,0 +1,10 @@
+Cladding_0:126.9278
+Cladding_30:97.4177
+Cladding_45:86.1797
+Cladding_60:76.6126
+Cladding_90:45.3909
+Core_0: 241.5301
+Core_30:181.4205
+Core_45:170.0201
+Core_60:151.1259
+Core_90: 94.1238
