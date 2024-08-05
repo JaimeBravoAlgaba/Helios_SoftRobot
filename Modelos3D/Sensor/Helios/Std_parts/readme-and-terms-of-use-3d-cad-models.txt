@@ -8,7 +8,7 @@ ES   Download de 05.08.2024 desde PARTcommunity/PARTserver/3Dfindit.com:
 
        
 	   
-       SE_3D_2020, KerbKonus 860000020800, KerbKonus 860000020800.par
+       SE_3D_2020, SN3500-M3-12 Cylinder head cap screw (DIN EN ISO 4762-10.9), SN3500-M3-12 Cylinder head cap screw (DIN EN ISO 4762-10_9).par
 
        Indicaciones para el uso:
 
