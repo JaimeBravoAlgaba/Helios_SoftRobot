@@ -1,5 +1,5 @@
 ﻿
-ES   Download de 05.08.2024 desde PARTcommunity/PARTserver/3Dfindit.com:
+ES   Download de 08.08.2024 desde PARTcommunity/PARTserver/3Dfindit.com:
 
        Estimado Usuario,
        
@@ -8,7 +8,7 @@ ES   Download de 05.08.2024 desde PARTcommunity/PARTserver/3Dfindit.com:
 
        
 	   
-       SE_3D_2020, SN3500-M3-12 Cylinder head cap screw (DIN EN ISO 4762-10.9), SN3500-M3-12 Cylinder head cap screw (DIN EN ISO 4762-10_9).par
+       SE_3D_2020, SVSS-M3-6-MOS, SVSS-M3-6-MOS.par
 
        Indicaciones para el uso:
 
