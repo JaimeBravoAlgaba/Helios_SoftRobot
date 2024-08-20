@@ -1,0 +1,36 @@
+# 1. Clonar el repositorio de Helios:
+git clone https://github.com/JaimeBravoAlgaba/Helios_SoftRobot.git
+
+# 2. Crear un workspace de ROS2
+mkdir -p helios_ws/src
+
+# 3. Instalar el paquete de helios_robot en el workspace
+cp -r Helios_SoftRobot/Código/helios_robot helios_ws/src
+cd helios_ws/src
+
+# 4. Instalar el paquete micro_ros_setup
+git clone https://github.com/micro-ROS/micro_ros_setup.git -b $ROS_DISTRO
+cd ..
+
+# 5. Compilar el workspace
+rosdep update && rosdep install --from-paths src --ignore-src -y
+colcon build --symlink-install
+source install/local_setup.bash
+
+# 6. Crear un agente de MicroROS
+ros2 run micro_ros_setup create_agent_ws.sh
+ros2 run micro_ros_setup build_agent.sh
+source install/local_setup.sh
+
+# 7. Conceder acceso al usuario al puerto USB de comunicación.
+# Se usará el puerto ttyUSB0
+stat /dev/ttyUSB0
+
+# Debería aparecer algo como: "Gid: (   20/ dialout)"
+# Añadir el usuario actual al grupo "dialout", o el que haya aparecido.
+sudo usermod -a -G dialout $USER
+
+# 8. Conectar el ESP32 y ejecutar el agente.
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0
+
+# Tras resetear el ESP32, deberían escucharse sus topics desde otro terminal.
