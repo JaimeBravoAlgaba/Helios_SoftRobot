@@ -22,15 +22,18 @@ ros2 run micro_ros_setup create_agent_ws.sh
 ros2 run micro_ros_setup build_agent.sh
 source install/local_setup.sh
 
-# 7. Conceder acceso al usuario al puerto USB de comunicación.
-# Se usará el puerto ttyUSB0
+# 7. Conectar el ESP32 y ejecutar el agente.
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0
+
+# 8. Si aparece un error, conceder acceso al usuario al puerto USB ttyUSB0.
+# Comprobar el grupo de usuarios que tiene acceso al puerto:
 stat /dev/ttyUSB0
 
 # Debería aparecer algo como: "Gid: (   20/ dialout)"
 # Añadir el usuario actual al grupo "dialout", o el que haya aparecido.
 sudo usermod -a -G dialout $USER
 
-# 8. Conectar el ESP32 y ejecutar el agente.
-ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0
+# Dar permisos de lectura y escritura al puerto:
+sudo chmod a+rw /dev/ttyUSB0
 
 # Tras resetear el ESP32, deberían escucharse sus topics desde otro terminal.
