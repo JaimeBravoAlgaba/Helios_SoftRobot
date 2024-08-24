@@ -87,14 +87,10 @@ float cableOffsets[4] = {0, PI/2.0, PI, -PI/2.0};
 
 float cableIKine(CoordsPCC coords, uint8_t i)
 {
-  float theta0 = coords.theta*cos(coords.phi);
-  float theta1 = coords.theta*sin(coords.phi);
-  if(i%2 == 0){
-    return -SEGMENTS_RC*theta0*cos(cableOffsets[i]);
-  }
-  else{
-    return -SEGMENTS_RC*theta1*cos(cableOffsets[i]-PI/2.0);
-  }
+  coords.phi = (coords.theta<0)?coords.phi+PI:coords.phi;
+  coords.theta = (abs(coords.theta)<1E-4)?0.0001:abs(coords.theta);
+
+  return 2*sin(coords.theta/(2.0*SEGMENTS_NUM))*(SEGMENTS_LEN*SEGMENTS_NUM/coords.theta - SEGMENTS_RC*sin(coords.phi+cableOffsets[i]));
 }
 
 long length2steps(float l){

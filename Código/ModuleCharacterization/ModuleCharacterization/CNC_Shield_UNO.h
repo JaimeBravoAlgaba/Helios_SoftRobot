@@ -35,7 +35,7 @@
   const uint8_t COOL_EN = A3;
 
   // TIMING
-  const int STEP_DELAY_HIGH = 5; // Microseconds
+  const int STEP_DELAY_HIGH = 1; // Microseconds
   const int STEP_DELAY_LOW = 1; // Microseconds
 
   // DIMENSIONS

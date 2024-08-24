@@ -1,7 +1,7 @@
 import serial
 import csv
 
-com_port = 'COM20'
+com_port = 'COM5'
 baud_rate = 115200
 
 # Open the COM port
