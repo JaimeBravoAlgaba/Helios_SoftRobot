@@ -93,14 +93,17 @@ void tool_callback(const void* msgin)
 
 void sensors_callback(rcl_timer_t * timer, int64_t last_call_time)
 {
-  extern float sensorData[N_SENSORS*2];
+  extern float sensorData[N_MODULES*N_SENSORS];
   updateSensors(); // Read the sensors
 
-  msg_sensors.data.size = N_SENSORS*2; // Set the size of the message to the number of sensors
-  for(uint8_t i=0; i<N_SENSORS*2; ++i)
+  msg_sensors.data.size = N_MODULES*N_SENSORS; // Set the size of the message to the number of sensors
+  /*for(uint8_t i=0; i<N_MODULES*N_SENSORS; ++i)
   {
     msg_sensors.data.data[i] = sensorData[i]; // Fill the message with the sensor readings
-  }
+  }*/
+
+  // Fill the message with the sensor readings
+  msg.sensors.data.data = sensorData;
 
   // Publish the sensor readings to the ROS2 topic
   RCCHECK(rcl_publish(&publisher_sensors, &msg_sensors, NULL));
