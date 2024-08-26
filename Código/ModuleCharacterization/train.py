@@ -7,12 +7,12 @@ import pandas as pd
 import json
 
 # This script trains a new model with a given dataset
-model_file = 'models/neural_network/model_40.keras'
-test_data = 'dataset/0x40_240823_3.csv'
+model_file = 'models/neural_network/model_41.keras'
+training_data = 'dataset/0x41_240823_1.csv'
 normalization_file = 'models/normalization_params.json'
 
 # Load data form csv file
-data = pd.read_csv(test_data, header=None, delimiter=';')
+data = pd.read_csv(training_data, header=None, delimiter=';')
 
 # Split data into input and output:
 # CSV file format: theta | phi | h0 | h1

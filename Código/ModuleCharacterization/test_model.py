@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import json
 
 # This script tests a pretrained model to predict the output of a given dataset
-model_file = 'models/neural_network/model_40.keras'
-test_data = 'dataset/0x41_240823_1.csv'
+model_file = 'models/neural_network/model_4A.keras'
+test_data = 'dataset/0x4A_240823_3.csv'
 normalization_file = 'models/normalization_params.json'
 
 def denormalize(data, min, max):
