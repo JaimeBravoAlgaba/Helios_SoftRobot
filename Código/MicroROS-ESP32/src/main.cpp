@@ -54,7 +54,6 @@ void error_loop() {
 
 void move_sections(void* pvParameters)
 {
-  // Move the selected section
   moveSection(SEC0, a);
   moveSection(SEC1, b);
   moveSection(SEC2, c);
@@ -94,16 +93,13 @@ void tool_callback(const void* msgin)
 void sensors_callback(rcl_timer_t * timer, int64_t last_call_time)
 {
   extern float sensorData[N_MODULES*N_SENSORS];
-  updateSensors(); // Read the sensors
+  updateModuleData(); // Read all the sensors
 
   msg_sensors.data.size = N_MODULES*N_SENSORS; // Set the size of the message to the number of sensors
-  /*for(uint8_t i=0; i<N_MODULES*N_SENSORS; ++i)
+  for(uint8_t i=0; i<N_MODULES*N_SENSORS; ++i)
   {
     msg_sensors.data.data[i] = sensorData[i]; // Fill the message with the sensor readings
-  }*/
-
-  // Fill the message with the sensor readings
-  msg.sensors.data.data = sensorData;
+  }
 
   // Publish the sensor readings to the ROS2 topic
   RCCHECK(rcl_publish(&publisher_sensors, &msg_sensors, NULL));
@@ -159,16 +155,16 @@ void setup() {  // Initialize Robot
   }
 
   // Memory allocation - msg_sensors
-  msg_sensors.data.capacity = N_SENSORS*2; 
+  msg_sensors.data.capacity = N_MODULES*N_SENSORS; 
   msg_sensors.data.size = 0;
   msg_sensors.data.data = (float*) malloc(msg_sensors.data.capacity * sizeof(float));
 
-  msg_sensors.layout.dim.capacity = N_SENSORS*2;
+  msg_sensors.layout.dim.capacity = N_MODULES*N_SENSORS;
   msg_sensors.layout.dim.size = 0;
   msg_sensors.layout.dim.data = (std_msgs__msg__MultiArrayDimension*) malloc(msg_sensors.layout.dim.capacity * sizeof(std_msgs__msg__MultiArrayDimension));
 
   for(size_t i = 0; i < msg_sensors.layout.dim.capacity; i++){
-      msg_sensors.layout.dim.data[i].label.capacity = N_SENSORS*2;
+      msg_sensors.layout.dim.data[i].label.capacity = N_MODULES*N_SENSORS;
       msg_sensors.layout.dim.data[i].label.size = 0;
       msg_sensors.layout.dim.data[i].label.data = (char*) malloc(msg_sensors.layout.dim.data[i].label.capacity * sizeof(char));
   }
@@ -197,6 +193,8 @@ void setup() {  // Initialize Robot
 		  msg_debug.data.size = strlen(msg_debug.data.data);
 		  RCSOFTCHECK(rcl_publish(&publisher_debug, &msg_debug, NULL));
     }
+
+  //calibrate();
 }
 
 void loop() {
