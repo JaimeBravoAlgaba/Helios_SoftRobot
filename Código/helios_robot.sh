@@ -3,7 +3,7 @@
 # Launch the agent
 gnome-terminal --title="Micro-ROS Agent" -- sh -c "bash -c \"
 	source /home/${USER}/ros2_humble/install/setup.bash;
-	source /home/${USER}/microros_ws/install/setup.bash;
+	source /home/${USER}/helios_ws/install/setup.bash;
 	ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0;
 	exec bash\""
 
@@ -11,15 +11,15 @@ sleep 2
 # Launch the sensor to pose node
 gnome-terminal --title="Sensor to Pose" -- sh -c "bash -c \"
 	source /home/${USER}/ros2_humble/install/setup.bash;
-	source /home/${USER}/microros_ws/install/setup.bash;
-	ros2 run helios_robot helios_robot_sensor2pose_ai;
+	source /home/${USER}/helios_ws/install/setup.bash;
+	ros2 run helios_robot helios_robot_sensor2pose;
 	exec bash\""
 
 sleep 1
 # Launch the kinematics
 gnome-terminal --title="KinePCC" -- sh -c "bash -c \"
 	source /home/${USER}/ros2_humble/install/setup.bash;
-	source /home/${USER}/microros_ws/install/setup.bash;
+	source /home/${USER}/helios_ws/install/setup.bash;
 	ros2 run helios_robot helios_robot_kine_pcc;
 	exec bash\""
 

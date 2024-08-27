@@ -1,74 +1,60 @@
+import os
+import tensorflow as tf
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
-from numpy import cos, sin, sqrt, arctan2, pi, exp
 import yaml
-
-theta_off = [0.26, 0.14, 0, 0.13, 0.05, 0.12]
+from math import pi, sqrt, atan2
 
 class SensorToPoseNode(Node):
     def __init__(self):
         super().__init__('sensor_to_pose_node')
-        self.subscription = self.create_subscription(
-            Float32MultiArray,
-            'helios_sensors',
-            self.sensor_callback,
-            10
-        )
-        self.publisher = self.create_publisher(
-            Float32MultiArray,
-            'helios_pose',
-            10
-        )
+        self.subscription = self.create_subscription(Float32MultiArray, 'helios_sensors', self.sensor_callback, 10)
+        self.publisher = self.create_publisher(Float32MultiArray, 'helios_pose_meas', 10)
 
-        # Load the models from the configuration file
-        with open('/home/jaime/microros_ws/src/helios_robot/config/model_parameters_cone.yaml') as file:
-            models = yaml.load(file, Loader=yaml.FullLoader)
-            self.modules = [models['module_40'],
-                            models['module_41'],
-                            models['module_44'],
-                            models['module_45'],
-                            models['module_48'],
-                            models['module_4A']]
+        # Load the pretrained AI models
+        folder = os.getcwd() + '/helios_ws/src/helios_robot/models/'
+        self.models = []
+        self.models.append(tf.keras.models.load_model(folder + 'model_40.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_41.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_44.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_45.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_48.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_4A.keras'))
 
     def normalize(self, data, min, max):
         return (data - min) / (max - min)
-
-    def sigmoid(self, x):
-        return 1 / (1 + exp(-x))
-
+    
+    def denormalize(self, data, min, max):
+        return data * (max - min) + min
+    
     def sensor_callback(self, msg):
         # Get the sensor values from the message
         sensor_values = msg.data
         
-        theta = [0]*6
-        phi = [0]*6
+        theta = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        phi = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        
         # Predict the pose. Each model predicts two values: x and y
         for index in range(6):
-            # Normalize the sensor values
-            a = self.modules[index]['a']
-            b = self.modules[index]['b']
-            c = self.modules[index]['c']
-            d = self.modules[index]['d']
-            e = self.modules[index]['e']
-            h0range = self.modules[index]['h0_range']
-            h1range = self.modules[index]['h1_range']
+            # Compute the average of the four sensors
+            sensor_avg = (sensor_values[index*4] + sensor_values[index*4+1] + sensor_values[index*4+2] + sensor_values[index*4+3]) / 4.0
 
-            h0 = 2*self.normalize(sensor_values[index*2], h0range[0], h0range[1])-1
-            h1 = 2*self.normalize(sensor_values[index*2+1], h1range[0], h1range[1])-1
-            r = h0**2+h1**2
+            # Append the average to the sensor values
+            input_vector = sensor_values[index*4:index*4+4]
+            input_vector.append(sensor_avg)
 
-            if r <0.05:
-                theta[index] = 0.00001
-                phi[index] = 0.00001
-            else:
-                # Apply the model to the normalized values
-                theta[index] = sqrt(abs(c*(a*(h0+d)**2+b*(h1+e)**2)))*180/pi*2
-                phi[index] = arctan2(h1,h0)
+            # Predict the pose
+            prediction = self.models[index](tf.constant([input_vector], dtype=tf.float32))
+            euler_y = self.denormalize(float(prediction[0][0]), -60, 60)
+            euler_z = self.denormalize(float(prediction[0][1]), -60, 60)
+
+            theta[index] = sqrt(euler_y**2 + euler_z**2)
+            phi[index] = atan2(euler_z, euler_y)*180/pi
         
         # Create and publish the message with the predicted pose
         pose_msg = Float32MultiArray()
-        pose_msg.data = theta + phi
+        pose_msg.data = theta+phi
         self.publisher.publish(pose_msg)
 
 def main(args=None):

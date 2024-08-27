@@ -1,24 +1,25 @@
-# Code for a publisher and subscriber node
+# Description: This node calculates the cable lengths from the section coordinates
+#
+# The node subscribes to the topic 'helios_pose_cmd' to receive the section coordinates (theta and phi) and calculates the cable lengths.
+# The mounting matrix is calculated from the cable offset and the cable lengths are calculated using the mounting matrix and the section coordinates.
+# The calculated cable lengths are published to the topic 'helios_cables_cmd'.
+#
+
 import rclpy
 import rclpy.logging
 from rclpy.node import Node
-
 import numpy as np
-
 from std_msgs.msg import Float32MultiArray
 
 rc = 0.043/2.0 # Radius of the robot disks
-offset = [-6/180.0*np.pi, 0, 6/180.0*np.pi] # Angle offset between the cables of consecutive sections
+offset = [-10/180.0*np.pi, 0, 10/180.0*np.pi] # Angle offset between the cables of consecutive sections
 
 class KinePCC(Node):
-
     def __init__(self):
         super().__init__('kine_pcc')
 
-        # Create a subscriber to the topic 'delta_sections_cmd' with the callback function 'callback' on new data
-        self.subscription = self.create_subscription(Float32MultiArray, 'delta_sections_cmd', self.calculate_kine, 10)
-        # Create a publisher to the topic 'delta_cables_cmd'
-        self.publisher_ = self.create_publisher(Float32MultiArray, 'delta_cables_cmd', 10)
+        self.subscription = self.create_subscription(Float32MultiArray, 'helios_pose_cmd', self.calculate_kine, 10)
+        self.publisher_ = self.create_publisher(Float32MultiArray, 'helios_cables_cmd', 10)
 
         self.i = 0
 
@@ -42,26 +43,26 @@ class KinePCC(Node):
         print("Phi:", phi)
 
         # Initialization: array of 12 zeros
-        delta_length = np.zeros((1, 12), float)
+        length_cmd = np.zeros((1, 12), float)
 
         # Calculate the cable lengths from the section coordinates
         # Section 0
         b = np.array([[np.cos(phi[0])], [np.sin(phi[0])]])*theta[0]
-        delta_length = self.mounting_matrix(offset[0]).dot(b)*(-rc)
+        length_cmd = self.mounting_matrix(offset[0]).dot(b)*(-rc)
         
         # Section 1
         b = b+theta[1]*np.array([[np.cos(phi[1])], [np.sin(phi[1])]])
-        delta_length = np.concatenate((delta_length, -rc*self.mounting_matrix(offset[1]).dot(b)))
+        length_cmd = np.concatenate((length_cmd, -rc*self.mounting_matrix(offset[1]).dot(b)))
 
         # Section 2
         b = b+theta[2]*np.array([[np.cos(phi[2])], [np.sin(phi[2])]])
-        delta_length = np.concatenate((delta_length, -rc*self.mounting_matrix(offset[2]).dot(b)))
+        length_cmd = np.concatenate((length_cmd, -rc*self.mounting_matrix(offset[2]).dot(b)))
 
-        print("Delta length:\n", delta_length)
+        print("Length command:\n", length_cmd)
         print("<<")
 
         # Publish the calculated cable lengths
-        self.publisher_.publish(Float32MultiArray(data=delta_length))
+        self.publisher_.publish(Float32MultiArray(data=length_cmd))
         
 def main(args=None):
     rclpy.init(args=args)
