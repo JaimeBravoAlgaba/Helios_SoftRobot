@@ -126,8 +126,8 @@ void setup() {  // Initialize Robot
   RCCHECK(rclc_publisher_init_default(&publisher_sensors, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32MultiArray), "helios_sensors"));
   RCCHECK(rclc_publisher_init_default(&publisher_debug, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String), "helios_debug"));
   
-  RCCHECK(rclc_subscription_init_default(&subscriber_lengths, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32MultiArray), "delta_cables_cmd"));
-  RCCHECK(rclc_subscription_init_default(&subscriber_tool, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int8), "tool_cmd"));
+  RCCHECK(rclc_subscription_init_default(&subscriber_lengths, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32MultiArray), "helios_cables_cmd"));
+  RCCHECK(rclc_subscription_init_default(&subscriber_tool, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int8), "helios_tool_cmd"));
 
 	RCCHECK(rclc_timer_init_default(&timer, &support, RCL_MS_TO_NS(READ_DELAY), sensors_callback));
 
