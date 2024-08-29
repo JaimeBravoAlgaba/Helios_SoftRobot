@@ -18,7 +18,8 @@
     static const uint8_t N_SECTIONS = 3;   // Number of sections    
     static const uint8_t N_CABLES = 4;     // Number of cables in each section
     static const uint8_t N_SEGMENTS = 2;   // Number of segments in each section
-    static const uint8_t N_SENSORS = 6;    // Number of sensors in each section
+    static const uint8_t N_MODULES= 6;    // Number of Helios modules in the robot
+    static const uint8_t N_SENSORS = 4;    // Number of sensors in each Helios module
 
     static const float SEGMENTS_LEN = 0.05;    // Length [m] of a segment
     static const float SEGMENTS_RC  = 0.0225;  // Radius [m] of the cable distribution circunference
@@ -44,20 +45,24 @@
     static const uint8_t EN0 = 16; // Section 0  motor drivers enable. ERROR: pin 34 only as INPUT. Change to pin 16
     static const uint8_t EN1 = 17; // Section 1  motor drivers enable. ERROR: pin 35 only as INPUT. Change to pin 17
     static const uint8_t EN2 = 32; // Section 2  motor drivers enable.
+    static const uint8_t ENABLE_PINS[N_SECTIONS] = {EN0, EN1, EN2}; // Array with the enable pins for each section
 
     static const uint8_t S0  = 33; // Step pin for MX_0 motors.
     static const uint8_t S1  = 26; // Step pin for MX_1 motors.
     static const uint8_t S2  = 25; // Step pin for MX_2 motors.
     static const uint8_t S3  = 27; // Step pin for MX_3 motors.
+    static const uint8_t STEP_PINS[N_CABLES] = {S0, S1, S2, S3}; // Array with the step pins for each smotor
 
     static const uint8_t D0  = 14; // Direction pin for MX_0 motors.
     static const uint8_t D1  = 12; // Direction pin for MX_1 motors.
     static const uint8_t D2  = 13; // Direction pin for MX_2 motors.
     static const uint8_t D3  = 15; // Direction pin for MX_3 motors.
+    static const uint8_t DIR_PINS[N_CABLES] = {D0, D1, D2, D3}; // Array with the direction pins for each motor
 
     // I2C interface
+    const uint32_t I2C_FREQ = 400000; // I2C clock frequency: 100kHz (standard mode) or 400kHz (fast mode)
     const byte I2C_TOOL_ADDR = 0x70; // I2C address for the tool module
-    const byte I2C_SENSOR_ADDR[N_SENSORS] = {0x40, 0x41, 0x44, 0x45, 0x48, 0x4A}; // I2C addresses for Helios Modules
+    const byte I2C_SENSOR_ADDR[N_MODULES] = {0x40, 0x41, 0x44, 0x45, 0x48, 0x4A}; // I2C addresses for Helios Modules
     static const uint8_t I2C_SDA = 21;
     static const uint8_t I2C_SCL = 22;
 
@@ -102,10 +107,16 @@ bool i2cCheckDevice(byte address);
 // SENSOR MANAGEMENT FUNCTIONS
 void initSensor();
 
-void updateSensors();
+uint32_t updateSensorDataIni(uint8_t module_index, uint8_t sensor_index);
+
+float updateSensorData(uint8_t module_index, uint8_t sensor_index);
+
+void updateModuleData();
 
 // ACTUATOR MANAGEMENT FUNCTIONS
 void initActuator();
+
+void resetCableLengths();
 
 float cableIKine(CoordsPCC coords, uint8_t sec, uint8_t cable);
 
@@ -118,6 +129,6 @@ void disableSection(uint8_t sec);
 // Execute one step in desired motors. 
 void stepSection(uint8_t sec, const int s[N_CABLES], float stepDelay);
 
-void moveSection(uint8_t sec, const float ref[N_CABLES]);
+void moveSection(uint8_t sec, const float l_ref[N_CABLES]);
 
 void moveRobot(const float ref[N_SECTIONS*N_CABLES]);

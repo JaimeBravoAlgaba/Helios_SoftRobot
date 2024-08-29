@@ -397,15 +397,15 @@ int32_t SFE_ADS122C04::readRawVoltage(uint8_t rate)
   }
 
   // Start the conversion (assumes we are using single shot mode)
-  start();
+  //start();
 
   // Wait for DRDY to go valid
   while((drdy == false) && (millis() < (start_time + ADS122C04_CONVERSION_TIMEOUT)))
   {
     delay(1); // Don't pound the bus too hard
-    //drdy = checkDataReady();                                                                !!!!!!!! MOD
+    //drdy = checkDataReady();
   }
-  drdy = true; // !!!!!!!! MOD
+  drdy = true;
 
   // Check if we timed out
   if (drdy == false)
