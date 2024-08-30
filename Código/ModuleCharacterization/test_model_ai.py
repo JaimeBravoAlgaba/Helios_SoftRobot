@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import json
 
 # This script tests a pretrained model to predict the output of a given dataset
-model_file = 'models/neural_network/model_4A_V2.keras'
+model_file = 'models/neural_network/model_0x4A_V2.keras'
 test_data = 'dataset/240823/0x4A_240823_2.csv'
 normalization_file = 'models/normalization_params.json'
 

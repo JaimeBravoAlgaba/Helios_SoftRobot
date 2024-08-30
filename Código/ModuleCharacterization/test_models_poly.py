@@ -4,6 +4,8 @@ import json
 import pandas as pd
 import numpy as np
 from math import sqrt
+import matplotlib.pyplot as plt
+import tensorflow as tf
 
 def read_json_file(file_path):
     with open(file_path, 'r') as file:
@@ -30,7 +32,10 @@ def p11(x, y, params):
 def p33(x, y, params):
     return params[0] + params[1]*x + params[2]*y + params[3]*x**2 + params[4]*x*y + params[5]*y**2 + params[6]*x**3 + params[7]*x**2*y + params[8]*x*y**2 + params[9]*y**3
 
-def test_models(mod, helios_names, degree=1, data_index=1):
+def denormalize(data, min, max):
+    return data * (max - min) + min
+
+def test_models(mod, helios_names, model='poly_1', data_index=1):
     helios_name = helios_names[mod]
     training_data = pd.read_csv(f'dataset/240823/{helios_name}_240823_{data_index}.csv', delimiter=';')
 
@@ -53,19 +58,45 @@ def test_models(mod, helios_names, degree=1, data_index=1):
     h13 = h1 - h3
 
     # Test the model by computing the RMSE
-    # Compute the predictions depending on the degree
-    if degree == 1:# Load the polynomial models
-        model_11 = load_models('models/p11/p11.json')
-        qy_pred = p11(h02, h13, model_11['qy'][mod])
-        qz_pred = p11(h02, h13, model_11['qz'][mod])
+    # Compute the predictions depending on the model type
+    if model == 'poly1':
+        # Load the model
+        models = load_models(f'models/{helios_name}_240823.json')
+        qy_model = models['qy'][0]
+        qz_model = models['qz'][0]
 
-    elif degree == 3:
-        model_33 = load_models('models/p33/p33.json')
-        qy_pred = p33(h02, h13, model_33['qy'][mod])
-        qz_pred = p33(h02, h13, model_33['qz'][mod])
+        # Predict the output
+        qy_pred = p11(h02, h13, qy_model)
+        qz_pred = p11(h02, h13, qz_model)
+
+    elif model == 'poly3':
+        # Load the model
+        models = load_models(f'models/{helios_name}_240823.json')
+        qy_model = models['qy'][3]
+        qz_model = models['qz'][3]
+
+        # Predict the output
+        qy_pred = p33(h02, h13, qy_model)
+        qz_pred = p33(h02, h13, qz_model)
+
+    elif model == 'neural_network':
+        # load the model
+        model = tf.keras.models.load_model(f'models/neural_network/model_{helios_name}.keras')
+
+        # Predict the output
+        x = np.column_stack((h02, h13))
+        y = np.column_stack((qy, qz))
+        predicted_output = pd.DataFrame(model.predict(x))
+
+        qy_pred = predicted_output.iloc[:, 0]
+        qz_pred = predicted_output.iloc[:, 1]
+
+        # Denormalize the real output
+        qy_pred = denormalize(qy_pred, -60, 60)
+        qz_pred = denormalize(qz_pred, -60, 60)
 
     else:
-        raise ValueError('Degree not supported')
+        raise ValueError('Non valid model')
 
     # Compute the RMSE
     rmse_qy = sqrt(np.mean((qy - qy_pred)**2))
@@ -81,8 +112,8 @@ if __name__ == '__main__':
 
     # Iterate over the models
     for mod in range(6):
-        rmse_training.append(test_models(mod, helios_names, degree=degree, data_index=1))
-        rmse_test.append(test_models(mod, helios_names, degree=degree, data_index=2))
+        rmse_training.append(test_models(mod, helios_names, model='neural_network', data_index=1))
+        rmse_test.append(test_models(mod, helios_names, model='neural_network', data_index=2))
         print('')
     
     # Barplot of the RMSE, comparing the two degrees
@@ -95,8 +126,6 @@ if __name__ == '__main__':
     rmse_qz_test = [rmse[1] for rmse in rmse_test]
 
     # Plot the RMSE
-    import matplotlib.pyplot as plt
-
     fig, axs = plt.subplots(1, 2, figsize=(10, 10), facecolor='white')
     plt.rcParams['font.family'] = 'Arial'
     bar_width = 0.35
