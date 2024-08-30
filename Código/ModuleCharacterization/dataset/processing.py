@@ -34,21 +34,29 @@ def plot_csv_file(file_path):
     axs[0].plot((qy-0.5)*120, label='qY')
     axs[0].plot((qz-0.5)*120, label='qZ')
     axs[0].set_ylabel('Ángulo [grados]', fontsize=16)
+    axs[0].legend()   
 
     # Plot Helios measurements
-    axs[1].plot(h0, label='h0')
-    axs[1].plot(h1, label='h1')
-    axs[1].plot(h2, label='h2')
-    axs[1].plot(h3, label='h3')
-    axs[1].set_ylabel('Medición', fontsize=16)
+    axs[2].plot(h0-h_avg, label='h0')
+    axs[2].plot(h1-h_avg, label='h1')
+    axs[2].plot(h2-h_avg, label='h2')
+    axs[2].plot(h3-h_avg, label='h3')
+    axs[2].set_ylabel('Medición', fontsize=16)
+    axs[2].legend()   
+
+    # Plot Helios measurements
+    axs[1].plot(h1-h3, label='h1-h3')
+    axs[1].plot(h0-h2, label='h0-h2')
+    axs[2].set_xlabel('Muestra', fontsize=16)
+    axs[1].set_ylabel('Medición diferencial', fontsize=16)
+    axs[1].legend()   
 
     # Plot Helios average
-    axs[2].plot(h_avg, label='h_avg}')
-    axs[2].set_xlabel('Muestra', fontsize=16)
-    axs[2].set_ylabel('Valor', fontsize=16)
+    #axs[2].plot(h_avg, label='h_avg}')
+    #axs[2].set_xlabel('Muestra', fontsize=16)
+    #axs[2].set_ylabel('Valor promedio', fontsize=16)
 
-    for ax in axs:
-        ax.legend()     
+    for ax in axs:  
         ax.grid(True)  
         ax.tick_params(axis='both', which='major', labelsize=14)
 
@@ -59,14 +67,14 @@ def plot_csv_file(file_path):
     # 3D plot of h0, h2 vs qy
     fig = plt.figure()
     ax = fig.add_subplot(121, projection='3d')
-    ax.scatter(h0- h2, h1-h3, qy, c=theta, cmap='viridis')
+    ax.scatter(h0- h2, h1-h3, (qy-0.5)*120, c=h_avg, cmap='inferno')
     ax.set_xlabel('h0-h2')
     ax.set_ylabel('h1-h3')
     ax.set_zlabel('qy')
 
     # 3D plot of h1, h3 vs qz
     ax = fig.add_subplot(122, projection='3d')
-    ax.scatter(h0- h2, h1-h3, qz, c=theta, cmap='viridis')
+    ax.scatter(h0- h2, h1-h3, (qz-0.5)*120, c=h_avg, cmap='inferno')
     ax.set_xlabel('h0-h2')
     ax.set_ylabel('h1-h3')
     ax.set_zlabel('qz')
@@ -87,11 +95,9 @@ def plot_csv_file(file_path):
     file_path = file_path.with_suffix('.mat')
     scipy.io.savemat(file_path, data_dict)
 
-
-
 if __name__ == '__main__':
     # File path
-    file_path = Path('./240823/0x45_240823_3.csv')
+    file_path = Path('./240823/0x4A_240823_1.csv')
 
     # Plot the data
     plot_csv_file(file_path)
