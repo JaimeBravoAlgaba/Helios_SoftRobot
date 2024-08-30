@@ -7,8 +7,8 @@ import pandas as pd
 import json
 
 # This script trains a new model with a given dataset
-model_file = 'models/neural_network/model_4A.keras'
-training_data = 'dataset/240823/0x4A_240823_2.csv'
+model_file = 'models/neural_network/model_4A_V2.keras'
+training_data = 'dataset/240823/0x4A_240823_3.csv'
 normalization_file = 'models/normalization_params.json'
 
 # Load data form csv file
@@ -22,16 +22,20 @@ qy = data.iloc[:, 0]
 qz = data.iloc[:, 1]
 
 # Inputs
+h0 = data.iloc[:, 2]
+h1 = data.iloc[:, 3]
+h2 = data.iloc[:, 4]
+h3 = data.iloc[:, 5]
 h_mean = data.iloc[:, 6]
-h0 = data.iloc[:, 2] - h_mean
-h1 = data.iloc[:, 3] - h_mean
-h2 = data.iloc[:, 4] - h_mean
-h3 = data.iloc[:, 5] - h_mean
+
+# Compute the differential measurements
+h02 = h0 - h2
+h13 = h1 - h3
 
 # Load a pretrained model
 model = tf.keras.models.load_model(model_file)
 
-x = np.column_stack((h0, h1, h2, h3))
+x = np.column_stack((h02, h13))
 y = np.column_stack((qy, qz))
 
 # Retrain the model with the new dataset, using the pretrained model as a starting point

@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import json
 
 # This script tests a pretrained model to predict the output of a given dataset
-model_file = 'models/neural_network/model_4A.keras'
-test_data = 'dataset/240823/0x4A_240823_3.csv'
+model_file = 'models/neural_network/model_4A_V2.keras'
+test_data = 'dataset/240823/0x4A_240823_2.csv'
 normalization_file = 'models/normalization_params.json'
 
 def denormalize(data, min, max):
@@ -24,13 +24,17 @@ qy = data.iloc[:, 0]
 qz = data.iloc[:, 1]
 
 # Inputs
+h0 = data.iloc[:, 2]
+h1 = data.iloc[:, 3]
+h2 = data.iloc[:, 4]
+h3 = data.iloc[:, 5]
 h_mean = data.iloc[:, 6]
-h0 = data.iloc[:, 2] - h_mean
-h1 = data.iloc[:, 3] - h_mean
-h2 = data.iloc[:, 4] - h_mean
-h3 = data.iloc[:, 5] - h_mean
 
-x = np.column_stack((h0, h1, h2, h3))
+# Compute the differential measurements
+h02 = h0 - h2
+h13 = h1 - h3
+
+x = np.column_stack((h02, h13))
 y = np.column_stack((qy, qz))
 
 # Load the model and predict the output
@@ -47,6 +51,10 @@ qz_pred = denormalize(predicted_output.iloc[:, 1], -60, 60)
 
 # Calculate the error
 error = np.sqrt((qy - qy_pred)**2 + (qz - qz_pred)**2)
+
+# Compute the RMSE
+rmse = np.sqrt(np.mean(error**2))
+print('RMSE: ', rmse)
 
 # Plot the error
 plt.plot(error)
@@ -66,7 +74,3 @@ plt.plot(qz_pred, label='Predicted qz', color='red')
 plt.legend()
 
 plt.show()
-# compute the RMSE
-rmse = np.sqrt(np.mean(error**2))
-print('RMSE: ', rmse)
-

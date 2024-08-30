@@ -42,12 +42,13 @@ def test_models(mod, helios_names, degree=1, data_index=1):
     qz = (training_data.iloc[:, 1]-0.5)*120
 
     # Inputs
+    h0 = training_data.iloc[:, 2]
+    h1 = training_data.iloc[:, 3]
+    h2 = training_data.iloc[:, 4]
+    h3 = training_data.iloc[:, 5]
     h_mean = training_data.iloc[:, 6]
-    h0 = training_data.iloc[:, 2] - h_mean
-    h1 = training_data.iloc[:, 3] - h_mean
-    h2 = training_data.iloc[:, 4] - h_mean
-    h3 = training_data.iloc[:, 5] - h_mean
 
+    # Compute the differential measurements
     h02 = h0 - h2
     h13 = h1 - h3
 
