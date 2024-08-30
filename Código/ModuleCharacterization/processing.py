@@ -1,6 +1,8 @@
-# Create a script that opens the .csv files contained in the data folder and plots the data in a single graph.
-# The script must work for any .csv file that has the same structure as the ones provided.
-# The data folder is named "240823" and is located in the same directory as the script.
+# Description: This script reads a CSV file with the following columns:	qy, qz, h0, h1, h2, h3, h_avg
+#               and plots the data in 3 subplots: Euler angles Y and Z, Helios measurements, Helios average
+#               It also plots the differential measurements h1-h3 and h0-h2 vs the Euler angles Y and Z
+#               Finally, it exports the data to a MATLAB .mat file with the following variables: qy, qz, h0, h1, h2, h3, h_avg
+#
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -60,10 +62,6 @@ def plot_csv_file(file_path):
         ax.grid(True)  
         ax.tick_params(axis='both', which='major', labelsize=14)
 
-    # Compute theta
-    theta = qy**2 + qz**2
-    theta = theta.apply(sqrt)
-
     # 3D plot of h0, h2 vs qy
     fig = plt.figure()
     ax = fig.add_subplot(121, projection='3d')
@@ -97,7 +95,7 @@ def plot_csv_file(file_path):
 
 if __name__ == '__main__':
     # File path
-    file_path = Path('./240823/0x4A_240823_1.csv')
+    file_path = Path('./dataset/240823/0x40_240823_1.csv')
 
     # Plot the data
     plot_csv_file(file_path)
