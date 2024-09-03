@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 import yaml
-from math import pi
+from math import pi, atan2, sqrt
 
 class SensorToPoseNode(Node):
     def __init__(self):
@@ -24,20 +24,12 @@ class SensorToPoseNode(Node):
         # Load the models from the .h5 files
         folder = os.getcwd() + '/microros_ws/src/helios_robot/models/'
         self.models = []
-        self.models.append(tf.keras.models.load_model(folder + 'model_40.h5'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_41.h5'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_44.h5'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_45.h5'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_48.h5'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_4A.h5'))
-
-        self.h0_ranges = []
-        self.h1_ranges = []
-        # Open yaml file with the sensor ranges
-        with open(folder + 'model_ranges.yaml', 'r') as file:
-            content = yaml.load(file, Loader=yaml.FullLoader)
-            self.h0_ranges = content['h0_ranges']
-            self.h1_ranges = content['h1_ranges']
+        self.models.append(tf.keras.models.load_model(folder + 'model_40.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_41.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_44.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_45.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_48.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'model_4A.keras'))
 
     def normalize(self, data, min, max):
         return (data - min) / (max - min)
@@ -53,17 +45,17 @@ class SensorToPoseNode(Node):
         phi = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         # Predict the pose. Each model predicts two values: x and y
         for index in range(6):
-            # Normalize the sensor values
-            h0range = self.h0_ranges[index]
-            h1range = self.h1_ranges[index]
-
-            h0 = self.normalize(sensor_values[index*2], h0range[0], h0range[1])
-            h1 = self.normalize(sensor_values[index*2+1], h1range[0], h1range[1])
+            h0 = sensor_values[index*2]
+            h1 = sensor_values[index*2+1]
 
             # Predict the pose
             prediction = self.models[index](tf.constant([[h0, h1]]))
-            theta[index] = abs(self.denormalize(float(prediction[0][0]), -30, 30))
-            phi[index] = self.denormalize(float(prediction[0][1]), -30, 30)
+            qy = abs(self.denormalize(float(prediction[0][0]), -60, 60))
+            qz = self.denormalize(float(prediction[0][1]), -60, 60)
+
+            # Calculate the angle
+            theta[index] = sqrt(qy**2 + qz**2)
+            phi[index] = 180/pi*atan2(qz, qy)+45
         
         # Create and publish the message with the predicted pose
         pose_msg = Float32MultiArray()
