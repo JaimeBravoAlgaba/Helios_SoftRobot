@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import json
 
 # This script tests a pretrained model to predict the output of a given dataset
-model_file = 'models/neural_network/model_0x4A_V2.keras'
-test_data = 'dataset/240823/0x4A_240823_2.csv'
+model_file = 'models/nn/nn_general.keras'
+test_data = 'dataset/240823/0x45_240823_2.csv'
 normalization_file = 'models/normalization_params.json'
 
 def denormalize(data, min, max):
@@ -49,16 +49,12 @@ qz = denormalize(qz, -60, 60)
 qy_pred = denormalize(predicted_output.iloc[:, 0], -60, 60)
 qz_pred = denormalize(predicted_output.iloc[:, 1], -60, 60)
 
-# Calculate the error
-error = np.sqrt((qy - qy_pred)**2 + (qz - qz_pred)**2)
+# Compute the RMSE of each output
+rmse = np.sqrt(np.mean((qy - qy_pred)**2))
+print('RMSE qy: ', rmse)
 
-# Compute the RMSE
-rmse = np.sqrt(np.mean(error**2))
-print('RMSE: ', rmse)
-
-# Plot the error
-plt.plot(error)
-plt.show()
+rmse = np.sqrt(np.mean((qz - qz_pred)**2))
+print('RMSE qz: ', rmse)
 
 # Compare the predicted output with the real output
 # Subplot 1

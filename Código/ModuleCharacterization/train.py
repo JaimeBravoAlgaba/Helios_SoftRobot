@@ -7,7 +7,7 @@ import pandas as pd
 import json
 
 # This script trains a new model with a given dataset
-model_file = 'models/neural_network/model_0x4A_V2.keras'
+model_file = 'models/nn/nn_0x4A_V2.keras'
 training_data = 'dataset/240823/0x4A_240823_1.csv'
 normalization_file = 'models/normalization_params.json'
 
@@ -38,7 +38,7 @@ h13 = h1 - h3
 # Create a model
 model = Sequential()
 model.add(Dense(16, input_dim=2, activation='relu'))
-model.add(Dense(8, activation='relu'))
+model.add(Dense(16, activation='relu'))
 model.add(Dense(2, activation='tanh'))
 
 # Compile the model
@@ -60,12 +60,12 @@ qz = denormalize(qz, -60, 60)
 qy_pred = denormalize(predicted_output.iloc[:, 0], -60, 60)
 qz_pred = denormalize(predicted_output.iloc[:, 1], -60, 60)
 
-# Calculate the error
-error = np.sqrt((qy - qy_pred)**2 + (qz - qz_pred)**2)
+# Compute the RMSE of each output
+rmse = np.sqrt(np.mean((qy - qy_pred)**2))
+print('RMSE qy: ', rmse)
 
-# Compute the RMSE
-rmse = np.sqrt(np.mean(error**2))
-print('RMSE: ', rmse)
+rmse = np.sqrt(np.mean((qz - qz_pred)**2))
+print('RMSE qz: ', rmse)
 
 # Model summary
 model.summary()
