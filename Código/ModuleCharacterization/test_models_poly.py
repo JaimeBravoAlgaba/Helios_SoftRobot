@@ -106,14 +106,14 @@ def test_models(mod, helios_names, model='poly_1', data_index=1):
 
 if __name__ == '__main__':
     helios_names = ['0x40', '0x41', '0x44', '0x45', '0x48', '0x4A']
-    degree = 3
+    model = 'neural_network'
     rmse_training = []
     rmse_test = []
 
     # Iterate over the models
     for mod in range(6):
-        rmse_training.append(test_models(mod, helios_names, model='neural_network', data_index=1))
-        rmse_test.append(test_models(mod, helios_names, model='neural_network', data_index=2))
+        rmse_training.append(test_models(mod, helios_names, model=model, data_index=1))
+        rmse_test.append(test_models(mod, helios_names, model=model, data_index=2))
         print('')
     
     # Barplot of the RMSE, comparing the two degrees

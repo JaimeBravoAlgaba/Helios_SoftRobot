@@ -7,8 +7,8 @@ import pandas as pd
 import json
 
 # This script trains a new model with a given dataset
-model_file = 'models/neural_network/model_0x4A_V2.keras'
-training_data = 'dataset/240823/0x4A_240823_1.csv'
+model_file = 'models/neural_network/model_0x44.keras'
+training_data = 'dataset/240823/0x44_240823_1.csv'
 normalization_file = 'models/normalization_params.json'
 
 def denormalize(data, min, max):
