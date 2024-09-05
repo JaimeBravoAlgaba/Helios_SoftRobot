@@ -1,5 +1,3 @@
-![logo_name](https://user-images.githubusercontent.com/90116779/190921175-1b6f6de5-6861-49d6-b9e2-9f3607bc0cc0.png)
-
 **Helios SoftRobot**
 =====================================
 
@@ -94,3 +92,21 @@ sudo chmod a+rw /dev/ttyUSB0
 Después de resetear el ESP32, deberían escucharse sus topics desde otro terminal.
 
 Esperamos que disfrutes utilizando Helios SoftRobot. Si tienes alguna pregunta o problema, no dudes en contactarnos.
+
+**Control por terminal**
+-----------
+
+Para lanzar el nodo de visualización:
+```bash
+ros2 run helios_robot helios_robot_plot
+```
+
+Para controlar la longitud de los cables, en metros:
+```bash
+ros2 pub --once helios_robot /helios_cables_cmd std_msgs/msg/Float32MultiArray "data: [0,0,0,0,  0,0,0,0,  0,0,0,0]"
+```
+
+Para controlar la herramienta ( dato de 0 a 255):
+```bash
+ros2 pub --once helios_robot /helios_cables_cmd std_msgs/msg/UInt8 "data: 255"
+```
