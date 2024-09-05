@@ -86,12 +86,7 @@ sudo usermod -a -G dialout $USER
 sudo chmod a+rw /dev/ttyUSB0
 ```
 
-**Revisión**
------------
-
 Después de resetear el ESP32, deberían escucharse sus topics desde otro terminal.
-
-Esperamos que disfrutes utilizando Helios SoftRobot. Si tienes alguna pregunta o problema, no dudes en contactarnos.
 
 **Control por terminal**
 -----------
