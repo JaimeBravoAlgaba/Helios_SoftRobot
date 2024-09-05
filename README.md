@@ -95,6 +95,12 @@ Esperamos que disfrutes utilizando Helios SoftRobot. Si tienes alguna pregunta o
 
 **Control por terminal**
 -----------
+- Puede utilizarse el archivo helios_robot.sh para lanzar automáticamente los nodos necesarios:
+```bash
+# Lanza el agente de MicroROS, la cinematica y la predicción de pose
+# En la carpeta en la que se encuentre el archivo hacer:
+./helios_robot.sh
+```
 
 - Lanzar el nodo de visualización:
 ```bash
