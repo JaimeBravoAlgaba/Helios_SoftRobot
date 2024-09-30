@@ -22,7 +22,6 @@ setup(
         'console_scripts': [
             "helios_robot_kine_pcc = helios_robot.helios_robot_kine_pcc:main",
             "helios_robot_sensor2pose = helios_robot.helios_robot_sensor2pose:main",
-            "helios_robot_control = helios_robot.helios_robot_control:main",
         ],
     },
 )

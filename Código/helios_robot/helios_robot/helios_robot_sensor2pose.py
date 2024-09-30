@@ -15,12 +15,12 @@ class SensorToPoseNode(Node):
         # Load the pretrained AI models
         folder = os.getcwd() + '/helios_ws/src/helios_robot/models/'
         self.models = []
-        self.models.append(tf.keras.models.load_model(folder + 'model_40.keras'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_41.keras'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_44.keras'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_45.keras'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_48.keras'))
-        self.models.append(tf.keras.models.load_model(folder + 'model_4A.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'nn_0x40.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'nn_0x41.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'nn_0x44.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'nn_0x45.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'nn_0x48.keras'))
+        self.models.append(tf.keras.models.load_model(folder + 'nn_0x4A.keras'))
 
     def normalize(self, data, min, max):
         return (data - min) / (max - min)
