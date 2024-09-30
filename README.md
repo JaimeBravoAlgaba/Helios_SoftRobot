@@ -114,7 +114,7 @@ ros2 pub --once helios_robot /helios_cables_cmd std_msgs/msg/Float32MultiArray "
 ros2 pub --once helios_robot /helios_sections_cmd std_msgs/msg/Float32MultiArray "data: [0,0,0,  0,0,0,]"
 ```
 
-- Controlar la herramienta ( dato de 0 a 255):
+- Controlar la herramienta (dato de 0 a 255):
 ```bash
 ros2 pub --once helios_robot /helios_cables_cmd std_msgs/msg/UInt8 "data: 255"
 ```
