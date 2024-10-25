@@ -105,16 +105,16 @@ ros2 run helios_robot helios_robot_plot
 - Controlar la longitud de los cables, en metros:
 ```bash
 # [L00, L01, L02, L03, L10, L11, ... L22, L23]
-ros2 pub --once helios_robot /helios_cables_cmd std_msgs/msg/Float32MultiArray "data: [0,0,0,0,  0,0,0,0,  0,0,0,0]"
+ros2 topic pub --once /helios_cables_cmd std_msgs/msg/Float32MultiArray "data: [0,0,0,0,  0,0,0,0,  0,0,0,0]"
 ```
 
 - Enviar comando en coordenadas theta y phi, en radianes:
 ```bash
 # [th0, th1, th2, phi0, phi1, phi2]
-ros2 pub --once helios_robot /helios_sections_cmd std_msgs/msg/Float32MultiArray "data: [0,0,0,  0,0,0,]"
+ros2 topic pub --once /helios_sections_cmd std_msgs/msg/Float32MultiArray "data: [0,0,0,  0,0,0]"
 ```
 
 - Controlar la herramienta (dato de 0 a 255):
 ```bash
-ros2 pub --once helios_robot /helios_cables_cmd std_msgs/msg/UInt8 "data: 255"
+ros2 topic pub --once /helios_tool_cmd std_msgs/msg/Int8 "data: 127"
 ```
