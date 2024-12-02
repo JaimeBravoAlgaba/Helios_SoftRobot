@@ -1,3 +1,5 @@
+#include <Adafruit_VL53L0X.h>
+
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
@@ -7,13 +9,15 @@
 
 #include <SparkFun_ADS122C04_ADC_Arduino_Library.h> // Modded library for compatibility with Helios project
 
-#define HELIOS_ADDR 0x40
+
+#define HELIOS_ADDR 0x4A
 #define IMU_0_ADDR 0x08
 #define IMU_1_ADDR 0x68
 #define TCAADDR 0x70
 
 SFE_ADS122C04 heliosSensor;
 Adafruit_BNO055 bno_0 = Adafruit_BNO055(55, IMU_0_ADDR, &Wire);
+Adafruit_VL53L0X tof = Adafruit_VL53L0X();
 
 uint32_t h[4] = {0, 0, 0, 0}; // Helios module measurement 
 float cableLengths[4] = {SEGMENTS_LEN, SEGMENTS_LEN, SEGMENTS_LEN, SEGMENTS_LEN};
@@ -21,7 +25,8 @@ sensors_event_t orientationData;
 
 CoordsPCC coords = {0, 0};
 CoordsPCC coordsIMU = {0,0};
-float qx_0, qy_0, qz_0;
+float qx_0 = 0, qy_0 = 0, qz_0 = 0;
+float l0 = 0, l1 = 0, l2 = 0, l3 = 0;
 
 CoordsPCC euler2pcc(float qx, float qy, float qz)
 {
@@ -38,7 +43,13 @@ uint32_t readSensor(uint8_t i)
       return heliosSensor.readADC(); 
 }
 
-void tcaselect(uint8_t i)
+void readTOFs()
+{
+      tcaSelect(0);
+      
+}
+
+void tcaSelect(uint8_t i)
 {
   if (i > 7) return;
  
@@ -126,7 +137,7 @@ void setup()
 
   // HELIOS INIT
     while(!heliosSensor.begin(HELIOS_ADDR)){
-      //Serial.println(F("Helios Module not detected. Retrying..."));
+      Serial.println(F("Helios Module not detected. Retrying..."));
       delay(500);
     }
 
@@ -134,6 +145,8 @@ void setup()
     heliosSensor.setGain(ADS122C04_GAIN_128);
     heliosSensor.setConversionMode(ADS122C04_CONVERSION_MODE_CONTINUOUS);
     heliosSensor.start();
+
+    Serial.print("Helios Module"); Serial.print(HELIOS_ADDR, HEX); Serial.println(" initialized.");
 
   // BNO055 INIT
     while(!bno_0.begin())
@@ -152,8 +165,8 @@ void setup()
     bno_0.getSensor(&sensor);
     if(bnoID != sensor.sensor_id)
     {
-      //Serial.println("\nNo calibration data for BNO055 with address ");
-      //Serial.println(IMU_0_ADDR, HEX);
+      Serial.println("\nNo calibration data for BNO055 with address ");
+      Serial.println(IMU_0_ADDR, HEX);
       delay(500);
     }
     else
@@ -161,32 +174,26 @@ void setup()
       eeAddress += sizeof(long);
       EEPROM.get(eeAddress, calibrationData);
       bno_0.setSensorOffsets(calibrationData);
-      //Serial.print("\nCalibration data loaded into BNO055 with address ");
-      //Serial.println(IMU_0_ADDR);
+      Serial.print("\nCalibration data loaded into BNO055 with address ");
+      Serial.println(IMU_0_ADDR);
     }
+
+
+    // TCA9548A SCAN  
+    Serial.println("Adafruit VL53L0X test");
+    for(uint8_t i=0; i<4; ++i) {
+      tcaSelect(i);
+      if (!tof.begin()) {
+        Serial.print(F("Failed to boot VL53L0X on channel "));
+        Serial.println(i);
+      }
+    }
+  
+    Serial.println("End");
 
     calibrateCables();
 
     Serial.println("eul_x, eul_y, eul_z, theta_ref, phi_ref, theta, phi, h0, h1, h2, h3");
-
-
-    // TCA9548A SCAN
-    Serial.println("\nTCA escaner listo");
-    
-    for (uint8_t t=0; t<8; t++) {
-      tcaselect(t);
-      Serial.print("  Escaneando salida "); Serial.println(t);
-
-      for (uint8_t addr = 0; addr<=127; addr++) {
-        if (addr == TCAADDR) continue;
-
-        Wire.beginTransmission(addr);
-        if (!Wire.endTransmission()) {
-          Serial.print("  - Encontrado I2C 0x");  Serial.println(addr,HEX);
-        }
-      }
-    }
-    Serial.println("Finalizado");
 }
 
 void loop()
