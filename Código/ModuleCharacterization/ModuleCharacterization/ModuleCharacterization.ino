@@ -10,6 +10,7 @@
 #define HELIOS_ADDR 0x40
 #define IMU_0_ADDR 0x08
 #define IMU_1_ADDR 0x68
+#define TCAADDR 0x70
 
 SFE_ADS122C04 heliosSensor;
 Adafruit_BNO055 bno_0 = Adafruit_BNO055(55, IMU_0_ADDR, &Wire);
@@ -35,6 +36,15 @@ uint32_t readSensor(uint8_t i)
       heliosSensor.setInputMultiplexer(ADS122C04_MUX_AIN0_AVSS + i);
       delay(50);
       return heliosSensor.readADC(); 
+}
+
+void tcaselect(uint8_t i)
+{
+  if (i > 7) return;
+ 
+  Wire.beginTransmission(TCAADDR);
+  Wire.write(1 << i);
+  Wire.endTransmission();  
 }
 
 void move(CoordsPCC c)
@@ -158,6 +168,25 @@ void setup()
     calibrateCables();
 
     Serial.println("eul_x, eul_y, eul_z, theta_ref, phi_ref, theta, phi, h0, h1, h2, h3");
+
+
+    // TCA9548A SCAN
+    Serial.println("\nTCA escaner listo");
+    
+    for (uint8_t t=0; t<8; t++) {
+      tcaselect(t);
+      Serial.print("  Escaneando salida "); Serial.println(t);
+
+      for (uint8_t addr = 0; addr<=127; addr++) {
+        if (addr == TCAADDR) continue;
+
+        Wire.beginTransmission(addr);
+        if (!Wire.endTransmission()) {
+          Serial.print("  - Encontrado I2C 0x");  Serial.println(addr,HEX);
+        }
+      }
+    }
+    Serial.println("Finalizado");
 }
 
 void loop()
