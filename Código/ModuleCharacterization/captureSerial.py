@@ -1,7 +1,7 @@
 import serial
 import csv
 
-com_port = 'COM5'
+com_port = '/dev/ttyUSB0'
 baud_rate = 115200
 
 # Open the COM port

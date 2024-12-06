@@ -1,5 +1,12 @@
 #ifndef __CNC_SHIELD_UNO__ 
-# define __CNC_SHIELD_UNO__ 
+# define __CNC_SHIELD_UNO__
+
+
+  #define EN_DEBUG 1
+  inline void print_info(String txt){
+    if(EN_DEBUG)
+      Serial.print(String(txt));
+  }
 
   const uint8_t X_MOT = 0;
   const uint8_t Y_MOT = 1;
@@ -39,10 +46,11 @@
   const int STEP_DELAY_LOW = 1; // Microseconds
 
   // DIMENSIONS
-  static const float SEGMENTS_NUM = 1.0;     // Number of segments in a section
-  static const float SEGMENTS_LEN = 0.0445;    // Length [m] of a segment
-  static const float SEGMENTS_RC  = 0.0225;  // Radius [m] of the cable distribution circunference
-  static const float SEGMENTS_RP  = 0.005;   // Radius [m] of the actuator pulley
+  const float SEGMENTS_NUM = 1.0;     // Number of segments in a section
+  const float SEGMENTS_LEN = 0.0445;    // Length [m] of a segment
+  const float SEGMENTS_RC  = 0.0225;  // Radius [m] of the cable distribution circunference
+  const float SEGMENTS_RP  = 0.005;   // Radius [m] of the actuator pulley
+  const float TOFS_DIAM = 100.0; // Distance [mm] between opposite TOFs
 
   const float GEAR_RATIO = 20;
   const float STEPS_PER_REVOLUTION = (200*32*GEAR_RATIO);
@@ -51,6 +59,7 @@
   // Data structure to manage the coordinates of a PCC section.
   struct CoordsPCC
   {
+    float length;
     float theta;
     float phi;
   };

@@ -1,38 +1,48 @@
-#include <Adafruit_VL53L0X.h>
-
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <EEPROM.h>
-#include "CNC_Shield_UNO.h"
-
+#include <Adafruit_VL6180X.h>
 #include <SparkFun_ADS122C04_ADC_Arduino_Library.h> // Modded library for compatibility with Helios project
-
+#include "CNC_Shield_UNO.h"
 
 #define HELIOS_ADDR 0x4A
 #define IMU_0_ADDR 0x08
-#define IMU_1_ADDR 0x68
-#define TCAADDR 0x70
+#define TCA_ADDR 0x70
 
 SFE_ADS122C04 heliosSensor;
-Adafruit_BNO055 bno_0 = Adafruit_BNO055(55, IMU_0_ADDR, &Wire);
-Adafruit_VL53L0X tof = Adafruit_VL53L0X();
+Adafruit_VL6180X tof = Adafruit_VL6180X();
 
 uint32_t h[4] = {0, 0, 0, 0}; // Helios module measurement 
 float cableLengths[4] = {SEGMENTS_LEN, SEGMENTS_LEN, SEGMENTS_LEN, SEGMENTS_LEN};
 sensors_event_t orientationData;
 
-CoordsPCC coords = {0, 0};
-CoordsPCC coordsIMU = {0,0};
+CoordsPCC coords;
+CoordsPCC coords_meas;
 float qx_0 = 0, qy_0 = 0, qz_0 = 0;
 float l0 = 0, l1 = 0, l2 = 0, l3 = 0;
+
+bool succ_init = true;
 
 CoordsPCC euler2pcc(float qx, float qy, float qz)
 {
   CoordsPCC coords;
   coords.phi = atan2(qz, qy);
   coords.theta = qy*cos(qx)+qz*sin(qx);
+  return coords;
+}
+
+CoordsPCC tofs2pcc(float l0, float l1, float l2, float l3){
+  float theta_x = atan2((l2-l0), TOFS_DIAM);
+  theta_x = (abs(theta_x) < 1E-6)? 1E-3 : theta_x;
+  float theta_y = atan2((l3-l1), TOFS_DIAM);
+  
+  CoordsPCC coords;
+  coords.theta = sqrt(theta_x*theta_x + theta_y*theta_y);
+  coords.phi = atan2(theta_y, theta_x);
+  coords.length = coords.theta * (l0+l1+l2+l3)/4.0 * tan(PI/2.0 - coords.theta);
+
   return coords;
 }
 
@@ -43,19 +53,28 @@ uint32_t readSensor(uint8_t i)
       return heliosSensor.readADC(); 
 }
 
-void readTOFs()
-{
-      tcaSelect(0);
-      
-}
-
 void tcaSelect(uint8_t i)
 {
   if (i > 7) return;
  
-  Wire.beginTransmission(TCAADDR);
+  Wire.beginTransmission(TCA_ADDR);
   Wire.write(1 << i);
   Wire.endTransmission();  
+}
+
+void readTOFs()
+{
+  tcaSelect(0);
+  l0 = tof.readRange();
+  
+  tcaSelect(1);
+  l1 = tof.readRange();
+  
+  tcaSelect(2);
+  l2 = tof.readRange();
+  
+  tcaSelect(3);
+  l3 = tof.readRange();
 }
 
 void move(CoordsPCC c)
@@ -74,6 +93,7 @@ void move(CoordsPCC c)
 
 void calibrateCables()
 {
+  print_info("Starting calibration... ");
   // 1. De-tension
   long n = length2steps(0.007); // Lengthen the cables by 5mm
   long dn[4] = {n, n, n, n};
@@ -90,7 +110,7 @@ void calibrateCables()
   for (uint8_t i=0; i<4; ++i)
   {
     h[i] = readSensor(i);
-    //Serial.print(h[i]); Serial.print(",");
+    //print_info(h[i]); print_info(",");
     int thr = 0.007*h[i];
     uint32_t u = h[i];
     dn[i] = n;
@@ -99,32 +119,29 @@ void calibrateCables()
     {
       stepParallel(dn);
       u = readSensor(i);
-      //Serial.print(u); Serial.print(",");
     }
     cableLengths[i] = SEGMENTS_LEN;
     dn[i] = 0;
-    //Serial.print("Motor "); Serial.print(i); Serial.println(" ready!");
     delay(100);
   }
+
+  print_info("OK\n");
 }
 
 void printData()
 {
+  /*print_info(String(coords_meas.theta * 180/PI)); print_info(",");
+  print_info(String(coords_meas.phi * 180/PI)); print_info(",");
+  print_info(String(coords_meas.length)); print_info(",");*/
+  print_info(String(l0)); print_info(",");
+  print_info(String(l1)); print_info(",");
+  print_info(String(l2)); print_info(",");
+  print_info(String(l3)); print_info(",");
 
-      Serial.print(qx_0); Serial.print(",");
-      Serial.print(qy_0); Serial.print(",");
-      Serial.print(qz_0); Serial.print(",");
-
-      Serial.print(coords.theta*180/PI, 4); Serial.print(",");
-      Serial.print(coords.phi*180/PI, 4);   Serial.print(",");
-
-      Serial.print(coordsIMU.theta, 4); Serial.print(",");
-      Serial.print(coordsIMU.phi, 4);   Serial.print(",");
-
-      Serial.print(h[0]); Serial.print(",");
-      Serial.print(h[1]); Serial.print(",");
-      Serial.print(h[2]); Serial.print(",");
-      Serial.println(h[3]);  
+  print_info(String(h[0])); print_info(",");
+  print_info(String(h[1])); print_info(",");
+  print_info(String(h[2])); print_info(",");
+  print_info(String(h[3])); print_info("\n");
 }
 
 void setup()
@@ -136,8 +153,10 @@ void setup()
   Wire.begin();
 
   // HELIOS INIT
+  print_info("Initializing Helios module on address ");
+  print_info(String(HELIOS_ADDR)); print_info("\n");
     while(!heliosSensor.begin(HELIOS_ADDR)){
-      Serial.println(F("Helios Module not detected. Retrying..."));
+      print_info(F("Helios Module not detected. Retrying...\n"));
       delay(500);
     }
 
@@ -146,138 +165,58 @@ void setup()
     heliosSensor.setConversionMode(ADS122C04_CONVERSION_MODE_CONTINUOUS);
     heliosSensor.start();
 
-    Serial.print("Helios Module"); Serial.print(HELIOS_ADDR, HEX); Serial.println(" initialized.");
+    print_info("OK\n");
 
-  // BNO055 INIT
-    while(!bno_0.begin())
-    {
-      Serial.println("BNO055 not detected. Retrying...");
-      delay(500);
-    }
-
-    int eeAddress = 0;
-    long bnoID;
-
-    EEPROM.get(eeAddress, bnoID);
-    adafruit_bno055_offsets_t calibrationData;
-    sensor_t sensor;
-
-    bno_0.getSensor(&sensor);
-    if(bnoID != sensor.sensor_id)
-    {
-      Serial.println("\nNo calibration data for BNO055 with address ");
-      Serial.println(IMU_0_ADDR, HEX);
-      delay(500);
-    }
-    else
-    {
-      eeAddress += sizeof(long);
-      EEPROM.get(eeAddress, calibrationData);
-      bno_0.setSensorOffsets(calibrationData);
-      Serial.print("\nCalibration data loaded into BNO055 with address ");
-      Serial.println(IMU_0_ADDR);
-    }
-
-
-    // TCA9548A SCAN  
-    Serial.println("Adafruit VL53L0X test");
+    // TCA9548A Initialization
+    print_info("Initializing TCA9548A with address ");
+    print_info(String(TCA_ADDR)); print_info("\n");
     for(uint8_t i=0; i<4; ++i) {
       tcaSelect(i);
       if (!tof.begin()) {
-        Serial.print(F("Failed to boot VL53L0X on channel "));
-        Serial.println(i);
+        print_info(F("\tFailed to boot TOF on channel "));
+        print_info(String(i)); print_info("\n");
+        succ_init = false;
+      }
+      else
+      {
+        print_info(F("\tSuccess booting TOF on channel "));
+        print_info(String(i)); print_info("\n");
       }
     }
-  
-    Serial.println("End");
+    print_info("OK\n");
+
+    if(succ_init){  
+      print_info("\nInitialization successful!\n");
+    }
+    else{
+      print_info("\nInitialization failed!\n");
+      while(1);
+    }
 
     calibrateCables();
 
-    Serial.println("eul_x, eul_y, eul_z, theta_ref, phi_ref, theta, phi, h0, h1, h2, h3");
+    print_info("theta, phi, L, h0, h1, h2, h3\n");
 }
 
 void loop()
-{
-  /*
+{  
   coords.theta=0;
   coords.phi = 0;
-
-  for(uint8_t j=0; j<24; ++j,  coords.theta=0,coords.phi+=PI/12.0)
-  {
-    for(uint8_t i=0; i<8; ++i, coords.theta+=PI/28.0*1.1)
-    {
-      move (coords);
-
-      // Read IMU
-        sensors_event_t orientationData;
-        bno_0.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-        qx_0 = orientationData.orientation.x;
-        qy_0 = orientationData.orientation.y;
-        qz_0 = orientationData.orientation.z;
-
-        coordsIMU.theta = sqrt(qy_0*qy_0 + qz_0*qz_0);
-        coordsIMU.phi = qx_0-atan2(qy_0, qz_0)*180/PI+45;
-
-        coordsIMU.phi = (coordsIMU.phi<0)? coordsIMU.phi+360:coordsIMU.phi;
-        coordsIMU.phi = (coordsIMU.phi>360)? coordsIMU.phi-360:coordsIMU.phi;
-        coordsIMU.phi = (coordsIMU.theta<0)? coordsIMU.phi+180:coordsIMU.phi;
-        coordsIMU.theta = abs(coordsIMU.theta);
-      
-      // Read Helios
-        for(uint8_t i=0; i<4; ++i)
-          h[i] = readSensor(i);
-
-      Serial.print(qx_0); Serial.print(",");
-      Serial.print(qy_0); Serial.print(",");
-      Serial.print(qz_0); Serial.print(",");
-
-      Serial.print(coords.theta*180/PI, 4); Serial.print(",");
-      Serial.print(coords.phi*180/PI, 4);   Serial.print(",");
-
-      Serial.print(coordsIMU.theta, 4); Serial.print(",");
-      Serial.print(coordsIMU.phi, 4);   Serial.print(",");
-
-      Serial.print(h[0]); Serial.print(",");
-      Serial.print(h[1]); Serial.print(",");
-      Serial.print(h[2]); Serial.print(",");
-      Serial.println(h[3]);    
-
-      delay(50);
-    }
-    coords.theta = 0;
-    move (coords);
-    calibrateCables();
-  }
-  */
-  
-  coords.theta=0;
-  coords.phi = 0;
+  coords.length = SEGMENTS_LEN;
 
   for(uint8_t j=0; j<8; ++j,  coords.theta=0,coords.phi+=PI/4.0)
   {
     for(uint8_t i=0; i<8; ++i, coords.theta+=PI/28.0*1.1)
     {
       move (coords);
-      
-      // Read Helios
+
+      // Read Sensors
         for(uint8_t i=0; i<4; ++i)
           h[i] = readSensor(i);
 
-      // Read IMU
-        bno_0.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-        qx_0 = orientationData.orientation.x;
-        qy_0 = orientationData.orientation.y;
-        qz_0 = orientationData.orientation.z;
-
-        coordsIMU.theta = sqrt(qy_0*qy_0 + qz_0*qz_0);
-        coordsIMU.phi = qx_0-atan2(qy_0, qz_0)*180/PI+45;
-
-        coordsIMU.phi = (coordsIMU.phi<0)? coordsIMU.phi+360:coordsIMU.phi;
-        coordsIMU.phi = (coordsIMU.phi>360)? coordsIMU.phi-360:coordsIMU.phi;
-        coordsIMU.phi = (coordsIMU.theta<0)? coordsIMU.phi+180:coordsIMU.phi;
-        coordsIMU.theta = abs(coordsIMU.theta);
-      
-      // Print Data
+      readTOFs();
+      coords_meas = tofs2pcc(l0, l1, l2, l3);
+    
       printData();
 
       delay(50);
@@ -286,26 +225,14 @@ void loop()
     for(uint8_t i=0; i<16; ++i, coords.theta-=PI/28.0*1.1)
     {
       move (coords);
-      
-      // Read Helios
+
+      // Read Sensors
         for(uint8_t i=0; i<4; ++i)
           h[i] = readSensor(i);
 
-      // Read IMU
-        bno_0.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-        qx_0 = orientationData.orientation.x;
-        qy_0 = orientationData.orientation.y;
-        qz_0 = orientationData.orientation.z;
-
-        coordsIMU.theta = sqrt(qy_0*qy_0 + qz_0*qz_0);
-        coordsIMU.phi = qx_0-atan2(qy_0, qz_0)*180/PI+45;
-
-        coordsIMU.phi = (coordsIMU.phi<0)? coordsIMU.phi+360:coordsIMU.phi;
-        coordsIMU.phi = (coordsIMU.phi>360)? coordsIMU.phi-360:coordsIMU.phi;
-        coordsIMU.phi = (coordsIMU.theta<0)? coordsIMU.phi+180:coordsIMU.phi;
-        coordsIMU.theta = abs(coordsIMU.theta);
-      
-      // Print Data
+      readTOFs();
+      coords_meas = tofs2pcc(l0, l1, l2, l3);
+    
       printData();
 
       delay(50);
@@ -314,26 +241,14 @@ void loop()
     for(uint8_t i=0; i<8; ++i, coords.theta+=PI/28.0*1.1)
     {
       move (coords);
-      
-      // Read Helios
+
+      // Read Sensors
         for(uint8_t i=0; i<4; ++i)
           h[i] = readSensor(i);
 
-      // Read IMU
-        bno_0.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-        qx_0 = orientationData.orientation.x;
-        qy_0 = orientationData.orientation.y;
-        qz_0 = orientationData.orientation.z;
-
-        coordsIMU.theta = sqrt(qy_0*qy_0 + qz_0*qz_0);
-        coordsIMU.phi = qx_0-atan2(qy_0, qz_0)*180/PI+45;
-
-        coordsIMU.phi = (coordsIMU.phi<0)? coordsIMU.phi+360:coordsIMU.phi;
-        coordsIMU.phi = (coordsIMU.phi>360)? coordsIMU.phi-360:coordsIMU.phi;
-        coordsIMU.phi = (coordsIMU.theta<0)? coordsIMU.phi+180:coordsIMU.phi;
-        coordsIMU.theta = abs(coordsIMU.theta);
-      
-      // Print Data
+      readTOFs();
+      coords_meas = tofs2pcc(l0, l1, l2, l3);
+    
       printData();
 
       delay(50);

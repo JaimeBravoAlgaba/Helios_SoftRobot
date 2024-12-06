@@ -90,7 +90,7 @@ float cableIKine(CoordsPCC coords, uint8_t i)
   coords.phi = (coords.theta<0)?coords.phi+PI:coords.phi;
   coords.theta = (abs(coords.theta)<1E-4)?0.0001:abs(coords.theta);
 
-  return 2*sin(coords.theta/(2.0*SEGMENTS_NUM))*(SEGMENTS_LEN*SEGMENTS_NUM/coords.theta - SEGMENTS_RC*sin(coords.phi+cableOffsets[i]));
+  return 2*sin(coords.theta/(2.0*SEGMENTS_NUM))*(coords.length*SEGMENTS_NUM/coords.theta - SEGMENTS_RC*sin(coords.phi+cableOffsets[i]));
 }
 
 long length2steps(float l){
