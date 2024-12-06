@@ -1,7 +1,6 @@
 #ifndef __CNC_SHIELD_UNO__ 
 # define __CNC_SHIELD_UNO__
 
-
   #define EN_DEBUG 1
   inline void print_info(String txt){
     if(EN_DEBUG)
@@ -56,18 +55,8 @@
   const float STEPS_PER_REVOLUTION = (200*32*GEAR_RATIO);
   const float ANGLE_PER_STEP = 2*M_PI/STEPS_PER_REVOLUTION;
 
-  // Data structure to manage the coordinates of a PCC section.
-  struct CoordsPCC
-  {
-    float length;
-    float theta;
-    float phi;
-  };
-
   // MOTION
   void setupCNC();
   void step(const uint8_t mot, long n);
   void stepParallel(int dn[4]);
-  float cableIKine(CoordsPCC coords, uint8_t i);
-  long length2steps(float l);
 #endif

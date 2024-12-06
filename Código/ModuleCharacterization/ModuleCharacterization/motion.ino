@@ -82,17 +82,3 @@ void stepParallel(long dn[4])
     }
   }
 }
-
-float cableOffsets[4] = {0, PI/2.0, PI, -PI/2.0};
-
-float cableIKine(CoordsPCC coords, uint8_t i)
-{
-  coords.phi = (coords.theta<0)?coords.phi+PI:coords.phi;
-  coords.theta = (abs(coords.theta)<1E-4)?0.0001:abs(coords.theta);
-
-  return 2*sin(coords.theta/(2.0*SEGMENTS_NUM))*(coords.length*SEGMENTS_NUM/coords.theta - SEGMENTS_RC*sin(coords.phi+cableOffsets[i]));
-}
-
-long length2steps(float l){
-  return ceil(l/(SEGMENTS_RP*ANGLE_PER_STEP));
-}
