@@ -2,7 +2,7 @@
 #include "CNC_Shield_UNO.h"
 #include "Helios.h"
 
-#define HELIOS_ADDR 0x48
+#define HELIOS_ADDR 0x4A
 #define IMU_0_ADDR 0x08
 #define TCA_ADDR 0x70
 
@@ -35,34 +35,28 @@ void move(CoordsPCC c) {
 void calibrateCables() {
   print_info("Starting calibration... ");
   
-  // 1. De-tension
-  long n = length2steps(0.007); // Lengthen the cables by 5mm
-  long dn[4] = {n, n, n, n};
+  // De-tension the cables lengthening them
+  long dn[4] = {length2steps(0.005), length2steps(0.005), length2steps(0.005), length2steps(0.005)};
   stepParallel(dn);
-  delay(500);
-
+  
+  memmove(l_tofs, readTOFs(), sizeof(l_tofs) * sizeof(uint8_t));
+  long l_tofs_init[4];
   for (uint8_t i = 0; i < 4; ++i) {
     dn[i] = 0;
   }
+  
+  for(uint8_t i = 0; i < 4; ++i) {
+    dn[i] = length2steps(-0.001);
+    l_tofs_init[i] = l_tofs[i];
 
-  // 2. Tension loop
-  n = length2steps(-0.00025); // Shorten each cable by 1mm per cycle
-  for (uint8_t i = 0; i < 4; ++i) {
-    h[i] = readHelios(i);
-    int thr = 0.007 * h[i];
-    uint32_t u = h[i];
-    dn[i] = n;
-    
-    while (abs((int)h[i] - (int)u) < thr) {
+    while (abs(l_tofs[i] - l_tofs_init[i]) < 3) {
       stepParallel(dn);
-      u = readHelios(i);
+      memmove(l_tofs, readTOFs(), sizeof(l_tofs) * sizeof(uint8_t));
     }
-    cableLengths[i] = SEGMENTS_LEN;
     dn[i] = 0;
-    delay(100);
   }
 
-  print_info("OK\n");
+  coords_meas = tofs2pcc(l_tofs[0], l_tofs[1], l_tofs[2], l_tofs[3]);
 }
 
 void printData() {
@@ -192,7 +186,25 @@ void loop() {
           dn[i] = cmd.substring(commas[i - 1] + 1, (i < 3) ? commas[i] : cmd.length()).toInt();
           dl[i] = steps2length(dn[i]);
           cableLengths[i] = dl[i] + cableLengths[i];
-        }        
+        }   
+      }
+
+      else if (cmd.startsWith("DELTA_PCC:")) {
+        cmd.remove(0, String("DELTA_PCC:").length());
+
+        int firstComma  = cmd.indexOf(',');
+        int secondComma = cmd.indexOf(',', firstComma + 1);
+        int thirdComma  = cmd.indexOf(',', secondComma + 1);
+
+        coords_ref.theta = cmd.substring(0, firstComma).toFloat() + coords_meas.theta;
+        coords_ref.phi = cmd.substring(firstComma + 1, secondComma).toFloat() + coords_meas.phi;
+        coords_ref.length = cmd.substring(secondComma + 1, thirdComma).toFloat() + coords_meas.length;
+        
+        for (uint8_t i = 0; i < 4; ++i) {
+          dl[i] = cableIKine(coords_ref, i) - cableLengths[i];
+          dn[i] = length2steps(dl[i]);
+          cableLengths[i] = dl[i] + cableLengths[i];
+        }
       }
 
       else if (cmd.startsWith("REF_PCC:")) {
@@ -218,12 +230,13 @@ void loop() {
       }
       
       stepParallel(dn);
-      
-      memmove(l_tofs, readTOFs(), sizeof(l_tofs) * sizeof(uint8_t));
-      for (uint8_t i = 0; i < 4; ++i) {
-        h[i] = readHelios(i);
+        }
       }
-      printData();
-    }
+      
+  memmove(l_tofs, readTOFs(), sizeof(l_tofs) * sizeof(uint8_t));
+  coords_meas = tofs2pcc(l_tofs[0], l_tofs[1], l_tofs[2], l_tofs[3]);
+  for (uint8_t i = 0; i < 4; ++i) {
+    h[i] = readHelios(i);
   }
+  printData();
 }
