@@ -2,7 +2,7 @@
 #include "CNC_Shield_UNO.h"
 #include "Helios.h"
 
-#define HELIOS_ADDR 0x4A
+#define HELIOS_ADDR 0x48
 #define IMU_0_ADDR 0x08
 #define TCA_ADDR 0x70
 
@@ -199,7 +199,7 @@ void loop() {
       delay(50);
     }
 
-    for (uint8_t i = 0; i < 16; ++i, coords_ref.theta -= PI / 28.0 * 1.1) {
+    for (uint8_t i = 0; i < 15; ++i, coords_ref.theta -= PI / 28.0 * 1.1) {
       move(coords_ref);
 
       // Read Sensors
