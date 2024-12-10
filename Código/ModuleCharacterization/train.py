@@ -1,71 +1,69 @@
+from matplotlib import pyplot as plt
 import numpy as np
 from numpy import cos, sin, pi
 import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import Dense
+from keras import Sequential
+from keras import layers
 import pandas as pd
 import json
 
+from processing_tof import get_data, normalize
+
 # This script trains a new model with a given dataset
 model_file = 'models/nn/nn_0x4A_V2.keras'
-training_data = 'dataset/240823/0x4A_240823_1.csv'
-normalization_file = 'models/normalization_params.json'
+training_data = './dataset/241207/0x4A_241207_1.csv'
 
-def denormalize(data, min, max):
-    return data * (max - min) + min
-
-# Load data form csv file
-data = pd.read_csv(training_data, header=None, delimiter=';')
-
-# Split data into input and output:
-# CSV file format: theta | phi | h0 | h1
-
-# Outputs
-qy = data.iloc[:, 0]
-qz = data.iloc[:, 1]
-
-# Inputs
-h0 = data.iloc[:, 2]
-h1 = data.iloc[:, 3]
-h2 = data.iloc[:, 4]
-h3 = data.iloc[:, 5]
-h_mean = data.iloc[:, 6]
-
-# Compute the differential measurements
-h02 = h0 - h2
-h13 = h1 - h3
+h, l, h_avg, l_avg, h0, l0 = get_data(training_data)
 
 # Create a model
 model = Sequential()
-model.add(Dense(16, input_dim=2, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(2, activation='tanh'))
+model.add(layers.Dense(16, input_dim=4, activation='relu'))
+model.add(layers.Dense(16, activation='relu'))
+model.add(layers.Dense(4, activation='tanh'))
 
 # Compile the model
 model.compile(loss='mean_squared_error', optimizer='adam')
 
 # Train the model
-x = np.column_stack((h02, h13))
-y = np.column_stack((qy, qz))
+x = np.array(h).T
+y = np.array(l).T
 model.fit(x, y, epochs=100, batch_size=10)
 
 # Predict the output
 predicted_output = pd.DataFrame(model.predict(x))
 
-# Denormalize the real output
-qy = denormalize(qy, -60, 60)
-qz = denormalize(qz, -60, 60)
+# Plot the predicted output
 
-# Denormalize the predicted output
-qy_pred = denormalize(predicted_output.iloc[:, 0], -60, 60)
-qz_pred = denormalize(predicted_output.iloc[:, 1], -60, 60)
+fig, axs = plt.subplots(2, 1, figsize=(10, 12))
 
-# Compute the RMSE of each output
-rmse = np.sqrt(np.mean((qy - qy_pred)**2))
-print('RMSE qy: ', rmse)
+# Plot the predicted output
+axs[0].plot(predicted_output[0], label='Predicted TOF distance l0')
+axs[0].plot(predicted_output[1], label='Predicted TOF distance l1')
+axs[0].plot(predicted_output[2], label='Predicted TOF distance l2')
+axs[0].plot(predicted_output[3], label='Predicted TOF distance l3')
+axs[0].set_xlabel('Sample Index')
+axs[0].set_ylabel('TOF Distance')
+axs[0].set_title('Predicted TOF Distances')
+axs[0].legend()
+axs[0].grid(True)
 
-rmse = np.sqrt(np.mean((qz - qz_pred)**2))
-print('RMSE qz: ', rmse)
+# Plot the training data
+axs[1].plot(l[0], label='Training TOF distance l0')
+axs[1].plot(l[1], label='Training TOF distance l1')
+axs[1].plot(l[2], label='Training TOF distance l2')
+axs[1].plot(l[3], label='Training TOF distance l3')
+axs[1].set_xlabel('Sample Index')
+axs[1].set_ylabel('TOF Distance')
+axs[1].set_title('Training TOF Distances')
+axs[1].legend()
+axs[1].grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Compute the RMSE
+rmse = np.sqrt(np.mean((predicted_output - y) ** 2))
+print('RMSE:', rmse)
 
 # Model summary
 model.summary()

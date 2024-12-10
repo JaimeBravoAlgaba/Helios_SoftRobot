@@ -1,77 +1,195 @@
+from matplotlib import pyplot as plt
 import numpy as np
-from numpy import cos, sin, pi, arctan2
 import pandas as pd
 import tensorflow as tf
-import matplotlib.pyplot as plt
-import json
+from keras import models as km
 
-# This script tests a pretrained model to predict the output of a given dataset
-<<<<<<< HEAD
-model_file = 'models/neural_network/model_0x44.keras'
-test_data = 'dataset/240823/0x44_240823_2.csv'
-=======
-model_file = 'models/nn/nn_general.keras'
-test_data = 'dataset/240823/0x45_240823_2.csv'
->>>>>>> 673fe33345620cc85742c8adaccaeb9f13d40e02
-normalization_file = 'models/normalization_params.json'
+from processing_tof import get_data, normalize
 
-def denormalize(data, min, max):
-    return data * (max - min) + min
+def denormalize(x, x0, x_avg):
+    for i in range(len(x)):
+        x[i] = [(x[i][j] + x0[i] + 1) * x_avg for j in range(len(x[i]))]
+    
+    return x
 
-# Load data form csv file
-data = pd.read_csv(test_data, header=None, delimiter=';')
+def fKine(l, D):
+    theta = np.zeros((len(l), 1))
+    phi = np.zeros((len(l), 1))
+    length = np.zeros((len(l), 1))
 
-# Split data into input and output:
-# CSV file format: theta | phi | h0 | h1
+    for i in range(len(l)):
+        thetaX = np.arctan2(l[i][2]-l[i][0], D)
+        thetaY = np.arctan2(l[i][3]-l[i][1], D)
+        theta[i] = np.sqrt(thetaX**2 + thetaY**2)
+        phi[i] = np.arctan2(thetaY, thetaX)
+        length[i] = theta[i] * sum(l[i]) / 4.0 * np.tan(np.pi/2 - theta[i])            
+    
+    return theta, phi, length
 
-# Outputs
-qy = data.iloc[:, 0]
-qz = data.iloc[:, 1]
+# This script tests an existing model with a given dataset
+model_file = 'models/nn/nn_0x4A_V2.keras'
+test_data = './dataset/241207/0x4A_241207_3.csv'
 
-# Inputs
-h0 = data.iloc[:, 2]
-h1 = data.iloc[:, 3]
-h2 = data.iloc[:, 4]
-h3 = data.iloc[:, 5]
-h_mean = data.iloc[:, 6]
+h, l, h_avg, l_avg, h0, l0 = get_data(test_data)
 
-# Compute the differential measurements
-h02 = h0 - h2
-h13 = h1 - h3
+# Load the model
+model = km.load_model(model_file)
 
-x = np.column_stack((h02, h13))
-y = np.column_stack((qy, qz))
+# Prepare the test data
+x = np.array(h).T
+y = np.array(l).T
 
-# Load the model and predict the output
-model = tf.keras.models.load_model(model_file)
-predicted_output = pd.DataFrame(model.predict(x))
+# Predict the output
+predicted_output = pd.DataFrame(model(x))
+predicted_output = np.array([predicted_output[i].tolist() for i in range(len(predicted_output.columns))])
 
-# Denormalize the real output
-qy = denormalize(qy, -60, 60)
-qz = denormalize(qz, -60, 60)
+# Denormalize the output and the test data
+expected_output = denormalize(l, l0, l_avg)
+predicted_output = denormalize(predicted_output, l0, l_avg)
 
-# Denormalize the predicted output
-qy_pred = denormalize(predicted_output.iloc[:, 0], -60, 60)
-qz_pred = denormalize(predicted_output.iloc[:, 1], -60, 60)
+# Plot the predicted output
+fig, axs = plt.subplots(2, 1, figsize=(10, 12))
 
-# Compute the RMSE of each output
-rmse = np.sqrt(np.mean((qy - qy_pred)**2))
-print('RMSE qy: ', rmse)
+# Plot the predicted output
+axs[0].plot(predicted_output[0], label='Predicted TOF distance l0')
+axs[0].plot(predicted_output[1], label='Predicted TOF distance l1')
+axs[0].plot(predicted_output[2], label='Predicted TOF distance l2')
+axs[0].plot(predicted_output[3], label='Predicted TOF distance l3')
+axs[0].set_ylabel('TOF Distance')
+axs[0].set_title('Predicted TOF Distances')
+axs[0].legend()
+axs[0].grid(True)
 
-rmse = np.sqrt(np.mean((qz - qz_pred)**2))
-print('RMSE qz: ', rmse)
+# Plot the test data
+axs[1].plot(expected_output[0], label='Test TOF distance l0')
+axs[1].plot(expected_output[1], label='Test TOF distance l1')
+axs[1].plot(expected_output[2], label='Test TOF distance l2')
+axs[1].plot(expected_output[3], label='Test TOF distance l3')
+axs[1].set_ylabel('TOF Distance')
+axs[1].set_title('Test TOF Distances')
+axs[1].legend()
+axs[1].grid(True)
 
-# Compare the predicted output with the real output
-# Subplot 1
-plt.subplot(2, 1, 1)
-plt.plot(qy, label='IMU qy', color='blue')
-plt.plot(qy_pred, label='Predicted qy', color='red')
-plt.legend()
+plt.tight_layout()
 
-# Subplot 2
-plt.subplot(2, 1, 2)
-plt.plot(qz, label='IMU qz', color='blue')
-plt.plot(qz_pred, label='Predicted qz', color='red')
-plt.legend()
+# Compute the RMSE
+rmse = np.sqrt(np.mean((predicted_output - expected_output) ** 2))
+print('RMSE:', rmse)
 
+# Model summary
+model.summary()
+
+theta_expected, phi_expected, length_expected = fKine(np.transpose(expected_output), 100)
+theta_predicted, phi_predicted, length_predicted = fKine(np.transpose(predicted_output), 100)
+
+# Wrap phi to 2*pi
+phi_expected = np.mod(phi_expected, 2 * np.pi)
+phi_predicted = np.mod(phi_predicted, 2 * np.pi)
+
+# Plot theta expected and predicted
+fig, axs = plt.subplots(3, 1, figsize=(10, 18))
+
+# Convert theta and phi to degrees
+theta_expected_deg = np.degrees(theta_expected)
+theta_predicted_deg = np.degrees(theta_predicted)
+phi_expected_deg = np.degrees(phi_expected)
+phi_predicted_deg = np.degrees(phi_predicted)
+
+# Plot theta expected and predicted
+axs[0].plot(theta_expected_deg, label='Theta Expected')
+axs[0].plot(theta_predicted_deg, label='Theta Predicted')
+axs[0].set_ylabel('Theta (degrees)')
+axs[0].set_title('Theta Expected and Predicted')
+axs[0].legend()
+axs[0].grid(True)
+
+# Plot phi expected and predicted
+axs[1].plot(phi_expected_deg, label='Phi Expected')
+axs[1].plot(phi_predicted_deg, label='Phi Predicted')
+axs[1].set_ylabel('Phi (degrees)')
+axs[1].set_title('Phi Expected and Predicted')
+axs[1].legend()
+axs[1].grid(True)
+
+# Plot length expected and predicted
+axs[2].plot(length_expected, label='Length Expected')
+axs[2].plot(length_predicted, label='Length Predicted')
+axs[2].set_ylabel('Length (mm)')
+axs[2].set_title('Length Expected and Predicted')
+axs[2].legend()
+axs[2].grid(True)
+
+plt.tight_layout()
+
+# Plot theta vs phi expected and predicted
+# Create two subplots: one for theta vs phi and one for length
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 16))
+
+# Plot theta vs phi in a polar plot. Expected and predicted
+ax1 = plt.subplot(121, projection='polar')
+ax1.plot(phi_expected, np.degrees(theta_expected), label='Expected')
+ax1.plot(phi_predicted, np.degrees(theta_predicted), label='Predicted')
+ax1.set_title('Theta vs Phi Expected and Predicted')
+ax1.grid(True)
+ax1.legend()
+
+# Plot length expected and predicted
+ax2 = plt.subplot(122)
+ax2.plot(length_expected, label='Length Expected')
+ax2.plot(length_predicted, label='Length Predicted')
+ax2.set_ylabel('Length (mm)')
+ax2.set_title('Length Expected and Predicted')
+ax2.legend()
+ax2.grid(True)
+ax2.set_ylim([50, 70])
+
+abs_error_theta = np.abs(theta_predicted - theta_expected)
+abs_error_phi = np.abs(phi_predicted - phi_expected)
+abs_error_length = np.abs(length_predicted - length_expected)
+
+# Plot absolute error for theta, phi, and length
+fig, axs = plt.subplots(3, 1, figsize=(10, 18))
+
+# Plot absolute error for theta
+axs[0].plot(np.degrees(abs_error_theta), label='Absolute Error Theta')
+axs[0].set_ylabel('Absolute Error (Theta) [degrees]')
+axs[0].set_title('Absolute Error for Theta')
+axs[0].legend()
+axs[0].grid(True)
+
+# Plot absolute error for phi
+axs[1].plot(np.degrees(abs_error_phi), label='Absolute Error Phi')
+axs[1].set_ylabel('Absolute Error (Phi) [degrees]')
+axs[1].set_title('Absolute Error for Phi')
+axs[1].legend()
+axs[1].grid(True)
+
+# Plot absolute error for length
+axs[2].plot(abs_error_length, label='Absolute Error Length')
+axs[2].set_ylabel('Absolute Error (Length) [mm]')
+
+axs[2].set_title('Absolute Error for Length')
+
+axs[2].legend()
+
+axs[2].set_title('Absolute Error for Length')
+axs[2].legend()
+axs[2].grid(True)
+
+plt.tight_layout()
+
+plt.tight_layout()
+
+# Plot length vs theta
+fig, ax = plt.subplots(figsize=(10, 6))
+
+ax.plot(np.degrees(theta_expected), length_expected, label='Expected')
+ax.plot(np.degrees(theta_predicted), length_predicted, label='Predicted')
+ax.set_xlabel('Theta (degrees)')
+ax.set_ylabel('Length (mm)')
+ax.set_title('Length vs Theta')
+ax.legend()
+ax.grid(True)
+
+plt.tight_layout()
 plt.show()

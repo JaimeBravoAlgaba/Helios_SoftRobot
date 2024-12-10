@@ -23,7 +23,15 @@ bool succ_init = true;
 uint32_t readHelios(uint8_t i) {
   helios.setInputMultiplexer(ADS122C04_MUX_AIN0_AVSS + i);
   delay(50);
-  return helios.readADC(); 
+
+  float n_samples = 20;
+  uint32_t h = 0;
+
+  for (uint8_t n = 0; n < n_samples; ++n) {
+    h = h * (n_samples-1) / n_samples + helios.readADC() / n_samples;
+  }
+
+  return h;
 }
 
 void tcaSelect(uint8_t i) {
@@ -34,9 +42,18 @@ void tcaSelect(uint8_t i) {
 }
 
 void readTOFs() {
+  float n_samples = 20;
+  uint8_t l_tofs_aux[4] = {0, 0, 0, 0};
+
+  for (uint8_t n = 0; n < n_samples; ++n) {
+    for (uint8_t i = 0; i < 4; ++i) {
+      tcaSelect(i);
+      l_tofs_aux[i] = l_tofs_aux[i] * (n_samples-1) / n_samples + tof.readRange() / n_samples;
+    }
+  }
+
   for (uint8_t i = 0; i < 4; ++i) {
-    tcaSelect(i);
-    l_tofs[i] = tof.readRange();
+    l_tofs[i] = l_tofs_aux[i];
   }
 }
 
@@ -219,5 +236,7 @@ void loop() {
   coords_ref.theta = 0;
   coords_ref.phi = 0;
   move(coords_ref);
-  delay(10000);
+  
+  Serial.println("Test complete!");
+  while(1);
 }

@@ -10,7 +10,16 @@ from math import pi, sqrt, atan2
 from pathlib import Path
 import scipy.io
 
-def plot_csv_file(file_path):
+def normalize(*args):
+    x_avg = sum(args[0]) / len(args[0])
+
+    x_norm = [(x - x_avg) / x_avg for x in args]
+    x0 = [x[0] for x in x_norm]
+    x_norm = [x - x[0] for x in x_norm]
+
+    return x_norm, x_avg, x0
+
+def get_data(file_path):
     # Read the data
     data = pd.read_csv(file_path, delimiter=',')
     
@@ -25,12 +34,18 @@ def plot_csv_file(file_path):
     h2 = data.iloc[:, 6] # Helios measurement 2
     h3 = data.iloc[:, 7] # Helios measurement 3
 
+    h, h_avg, h0 = normalize(h0, h1, h2, h3)
+    l, l_avg, l0 = normalize(l0, l1, l2, l3)
+
+    return h, l, h_avg, l_avg, h0, l0
+
+def plot_data(l, h, l_avg, h_avg):
     # Plot the TOF distances
     plt.figure(figsize=(10, 6))
-    plt.plot(l0, label='TOF distance l0')
-    plt.plot(l1, label='TOF distance l1')
-    plt.plot(l2, label='TOF distance l2')
-    plt.plot(l3, label='TOF distance l3')
+    plt.plot(l[0], label='TOF distance l0')
+    plt.plot(l[1], label='TOF distance l1')
+    plt.plot(l[2], label='TOF distance l2')
+    plt.plot(l[3], label='TOF distance l3')
     
     plt.xlabel('Sample Index')
     plt.ylabel('TOF Distance')
@@ -40,10 +55,10 @@ def plot_csv_file(file_path):
 
     # Plot the Helios measurements
     plt.figure(figsize=(10, 6))
-    plt.plot(h0, label='Helios measurement 0')
-    plt.plot(h1, label='Helios measurement 1')
-    plt.plot(h2, label='Helios measurement 2')
-    plt.plot(h3, label='Helios measurement 3')
+    plt.plot(h[0], label='Helios measurement 0')
+    plt.plot(h[1], label='Helios measurement 1')
+    plt.plot(h[2], label='Helios measurement 2')
+    plt.plot(h[3], label='Helios measurement 3')
 
     plt.xlabel('Sample Index')
     plt.ylabel('Helios Measurement')
@@ -52,8 +67,8 @@ def plot_csv_file(file_path):
     plt.grid(True)
 
     # Calculate the differential measurements
-    diff_l2_l0 = l2 - l0
-    diff_l3_l1 = l3 - l1
+    diff_l2_l0 = l[2] - l[0]
+    diff_l3_l1 = l[3] - l[1]
 
     # Plot the differential measurements
     plt.figure(figsize=(10, 6))
@@ -67,13 +82,13 @@ def plot_csv_file(file_path):
     plt.grid(True)
 
     # Calculate the differential measurements for Helios
-    diff_h2_h0 = h0 - h2
-    diff_h3_h1 = h3 - h1
+    diff_h2_h0 = h[2] - h[0]
+    diff_h3_h1 = h[3] - h[1]
 
     # Plot the differential measurements for Helios
     plt.figure(figsize=(10, 6))
-    plt.plot(diff_h3_h1, label='Differential h3 - h1')
     plt.plot(diff_h2_h0, label='Differential h2 - h0')
+    plt.plot(diff_h3_h1, label='Differential h3 - h1')
     
     plt.xlabel('Sample Index')
     plt.ylabel('Differential Helios Measurement')
@@ -81,10 +96,35 @@ def plot_csv_file(file_path):
     plt.legend()
     plt.grid(True)
 
+    # Plot the average Helios measurement and TOF distance in the same figure
+    plt.figure(figsize=(10, 12))
+
+    # Subplot for average Helios measurement
+    plt.subplot(2, 1, 1)
+    plt.plot(h_avg, label='Average Helios measurement')
+    plt.xlabel('Sample Index')
+    plt.ylabel('Average Measurement')
+    plt.title('Average Helios Measurement')
+    plt.legend()
+    plt.grid(True)
+
+    # Subplot for average TOF distance
+    plt.subplot(2, 1, 2)
+    plt.plot(l_avg, label='Average TOF distance')
+    plt.xlabel('Sample Index')
+    plt.ylabel('Average TOF Distance')
+    plt.title('Average TOF Distance')
+    plt.legend()
+    plt.grid(True)
+
 if __name__ == '__main__':
     # File path
-    file_path = Path('./data.csv')
+    file_path = Path('./dataset/241207/0x4A_241207_3.csv')
 
     # Plot the data
-    plot_csv_file(file_path)
+    h, l, h_avg, l_avg, h0, l0 = get_data(file_path)
+    plot_data(l, h, l_avg, h_avg)
     plt.show()
+
+    print(h0)
+    print(l0)

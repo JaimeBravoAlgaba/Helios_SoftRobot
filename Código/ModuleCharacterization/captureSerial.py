@@ -1,7 +1,13 @@
 import serial
 import csv
+import platform
 
-com_port = '/dev/ttyUSB0'
+if platform.system() == 'Linux':
+    com_port = '/dev/ttyUSB0'
+elif platform.system() == 'Windows':
+    com_port = 'COM5'
+else:
+    raise EnvironmentError('Unsupported platform')
 baud_rate = 115200
 
 # Open the COM port
@@ -12,10 +18,9 @@ ser = serial.Serial(com_port, baud_rate)  # Replace 'COM1' with the appropriate 
 csv_file = open('data.csv', 'w', newline='')
 csv_writer = csv.writer(csv_file)
 
-try:
+while True:
     counter = 0
-
-    while True:
+    try:
         # Read data from the COM port
         data = ser.readline().decode().strip()
 
@@ -33,8 +38,8 @@ try:
             counter += 1
             print(f'[{counter}] >> {values}')
 
-except KeyboardInterrupt:
-    # Close the CSV file and COM port on keyboard interrupt
-    csv_file.close()
-    ser.close()
-    print('Test complete!')
+    except KeyboardInterrupt:
+        # Close the CSV file and COM port on keyboard interrupt
+        csv_file.close()
+        ser.close()
+        print('Test complete!')
