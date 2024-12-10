@@ -11,7 +11,7 @@ from processing_tof import get_data, normalize
 # This script retrains an existing model with a given dataset
 model_file = 'models/nn/nn_0x4A_V2.keras'
 model_file_new = 'models/nn/nn_0x4A_V2.keras'
-training_data = './dataset/241207/0x4A_241207_5.csv'
+training_data = './dataset/241207/0x4A_241207_6.csv'
 
 h, l, h_avg, l_avg, h0, l0 = get_data(training_data)
 
