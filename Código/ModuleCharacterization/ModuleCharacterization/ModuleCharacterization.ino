@@ -25,10 +25,11 @@ uint32_t readHelios(uint8_t i) {
   delay(50);
 
   float n_samples = 20;
+  float n_filter = 5.0;
   uint32_t h = 0;
 
   for (uint8_t n = 0; n < n_samples; ++n) {
-    h = h * (n_samples-1) / n_samples + helios.readADC() / n_samples;
+    h = h * (n_filter-1) / n_filter + helios.readADC() / n_filter;
   }
 
   return h;
@@ -43,12 +44,13 @@ void tcaSelect(uint8_t i) {
 
 void readTOFs() {
   float n_samples = 20;
+  float n_filter = 5.0;
   uint8_t l_tofs_aux[4] = {0, 0, 0, 0};
 
   for (uint8_t n = 0; n < n_samples; ++n) {
     for (uint8_t i = 0; i < 4; ++i) {
       tcaSelect(i);
-      l_tofs_aux[i] = l_tofs_aux[i] * (n_samples-1) / n_samples + tof.readRange() / n_samples;
+      l_tofs_aux[i] = l_tofs_aux[i] * (n_filter-1) / n_filter + tof.readRange() / n_filter;
     }
   }
 
