@@ -30,8 +30,8 @@ def fKine(l, D):
     return theta, phi, length
 
 # This script tests an existing model with a given dataset
-model_file = 'models/nn/nn_0x4A_V2.keras'
-test_data = './dataset/241207/0x4A_241207_8.csv'
+model_file = 'models/nn/nn_0x48_V2.keras'
+test_data = './dataset/241207/0x48_241207_1.csv'
 
 h, l, h_avg, l_avg, h0, l0 = get_data(test_data)
 
