@@ -2,7 +2,7 @@
 #include "CNC_Shield_UNO.h"
 #include "Helios.h"
 
-#define HELIOS_ADDR 0x48
+#define HELIOS_ADDR 0x4A
 #define IMU_0_ADDR 0x08
 #define TCA_ADDR 0x70
 
@@ -172,73 +172,49 @@ void setup() {
     while (1);
   }
 
-  calibrateCables();
-
   print_info("theta, phi, L, h0, h1, h2, h3\n");
 }
 
 void loop() {  
-  coords_ref.theta = 0;
-  coords_ref.phi = 0;
-  coords_ref.length = SEGMENTS_LEN;
+  // Listen via serial port and wait for a command. You will receive a string with the format "l0,l1,l2,l3".
+  // Start a loop moving the Helios module to the desired position and reading the sensors (Helios and TOFs).
+  // Print the data in the following format: "tof0,tof1,tof2,tof3,h0,h1,h2,h3".
+  // You must read and move in parallel
+  // The loop must end when the command "stop" is received.
+  // If the command "calibrate" is received, you must call the function calibrateCables().
 
-  for (uint8_t j = 0; j < 8; ++j, coords_ref.theta = 0, coords_ref.phi += PI / 4.0) {
-    for (uint8_t i = 0; i < 8; ++i, coords_ref.theta += PI / 28.0 * 1.1) {
-      move(coords_ref);
+  if (Serial.available() > 0) {
+    String cmd = Serial.readStringUntil('\n');
 
-      // Read Sensors
+    if (cmd == "stop") {
+      return;
+    }
+    
+    else if (cmd == "calibrate") {
+      calibrateCables();
+    }
+    
+    else {
+      float l0, l1, l2, l3;
+      
+      int firstComma = cmd.indexOf(',');
+      int secondComma = cmd.indexOf(',', firstComma + 1);
+      int thirdComma = cmd.indexOf(',', secondComma + 1);
+
+      l0 = cmd.substring(0, firstComma).toFloat();
+      l1 = cmd.substring(firstComma + 1, secondComma).toFloat();
+      l2 = cmd.substring(secondComma + 1, thirdComma).toFloat();
+      l3 = cmd.substring(thirdComma + 1).toFloat();
+
+      Serial.print(l0, 4); Serial.print(","); Serial.print(l1, 4); Serial.print(","); Serial.print(l2, 4); Serial.print(","); Serial.print(l3, 4); Serial.print("\n");
+
+      long dn[4] = {length2steps(l0), length2steps(l1), length2steps(l2), length2steps(l3)};
+      stepParallel(dn);
+      readTOFs();
       for (uint8_t i = 0; i < 4; ++i) {
         h[i] = readHelios(i);
       }
-
-      readTOFs();
-      coords_meas = tofs2pcc(l_tofs[0], l_tofs[1], l_tofs[2], l_tofs[3]);
-    
       printData();
-
-      delay(50);
     }
-
-    for (uint8_t i = 0; i < 15; ++i, coords_ref.theta -= PI / 28.0 * 1.1) {
-      move(coords_ref);
-
-      // Read Sensors
-      for (uint8_t i = 0; i < 4; ++i) {
-        h[i] = readHelios(i);
-      }
-
-      readTOFs();
-      coords_meas = tofs2pcc(l_tofs[0], l_tofs[1], l_tofs[2], l_tofs[3]);
-    
-      printData();
-
-      delay(50);
-    }
-    
-    for (uint8_t i = 0; i < 8; ++i, coords_ref.theta += PI / 28.0 * 1.1) {
-      move(coords_ref);
-
-      // Read Sensors
-      for (uint8_t i = 0; i < 4; ++i) {
-        h[i] = readHelios(i);
-      }
-
-      readTOFs();
-      coords_meas = tofs2pcc(l_tofs[0], l_tofs[1], l_tofs[2], l_tofs[3]);
-    
-      printData();
-
-      delay(50);
-    }
-
-    coords_ref.theta = 0;
-    move(coords_ref);
   }
-
-  coords_ref.theta = 0;
-  coords_ref.phi = 0;
-  move(coords_ref);
-  
-  Serial.println("Test complete!");
-  while(1);
 }
