@@ -129,3 +129,13 @@ uint8_t* readTOFs() {
   
   return l_tofs;
 }
+
+uint32_t* readHelios() {
+  static uint32_t h[4] = {0, 0, 0, 0};
+
+  for (uint8_t i = 0; i < 4; ++i) {
+    h[i] = readHelios(i);
+  }
+
+  return h;
+}

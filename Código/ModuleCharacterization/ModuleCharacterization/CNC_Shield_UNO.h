@@ -1,7 +1,7 @@
 #ifndef __CNC_SHIELD_UNO__ 
 # define __CNC_SHIELD_UNO__
 
-  #define EN_DEBUG 1
+  #define EN_DEBUG 0
   inline void print_info(String txt){
     if(EN_DEBUG)
       Serial.print(String(txt));
@@ -63,5 +63,5 @@
   // SENSORS
   void tcaSelect(uint8_t i);
   uint8_t* readTOFs();
-  uint32_t* readHelios();
+  uint32_t readHelios(uint8_t i);
 #endif

@@ -141,11 +141,13 @@ void loop() {
     String cmd = Serial.readStringUntil('\n');
 
     if (cmd == "stop") {
+      Serial.println("OK");
       return;
     }
     
     else if (cmd == "calibrate") {
       calibrateCables();
+      Serial.println("OK");
     }
     
     else {
