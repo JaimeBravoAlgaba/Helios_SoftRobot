@@ -59,4 +59,9 @@
   void setupCNC();
   void step(const uint8_t mot, long n);
   void stepParallel(int dn[4]);
+
+  // SENSORS
+  void tcaSelect(uint8_t i);
+  uint8_t* readTOFs();
+  uint32_t* readHelios();
 #endif

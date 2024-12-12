@@ -10,7 +10,7 @@ HeliosSensor helios;
 Adafruit_VL6180X tof = Adafruit_VL6180X();
 
 uint32_t h[4] = {0, 0, 0, 0}; // Helios module measurement
-uint8_t l_tofs[4] = {0, 0, 0, 0}; // TOF modules measurement
+uint8_t l_tofs[4]; // TOF modules measurement
 
 float cableLengths[4] = {SEGMENTS_LEN, SEGMENTS_LEN, SEGMENTS_LEN, SEGMENTS_LEN};
 sensors_event_t orientationData;
@@ -19,45 +19,6 @@ CoordsPCC coords_ref;
 CoordsPCC coords_meas;
 
 bool succ_init = true;
-
-uint32_t readHelios(uint8_t i) {
-  helios.setInputMultiplexer(ADS122C04_MUX_AIN0_AVSS + i);
-  delay(50);
-
-  float n_samples = 20;
-  float n_filter = 5.0;
-  uint32_t h = 0;
-
-  for (uint8_t n = 0; n < n_samples; ++n) {
-    h = h * (n_filter-1) / n_filter + helios.readADC() / n_filter;
-  }
-
-  return h;
-}
-
-void tcaSelect(uint8_t i) {
-  if (i > 7) return;
-  Wire.beginTransmission(TCA_ADDR);
-  Wire.write(1 << i);
-  Wire.endTransmission();  
-}
-
-void readTOFs() {
-  float n_samples = 20;
-  float n_filter = 5.0;
-  uint8_t l_tofs_aux[4] = {0, 0, 0, 0};
-
-  for (uint8_t n = 0; n < n_samples; ++n) {
-    for (uint8_t i = 0; i < 4; ++i) {
-      tcaSelect(i);
-      l_tofs_aux[i] = l_tofs_aux[i] * (n_filter-1) / n_filter + tof.readRange() / n_filter;
-    }
-  }
-
-  for (uint8_t i = 0; i < 4; ++i) {
-    l_tofs[i] = l_tofs_aux[i];
-  }
-}
 
 void move(CoordsPCC c) {
   float l_ref[4] = {0, 0, 0, 0};
@@ -176,13 +137,6 @@ void setup() {
 }
 
 void loop() {  
-  // Listen via serial port and wait for a command. You will receive a string with the format "l0,l1,l2,l3".
-  // Start a loop moving the Helios module to the desired position and reading the sensors (Helios and TOFs).
-  // Print the data in the following format: "tof0,tof1,tof2,tof3,h0,h1,h2,h3".
-  // You must read and move in parallel
-  // The loop must end when the command "stop" is received.
-  // If the command "calibrate" is received, you must call the function calibrateCables().
-
   if (Serial.available() > 0) {
     String cmd = Serial.readStringUntil('\n');
 
@@ -210,7 +164,8 @@ void loop() {
 
       long dn[4] = {length2steps(l0), length2steps(l1), length2steps(l2), length2steps(l3)};
       stepParallel(dn);
-      readTOFs();
+      
+      memmove(l_tofs, readTOFs(), sizeof(l_tofs) * sizeof(uint8_t));
       for (uint8_t i = 0; i < 4; ++i) {
         h[i] = readHelios(i);
       }

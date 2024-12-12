@@ -20,6 +20,9 @@ void setupCNC(){
   //...
 }
 
+// MOTION CONTROL
+// ___________________________
+
 void step(const uint8_t mot, long n) {
   uint8_t dir = (n<0);
   n = abs(n);
@@ -81,4 +84,48 @@ void stepParallel(long dn[4])
       step(j, s[j]);
     }
   }
+}
+
+// SENSOR CONTROL
+// ___________________________
+
+uint32_t readHelios(uint8_t i) {
+  helios.setInputMultiplexer(ADS122C04_MUX_AIN0_AVSS + i);
+  delay(50);
+
+  float n_samples = 20;
+  float n_filter = 5.0;
+  uint32_t h = 0;
+
+  for (uint8_t n = 0; n < n_samples; ++n) {
+    h = h * (n_filter-1) / n_filter + helios.readADC() / n_filter;
+  }
+
+  return h;
+}
+
+void tcaSelect(uint8_t i) {
+  if (i > 7) return;
+  Wire.beginTransmission(TCA_ADDR);
+  Wire.write(1 << i);
+  Wire.endTransmission();  
+}
+
+uint8_t* readTOFs() {
+  float n_samples = 20;
+  float n_filter = 5.0;
+  static uint8_t l_tofs[4] = {0, 0, 0, 0};
+
+  for (uint8_t i = 0; i < 4; ++i) {
+    l_tofs[i] = 0;
+  }
+
+  for (uint8_t n = 0; n < n_samples; ++n) {
+    for (uint8_t i = 0; i < 4; ++i) {
+      tcaSelect(i);
+      l_tofs[i] = l_tofs[i] * (n_filter-1) / n_filter + tof.readRange() / n_filter;
+    }
+  }
+  
+  return l_tofs;
 }
