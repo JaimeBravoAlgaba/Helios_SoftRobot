@@ -14,6 +14,10 @@ long length2steps(float l){
 return ceil(l/(SEGMENTS_RP*ANGLE_PER_STEP));
 }
 
+float steps2length(long n){
+  return n*SEGMENTS_RP*ANGLE_PER_STEP;
+}
+
 CoordsPCC euler2pcc(float qx, float qy, float qz)
 {
   CoordsPCC coords;

@@ -1,7 +1,7 @@
 #ifndef __CNC_SHIELD_UNO__ 
 # define __CNC_SHIELD_UNO__
 
-  #define EN_DEBUG 0
+  #define EN_DEBUG 1
   inline void print_info(String txt){
     if(EN_DEBUG)
       Serial.print(String(txt));
