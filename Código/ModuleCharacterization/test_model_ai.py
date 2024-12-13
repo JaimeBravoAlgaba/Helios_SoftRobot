@@ -12,7 +12,7 @@ def denormalize(x, x0, x_avg):
     
     return x
 
-def fKine(l, D):
+def fKine(l, D = 100):
     theta = np.zeros((len(l), 1))
     phi = np.zeros((len(l), 1))
     length = np.zeros((len(l), 1))
