@@ -2,7 +2,7 @@
 #include "CNC_Shield_UNO.h"
 #include "Helios.h"
 
-#define HELIOS_ADDR 0x4A
+#define HELIOS_ADDR 0x48
 #define IMU_0_ADDR 0x08
 #define TCA_ADDR 0x70
 
@@ -133,38 +133,90 @@ void setup() {
     while (1);
   }
 
-  print_info("theta, phi, L, h0, h1, h2, h3\n");
+  Serial.println("START");
 }
 
 void loop() {  
   if (Serial.available() > 0) {
     String cmd = Serial.readStringUntil('\n');
 
-    if (cmd == "stop") {
+    if (cmd == "HELLO") {
       Serial.println("OK");
       return;
     }
     
-    else if (cmd == "calibrate") {
+    else if (cmd == "CALIBRATE") {
       calibrateCables();
       Serial.println("OK");
     }
     
     else {
-      float l0, l1, l2, l3;
+      float dl[4];
+      long dn[4];
+
+      if (cmd.startsWith("DELTA_LEN:")) {
+        cmd.remove(0, String("DELTA_LEN:").length());
+
+        int firstComma  = cmd.indexOf(',');
+        int secondComma = cmd.indexOf(',', firstComma + 1);
+        int thirdComma  = cmd.indexOf(',', secondComma + 1);
+
+        int commas[3];
+        commas[0] = cmd.indexOf(',');        
+        commas[1] = cmd.indexOf(',', commas[0] + 1);
+        commas[2] = cmd.indexOf(',', commas[1] + 1);
+
+        dl[0] = cmd.substring(0, commas[0]).toFloat();
+        dn[0] = length2steps(dl[0]);
+        for (int i = 1; i < 4; ++i) {
+          dl[i] = cmd.substring(commas[i - 1] + 1, (i < 3) ? commas[i] : cmd.length()).toFloat();
+          dn[i] = length2steps(dl[i]);
+          cableLengths[i] = dl[i] + cableLengths[i];
+        }
+      }
+
+      else if (cmd.startsWith("DELTA_STEPS:")) {
+        cmd.remove(0, String("DELTA_STEPS:").length());
+
+        int firstComma  = cmd.indexOf(',');
+        int secondComma = cmd.indexOf(',', firstComma + 1);
+        int thirdComma  = cmd.indexOf(',', secondComma + 1);
+        
+        int commas[3];
+        commas[0] = cmd.indexOf(',');
+        commas[1] = cmd.indexOf(',', commas[0] + 1);
+        commas[2] = cmd.indexOf(',', commas[1] + 1);
+
+        dn[0] = cmd.substring(0, commas[0]).toInt();
+        for (int i = 1; i < 4; ++i) {
+          dn[i] = cmd.substring(commas[i - 1] + 1, (i < 3) ? commas[i] : cmd.length()).toInt();
+          dl[i] = steps2length(dn[i]);
+          cableLengths[i] = dl[i] + cableLengths[i];
+        }        
+      }
+
+      else if (cmd.startsWith("REF_PCC:")) {
+        cmd.remove(0, String("REF_PCC:").length());
+
+        int firstComma  = cmd.indexOf(',');
+        int secondComma = cmd.indexOf(',', firstComma + 1);
+        int thirdComma  = cmd.indexOf(',', secondComma + 1);
+
+        coords_ref.theta = cmd.substring(0, firstComma).toFloat();
+        coords_ref.phi = cmd.substring(firstComma + 1, secondComma).toFloat();
+        coords_ref.length = cmd.substring(secondComma + 1, thirdComma).toFloat();
+        
+        for (uint8_t i = 0; i < 4; ++i) {
+          dl[i] = cableIKine(coords_ref, i) - cableLengths[i];
+          dn[i] = length2steps(dl[i]);
+          cableLengths[i] = dl[i] + cableLengths[i];
+        }
+      }
+      else {
+        Serial.println("ERROR");
+        return;
+      }
       
-      int firstComma = cmd.indexOf(',');
-      int secondComma = cmd.indexOf(',', firstComma + 1);
-      int thirdComma = cmd.indexOf(',', secondComma + 1);
-
-      l0 = cmd.substring(0, firstComma).toFloat();
-      l1 = cmd.substring(firstComma + 1, secondComma).toFloat();
-      l2 = cmd.substring(secondComma + 1, thirdComma).toFloat();
-      l3 = cmd.substring(thirdComma + 1).toFloat();
-
-      Serial.print(l0, 4); Serial.print(","); Serial.print(l1, 4); Serial.print(","); Serial.print(l2, 4); Serial.print(","); Serial.print(l3, 4); Serial.print("\n");
-
-      long dn[4] = {length2steps(l0), length2steps(l1), length2steps(l2), length2steps(l3)};
       stepParallel(dn);
       
       memmove(l_tofs, readTOFs(), sizeof(l_tofs) * sizeof(uint8_t));
