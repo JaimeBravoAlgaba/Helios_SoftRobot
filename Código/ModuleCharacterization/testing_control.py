@@ -61,7 +61,7 @@ pcc_coordinates_ref = [
 ]
 
 # Increase pcc_coordinates_ref list with intermediary points when there is an increment in theta bigger than np.pi/36
-n_int_points = 10
+n_int_points = 9
 pcc_coordinates_points = []
 for i in range(len(pcc_coordinates_ref)-1):
     if pcc_coordinates_ref[i]['theta'] != pcc_coordinates_ref[i+1]['theta'] or pcc_coordinates_ref[i]['phi'] != pcc_coordinates_ref[i+1]['phi']:
