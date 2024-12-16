@@ -47,10 +47,33 @@ def iKine(coords):
 # List of PCC coordinates to loop over
 pcc_coordinates_ref= [
     {'theta': np.pi/4, 'phi': 0, 'length': 0.065},
-    {'theta': 0, 'phi':0, 'length': 0.065},
+    {'theta': np.pi/4, 'phi': 0, 'length': 0.060},
+    {'theta': 0, 'phi':0, 'length': 0.060},
+    {'theta': 0, 'phi':0, 'length': 0.055},
+    {'theta': np.pi/4, 'phi': 0, 'length': 0.055},
+    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.055},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.055},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.060},
+    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.060},
     {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.065},
     {'theta': 0, 'phi': np.pi/2, 'length': 0.065}
 ]
+
+# Increase pcc_coordinates_ref list with intermediary points when there is an increment in theta bigger than np.pi/36
+n_int_points = 9
+for i in range(len(pcc_coordinates_ref)-1):
+    if pcc_coordinates_ref[i]['theta'] != pcc_coordinates_ref[i+1]['theta']:
+        theta_step = (pcc_coordinates_ref[i+1]['theta'] - pcc_coordinates_ref[i]['theta']) / n_int_points
+        phi_step = (pcc_coordinates_ref[i+1]['phi'] - pcc_coordinates_ref[i]['phi']) / n_int_points
+        #length_step = (pcc_coordinates_ref[i+1]['length'] - pcc_coordinates_ref[i]['length']) / n_int_points
+        length_step = 0
+
+        for j in range(1, n_int_points):
+            pcc_coordinates_ref.append({
+                'theta': pcc_coordinates_ref[i]['theta'] + j * theta_step,
+                'phi': pcc_coordinates_ref[i]['phi'] + j * phi_step,
+                'length': pcc_coordinates_ref[i]['length'] + j * length_step
+            })
 
 # This script tests an existing model with a given dataset
 model_file = 'models/nn/nn_0x48_V2.keras'
