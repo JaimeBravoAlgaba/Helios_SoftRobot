@@ -49,7 +49,7 @@ void calibrateCables() {
     dn[i] = length2steps(-0.001);
     l_tofs_init[i] = l_tofs[i];
 
-    while (abs(l_tofs[i] - l_tofs_init[i]) < 3) {
+    while (abs(l_tofs[i] - l_tofs_init[i]) < 2) {
       stepParallel(dn);
       memmove(l_tofs, readTOFs(), sizeof(l_tofs) * sizeof(uint8_t));
     }

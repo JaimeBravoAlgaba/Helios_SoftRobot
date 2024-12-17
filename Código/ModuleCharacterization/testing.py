@@ -46,7 +46,7 @@ pcc_coordinates_ref= [
 ]
 
 # Open serial port
-ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+ser = serial.Serial('/dev/ttyUSB1', 115200, timeout=1)
 time.sleep(2)  # Wait for the serial connection to initialize
 
 try:
