@@ -37,6 +37,20 @@ def iKine(coords):
     
     return cable_lengths
 
+def wait_confirm(ser, expected_response="OK", max_iterations=100):
+    iterations = 0
+    while iterations < max_iterations:
+        if ser.in_waiting > 0:
+            response = ser.readline().decode().strip()
+            if response == expected_response:
+                print(response)
+                return True
+            else:
+                print(f"Received: {response}")
+        time.sleep(1)
+        iterations += 1
+    return False
+
 # List of PCC coordinates to loop over
 pcc_coordinates_ref= [
     {'theta': np.pi/4, 'phi': 0, 'length': 0.065},
@@ -49,17 +63,31 @@ pcc_coordinates_ref= [
 ser = serial.Serial('/dev/ttyUSB1', 115200, timeout=1)
 time.sleep(2)  # Wait for the serial connection to initialize
 
+# Wait until the module is initialized
+while True:
+    if ser.in_waiting > 0:
+        response = ser.readline().decode().strip()
+        if response == "START":
+            print(response)
+            break
+        else:
+            print(f"Received: {response}")
+    time.sleep(0.1)
+
 try:
 
     # Send the "calibrate" command via serial
-    ser.write("calibrate".encode())
-    while ser.in_waiting == 0:
-        time.sleep(0.1)
-    response = ser.readline().decode().strip()
-    print(f"Sent: calibrate, Received: {response}")
+    ser.write("CALIBRATE".encode())
+    if not wait_confirm(ser):
+        raise TimeoutError("Failed to receive expected response 'OK' from the module.")
+
+
+    # Wait until the module answers with "OK"
+    if not wait_confirm(ser):
+        raise TimeoutError("Failed to receive expected response 'OK' from the module.")
 
     # Initialize current cable lengths
-    current_cable_lengths = [0.065, 0.065, 0.065, 0.065]
+    current_cable_lengths = [0.0445, 0.0445, 0.0445, 0.0445]
 
     for pcc_coordinates in pcc_coordinates_ref:
         # Compute the needed increment of cable lengths
@@ -68,6 +96,7 @@ try:
         
         # Send the cable lengths via serial
         cable_lengths_str = ",".join([str(length) for length in delta_cable_lengths])
+        cable_lengths_str = "REF_LEN:" + cable_lengths_str
         ser.write(cable_lengths_str.encode())
         
         # Capture the readings answered by the module
