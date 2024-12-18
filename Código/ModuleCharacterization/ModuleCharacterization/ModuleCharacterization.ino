@@ -230,6 +230,7 @@ void loop() {
       }
       
       stepParallel(dn);
+      Serial.println("OK");
         }
       }
       

@@ -37,24 +37,29 @@ def iKine(coords):
     
     return cable_lengths
 
-def wait_confirm(ser, expected_response="OK", max_iterations=100):
+def wait_confirm(ser, expected_response="OK", max_iterations=1000):
     iterations = 0
     while iterations < max_iterations:
         if ser.in_waiting > 0:
             response = ser.readline().decode().strip()
+            print(f">> {response}")
             if response == expected_response:
-                print(response)
                 return True
-            else:
-                print(f"Received: {response}")
-        time.sleep(1)
+        time.sleep(0.1)
         iterations += 1
     return False
 
 # List of PCC coordinates to loop over
 pcc_coordinates_ref= [
     {'theta': np.pi/4, 'phi': 0, 'length': 0.065},
-    {'theta': 0, 'phi':0, 'length': 0.065},
+    {'theta': np.pi/4, 'phi': 0, 'length': 0.060},
+    {'theta': 0, 'phi':0, 'length': 0.060},
+    {'theta': 0, 'phi':0, 'length': 0.055},
+    {'theta': np.pi/4, 'phi': 0, 'length': 0.055},
+    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.055},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.055},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.060},
+    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.060},
     {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.065},
     {'theta': 0, 'phi': np.pi/2, 'length': 0.065}
 ]
@@ -63,54 +68,34 @@ pcc_coordinates_ref= [
 ser = serial.Serial('/dev/ttyUSB1', 115200, timeout=1)
 time.sleep(2)  # Wait for the serial connection to initialize
 
+wait_confirm(ser, expected_response="START")
+
 # Wait until the module is initialized
 while True:
-    if ser.in_waiting > 0:
-        response = ser.readline().decode().strip()
-        if response == "START":
-            print(response)
-            break
-        else:
-            print(f"Received: {response}")
-    time.sleep(0.1)
+    try:
 
-try:
+        # Send the "calibrate" command via serial
+        ser.write("CALIBRATE".encode())
+        print(f"<< CALIBRATE")
+        if not wait_confirm(ser):
+            raise TimeoutError("Failed to receive expected response 'OK' from the module.")
 
-    # Send the "calibrate" command via serial
-    ser.write("CALIBRATE".encode())
-    if not wait_confirm(ser):
-        raise TimeoutError("Failed to receive expected response 'OK' from the module.")
+        # Initialize current cable lengths
+        current_cable_lengths = [0.0445, 0.0445, 0.0445, 0.0445]
 
-
-    # Wait until the module answers with "OK"
-    if not wait_confirm(ser):
-        raise TimeoutError("Failed to receive expected response 'OK' from the module.")
-
-    # Initialize current cable lengths
-    current_cable_lengths = [0.0445, 0.0445, 0.0445, 0.0445]
-
-    for pcc_coordinates in pcc_coordinates_ref:
-        # Compute the needed increment of cable lengths
-        cable_lengths = iKine(pcc_coordinates)
-        delta_cable_lengths = [new - old for new, old in zip(cable_lengths, current_cable_lengths)]
-        
-        # Send the cable lengths via serial
-        cable_lengths_str = ",".join([str(length) for length in delta_cable_lengths])
-        cable_lengths_str = "REF_LEN:" + cable_lengths_str
-        ser.write(cable_lengths_str.encode())
-        
-        # Capture the readings answered by the module
-        response = ser.readline().decode().strip()
-        while ser.in_waiting == 0:
+        for pcc_coordinates in pcc_coordinates_ref:            
+            # Send the cable lengths via serial
+            cable_lengths_str = ",".join([str(pcc_coordinates['theta']), str(pcc_coordinates['phi']), str(pcc_coordinates['length'])])
+            cable_lengths_str = "REF_PCC:" + cable_lengths_str
+            ser.write(cable_lengths_str.encode())
             time.sleep(0.1)
-        response = ser.readline().decode().strip()
-        print(f"Sent: {cable_lengths_str}, Received: {response}")
+            print(f"<< {cable_lengths_str}")
+            if not wait_confirm(ser):
+                raise TimeoutError("Failed to receive expected response 'OK' from the module.")
+            
+            # Wait before sending the next set of coordinates
+            time.sleep(1)
 
-        current_cable_lengths = cable_lengths
-        
-        # Wait before sending the next set of coordinates
-        time.sleep(1)
-
-finally:
-    # Close the serial port
-    ser.close()
+    finally:
+        # Close the serial port
+        ser.close()
