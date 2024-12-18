@@ -60,6 +60,7 @@ pcc_coordinates_ref = [
     {'theta': 0, 'phi': np.pi/2, 'length': 0.065}
 ]
 
+
 # Increase pcc_coordinates_ref list with intermediary points when there is an increment in theta bigger than np.pi/36
 n_int_points = 9
 pcc_coordinates_points = []
