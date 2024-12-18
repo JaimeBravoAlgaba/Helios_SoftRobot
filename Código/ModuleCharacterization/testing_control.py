@@ -6,8 +6,8 @@ from matplotlib import pyplot as plt
 import pandas as pd
 from keras import models as km
 
-from processing_tof import get_data
-from test_model_ai import denormalize
+#from processing_tof import get_data
+#from test_model_ai import denormalize
 
 def tofs2pcc(l):
     theta = np.zeros((len(l), 1))
@@ -46,6 +46,7 @@ def iKine(coords):
 
 # List of PCC coordinates to loop over
 pcc_coordinates_ref= [
+    {'theta': 0, 'phi': 0, 'length': 0.065},
     {'theta': np.pi/4, 'phi': 0, 'length': 0.065},
     {'theta': np.pi/4, 'phi': 0, 'length': 0.060},
     {'theta': 0, 'phi':0, 'length': 0.060},
@@ -59,18 +60,32 @@ pcc_coordinates_ref= [
     {'theta': 0, 'phi': np.pi/2, 'length': 0.065}
 ]
 
-
 # Increase pcc_coordinates_ref list with intermediary points when there is an increment in theta bigger than np.pi/36
 n_int_points = 9
+pcc_coordinates_points = []
 for i in range(len(pcc_coordinates_ref)-1):
-    if pcc_coordinates_ref[i]['theta'] != pcc_coordinates_ref[i+1]['theta']:
+    if pcc_coordinates_ref[i]['theta'] != pcc_coordinates_ref[i+1]['theta'] or pcc_coordinates_ref[i]['phi'] != pcc_coordinates_ref[i+1]['phi'] or pcc_coordinates_ref[i]['length'] != pcc_coordinates_ref[i+1]['length']:
         theta_step = (pcc_coordinates_ref[i+1]['theta'] - pcc_coordinates_ref[i]['theta']) / n_int_points
         phi_step = (pcc_coordinates_ref[i+1]['phi'] - pcc_coordinates_ref[i]['phi']) / n_int_points
         #length_step = (pcc_coordinates_ref[i+1]['length'] - pcc_coordinates_ref[i]['length']) / n_int_points
         length_step = 0
 
+        if pcc_coordinates_ref[i]['length'] != pcc_coordinates_ref[i+1]['length']:
+            pcc_coordinates_points.append({
+                'theta': pcc_coordinates_ref[i]['theta'],
+                'phi': pcc_coordinates_ref[i]['phi'],
+                'length': pcc_coordinates_ref[i]['length']
+            })
+            pcc_coordinates_points.append({
+                'theta': pcc_coordinates_ref[i+1]['theta'],
+                'phi': pcc_coordinates_ref[i+1]['phi'],
+                'length': pcc_coordinates_ref[i+1]['length']
+            })
+            continue
+
+        
         for j in range(1, n_int_points):
-            pcc_coordinates_ref.append({
+            pcc_coordinates_points.append({
                 'theta': pcc_coordinates_ref[i]['theta'] + j * theta_step,
                 'phi': pcc_coordinates_ref[i]['phi'] + j * phi_step,
                 'length': pcc_coordinates_ref[i]['length'] + j * length_step
