@@ -6,8 +6,8 @@ from matplotlib import pyplot as plt
 import pandas as pd
 from keras import models as km
 
-#from processing_tof import get_data
-#from test_model_ai import denormalize
+from processing_tof import get_data
+from test_model_ai import denormalize
 
 def tofs2pcc(l):
     theta = np.zeros((len(l), 1))
@@ -46,18 +46,18 @@ def iKine(coords):
 
 # List of PCC coordinates to loop over
 pcc_coordinates_ref= [
-    {'theta': 0, 'phi': 0, 'length': 0.065},
-    {'theta': np.pi/4, 'phi': 0, 'length': 0.065},
-    {'theta': np.pi/4, 'phi': 0, 'length': 0.060},
-    {'theta': 0, 'phi':0, 'length': 0.060},
-    {'theta': 0, 'phi':0, 'length': 0.055},
-    {'theta': np.pi/4, 'phi': 0, 'length': 0.055},
-    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.055},
-    {'theta': 0, 'phi': np.pi/2, 'length': 0.055},
-    {'theta': 0, 'phi': np.pi/2, 'length': 0.060},
-    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.060},
-    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.065},
-    {'theta': 0, 'phi': np.pi/2, 'length': 0.065}
+    {'theta': 0, 'phi': 0, 'length': 0.0445},
+    {'theta': np.pi/4, 'phi': 0, 'length': 0.0445},
+    {'theta': np.pi/4, 'phi': 0, 'length': 0.040},
+    {'theta': 0, 'phi':0, 'length': 0.040},
+    {'theta': 0, 'phi':0, 'length': 0.035},
+    {'theta': np.pi/4, 'phi': 0, 'length': 0.035},
+    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.035},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.035},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.040},
+    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.040},
+    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.045},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.045}
 ]
 
 # Increase pcc_coordinates_ref list with intermediary points when there is an increment in theta bigger than np.pi/36
