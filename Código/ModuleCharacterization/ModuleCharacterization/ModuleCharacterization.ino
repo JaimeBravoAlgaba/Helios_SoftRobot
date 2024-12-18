@@ -61,18 +61,21 @@ void calibrateCables() {
 
 void printData() {
   // Print TOF data
-  for (uint8_t i = 0; i < 4; ++i) {
+  Serial.print("TOFS:[");
+  for (uint8_t i = 0; i < 3; ++i) {
     Serial.print(l_tofs[i]);
     Serial.print(",");
   }
+  Serial.print(l_tofs[3]);
 
   // Print Helios data
+  Serial.print("], HELIOS:[");
   for (uint8_t i = 0; i < 4; ++i) {
     Serial.print(h[i]);
     if (i < 3) {
       Serial.print(",");
     } else {
-      Serial.print("\n");
+      Serial.print("]\n");
     }
   }
 }
