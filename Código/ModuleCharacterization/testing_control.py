@@ -133,7 +133,7 @@ try:
     if not wait_confirm(ser):
         raise TimeoutError("Failed to receive expected response 'OK' from the module.")
 
-    pcc_coordinates = {'theta': 0, 'phi': 0, 'length': 0.035}
+    pcc_coordinates = {'theta': 0, 'phi': 0, 'length': 0.0430}
 
     for p in np.arange(0, 2 * np.pi, np.pi / 4):
         pcc_coordinates['phi'] = p
@@ -158,7 +158,7 @@ try:
                 try:
                     response_dict = json.loads(response)
                 except json.JSONDecodeError:
-                    print("Failed to decode JSON response")
+                    print("Failed to decode JSON response:" + response)
                     continue
 
                 tof_values = response_dict['TOFS']
@@ -187,7 +187,7 @@ try:
                 try:
                     response_dict = json.loads(response)
                 except json.JSONDecodeError:
-                    print("Failed to decode JSON response")
+                    print("Failed to decode JSON response:" + response)
                     continue
 
                 tof_values = response_dict['TOFS']
