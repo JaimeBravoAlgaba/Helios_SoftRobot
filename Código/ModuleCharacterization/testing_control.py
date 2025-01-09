@@ -133,7 +133,7 @@ try:
     if not wait_confirm(ser):
         raise TimeoutError("Failed to receive expected response 'OK' from the module.")
 
-    pcc_coordinates = {'theta': 0, 'phi': 0, 'length': 0.0445}
+    pcc_coordinates = {'theta': 0, 'phi': 0, 'length': 0.035}
 
     for p in np.arange(0, 2 * np.pi, np.pi / 4):
         pcc_coordinates['phi'] = p
