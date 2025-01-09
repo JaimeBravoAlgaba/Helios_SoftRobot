@@ -49,7 +49,7 @@ void calibrateCables() {
     dn[i] = length2steps(-0.001);
     l_tofs_init[i] = l_tofs[i];
 
-    while (abs(l_tofs[i] - l_tofs_init[i]) < 2) {
+    while (abs(l_tofs[i] - l_tofs_init[i]) < 3) {
       stepParallel(dn);
       memmove(l_tofs, readTOFs(), sizeof(l_tofs) * sizeof(uint8_t));
     }
@@ -61,7 +61,7 @@ void calibrateCables() {
 
 void printData() {
   // Print TOF data
-  Serial.print("TOFS:[");
+  Serial.print("{\"TOFS\":[");
   for (uint8_t i = 0; i < 3; ++i) {
     Serial.print(l_tofs[i]);
     Serial.print(",");
@@ -69,13 +69,13 @@ void printData() {
   Serial.print(l_tofs[3]);
 
   // Print Helios data
-  Serial.print("], HELIOS:[");
+  Serial.print("], \"HELIOS\":[");
   for (uint8_t i = 0; i < 4; ++i) {
     Serial.print(h[i]);
     if (i < 3) {
       Serial.print(",");
     } else {
-      Serial.print("]\n");
+      Serial.print("]}\n");
     }
   }
 }

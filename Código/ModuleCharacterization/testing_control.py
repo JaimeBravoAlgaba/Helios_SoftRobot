@@ -1,29 +1,37 @@
+import json
 import numpy as np
 import serial
 import time
 
 from matplotlib import pyplot as plt
-import pandas as pd
-from keras import models as km
 
-from processing_tof import get_data
-from test_model_ai import denormalize
+import platform
+import csv
 
-def tofs2pcc(l):
-    theta = np.zeros((len(l), 1))
-    phi = np.zeros((len(l), 1))
-    length = np.zeros((len(l), 1))
+if platform.system() == 'Linux':
+    com_port = '/dev/ttyUSB0'
+elif platform.system() == 'Windows':
+    com_port = 'COM5'
+else:
+    raise EnvironmentError('Unsupported platform')
+baud_rate = 115200
 
-    for i in range(len(l)):
-        thetaX = np.arctan2(l[i][2]-l[i][0], D)
-        thetaY = np.arctan2(l[i][3]-l[i][1], D)
-        theta[i] = np.sqrt(thetaX**2 + thetaY**2)
-        phi[i] = np.arctan2(thetaY, thetaX)
-        if theta[i] < 1e-6:
-            length[i] = np.mean(l[i])
-        else:
-            length[i] = theta[i] * np.mean(l[i]) * np.tan(np.pi/2 - theta[i])
-    
+# Open a CSV file to write the readings
+csv_file = open('data.csv', mode='w', newline='')
+csv_writer = csv.writer(csv_file)
+
+def tofs2pcc(l, D=100):
+    thetaX = np.arctan2(l[2]-l[0], D)
+    thetaY = np.arctan2(l[3]-l[1], D)
+
+    theta = np.sqrt(thetaX**2 + thetaY**2)
+    phi = np.arctan2(thetaY, thetaX)
+
+    if theta < 1e-6:
+        length = np.mean(l[i])/1000
+    else:
+        length = theta * np.mean(l)/1000 * np.tan(np.pi/2 - theta)
+
     return theta, phi, length
 
 def iKine(coords):
@@ -43,6 +51,18 @@ def iKine(coords):
         cable_lengths.append(length)
     
     return cable_lengths
+
+def wait_confirm(ser, expected_response="OK", max_iterations=1000):
+    iterations = 0
+    while iterations < max_iterations:
+        if ser.in_waiting > 0:
+            response = ser.readline().decode().strip()
+            print(f">> {response}")
+            if response == expected_response:
+                return True
+        time.sleep(0.1)
+        iterations += 1
+    return False
 
 # List of PCC coordinates to loop over
 pcc_coordinates_ref= [
@@ -92,75 +112,91 @@ for i in range(len(pcc_coordinates_ref)-1):
             })
 
 # This script tests an existing model with a given dataset
-model_file = 'models/nn/nn_0x48_V2.keras'
-test_data = './dataset/241207/0x48_241207_5.csv'
-
-h, l, h_avg, l_avg, h0, l0 = get_data(test_data)
-
-# Load the model
-model = km.load_model(model_file)
+#model_file = 'models/nn/nn_0x48_V2.keras'
+#test_data = './dataset/241207/0x48_241207_5.csv'
+#
+#h, l, h_avg, l_avg, h0, l0 = get_data(test_data)
+#
+## Load the model
+#model = km.load_model(model_file)
 
 # Open serial port
-ser = serial.Serial('COM3', 115200, timeout=1)
+ser = serial.Serial(com_port, baud_rate, timeout=1)
 time.sleep(2)  # Wait for the serial connection to initialize
 
+wait_confirm(ser, expected_response="START")
+
 try:
-
     # Send the "calibrate" command via serial
-    ser.write("calibrate".encode())
-    while ser.in_waiting == 0:
-        time.sleep(0.1)
-    response = ser.readline().decode().strip()
-    print(f"Sent: calibrate, Received: {response}")
+    ser.write("CALIBRATE".encode())
+    print(f"<< CALIBRATE")
+    if not wait_confirm(ser):
+        raise TimeoutError("Failed to receive expected response 'OK' from the module.")
 
-    # Initialize current cable lengths
-    current_cable_lengths = [0.065, 0.065, 0.065, 0.065]
+    pcc_coordinates = {'theta': 0, 'phi': 0, 'length': 0.0445}
 
-    for pcc_coordinates in pcc_coordinates_ref:
+    for p in np.arange(0, 2 * np.pi, np.pi / 4):
+        pcc_coordinates['phi'] = p
 
-        # Compute the needed increment of cable lengths
-        cable_lengths = iKine(pcc_coordinates)
-        delta_cable_lengths = [new - old for new, old in zip(cable_lengths, current_cable_lengths)]
+        for t in np.arange(0, np.pi/4, np.pi / 32):
+            pcc_coordinates['theta'] = t
 
-        remaining_iterations = 10
-
-        while remaining_iterations:
-
-            remaining_iterations -= 1
-        
             # Send the cable lengths via serial
-            cable_lengths_str = ",".join([str(length) for length in delta_cable_lengths])
-            ser.write(cable_lengths_str.encode())
+            pcc_ref_str = ",".join([str(pcc_coordinates['theta']), str(pcc_coordinates['phi']), str(pcc_coordinates['length'])])
+            pcc_ref_str= "REF_PCC:" + pcc_ref_str
+            ser.write(pcc_ref_str.encode())
+            print(f"<< {pcc_ref_str}")
             
-            # Capture the readings answered by the module
-            response = ser.readline().decode().strip()
-            while ser.in_waiting == 0:
-                time.sleep(0.1)
-            response = ser.readline().decode().strip()
+            if not wait_confirm(ser):
+                print("Failed to confirm. Retrying...")
+                ser.write(pcc_ref_str.encode())
+            else:
+                # Capture the readings answered by the module
+                response = ser.readline().decode().strip()
 
-            print(f"Sent: {cable_lengths_str}, Received: {response}")
+                # Parse the response 
+                try:
+                    response_dict = json.loads(response)
+                except json.JSONDecodeError:
+                    print("Failed to decode JSON response")
+                    continue
 
-            # Read the TOF sensor values
-            tof_values = [float(value) for value in response.split(",")]
-            predicted_length = pd.DataFrame(model(tof_values))
-            predicted_length = np.array([predicted_length[i].tolist() for i in range(len(predicted_length.columns))])
-            predicted_length = denormalize(predicted_length, l0, l_avg)
+                tof_values = response_dict['TOFS']
+                helios_values = response_dict['HELIOS']
 
-            # Compute the PCC coordinates from the TOF sensor values
-            theta, phi, length = tofs2pcc(predicted_length, 0.1)
+                print(f">> TOF: {tof_values}, HELIOS: {helios_values}")
+                csv_writer.writerow([tof_values, helios_values])
 
-            # If error is small, break the loop
-            if theta - pcc_coordinates['theta'] < 3 and phi - pcc_coordinates['phi'] < 5 and length - pcc_coordinates['length'] < 0.005:
-                break
+        for t in np.arange(0, np.pi/4, np.pi / 32):
+            pcc_coordinates['theta'] = np.pi/4 - t
 
-            # Using iKine, compute the estimated able lengths
-            current_cable_lengths = iKine({'theta': theta, 'phi': phi, 'length': length})
+            # Send the cable lengths via serial
+            pcc_ref_str = ",".join([str(pcc_coordinates['theta']), str(pcc_coordinates['phi']), str(pcc_coordinates['length'])])
+            pcc_ref_str= "REF_PCC:" + pcc_ref_str
+            ser.write(pcc_ref_str.encode())
+            print(f"<< {pcc_ref_str}")
+            
+            if not wait_confirm(ser):
+                print("Failed to confirm. Retrying...")
+                ser.write(pcc_ref_str.encode())
+            else:
+                # Capture the readings answered by the module
+                response = ser.readline().decode().strip()
 
-            delta_cable_lengths = [new - old for new, old in zip(cable_lengths, current_cable_lengths)]
-        
-        # Wait before sending the next set of coordinates
-        time.sleep(1)
+                # Parse the response 
+                try:
+                    response_dict = json.loads(response)
+                except json.JSONDecodeError:
+                    print("Failed to decode JSON response")
+                    continue
+
+                tof_values = response_dict['TOFS']
+                helios_values = response_dict['HELIOS']
+
+                print(f">> TOF: {tof_values}, HELIOS: {helios_values}")
+                csv_writer.writerow([tof_values, helios_values])
 
 finally:
-    # Close the serial port
+    csv_file.close()
+    print("Finished!")
     ser.close()
