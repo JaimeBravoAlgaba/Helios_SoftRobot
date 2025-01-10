@@ -52,64 +52,27 @@ def iKine(coords):
     
     return cable_lengths
 
-def wait_confirm(ser, expected_response="OK", max_iterations=1000):
+def wait_confirm(ser, expected_response="NONE", max_iterations=1000):
     iterations = 0
+    strict = True
+    if expected_response == "NONE":
+        strict = False
+    
     while iterations < max_iterations:
         if ser.in_waiting > 0:
             response = ser.readline().decode().strip()
             print(f">> {response}")
             if response == expected_response:
                 return True
+            else:
+                if strict:
+                    continue
+                else:
+                    print(f"Expected '{expected_response}', but received '{response}'")
+                    return True
         time.sleep(0.1)
         iterations += 1
     return False
-
-# List of PCC coordinates to loop over
-pcc_coordinates_ref= [
-    {'theta': 0, 'phi': 0, 'length': 0.0445},
-    {'theta': np.pi/4, 'phi': 0, 'length': 0.0445},
-    {'theta': np.pi/4, 'phi': 0, 'length': 0.040},
-    {'theta': 0, 'phi':0, 'length': 0.040},
-    {'theta': 0, 'phi':0, 'length': 0.035},
-    {'theta': np.pi/4, 'phi': 0, 'length': 0.035},
-    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.035},
-    {'theta': 0, 'phi': np.pi/2, 'length': 0.035},
-    {'theta': 0, 'phi': np.pi/2, 'length': 0.040},
-    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.040},
-    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.045},
-    {'theta': 0, 'phi': np.pi/2, 'length': 0.045}
-]
-
-# Increase pcc_coordinates_ref list with intermediary points when there is an increment in theta bigger than np.pi/36
-n_int_points = 9
-pcc_coordinates_points = []
-for i in range(len(pcc_coordinates_ref)-1):
-    if pcc_coordinates_ref[i]['theta'] != pcc_coordinates_ref[i+1]['theta'] or pcc_coordinates_ref[i]['phi'] != pcc_coordinates_ref[i+1]['phi'] or pcc_coordinates_ref[i]['length'] != pcc_coordinates_ref[i+1]['length']:
-        theta_step = (pcc_coordinates_ref[i+1]['theta'] - pcc_coordinates_ref[i]['theta']) / n_int_points
-        phi_step = (pcc_coordinates_ref[i+1]['phi'] - pcc_coordinates_ref[i]['phi']) / n_int_points
-        #length_step = (pcc_coordinates_ref[i+1]['length'] - pcc_coordinates_ref[i]['length']) / n_int_points
-        length_step = 0
-
-        if pcc_coordinates_ref[i]['length'] != pcc_coordinates_ref[i+1]['length']:
-            pcc_coordinates_points.append({
-                'theta': pcc_coordinates_ref[i]['theta'],
-                'phi': pcc_coordinates_ref[i]['phi'],
-                'length': pcc_coordinates_ref[i]['length']
-            })
-            pcc_coordinates_points.append({
-                'theta': pcc_coordinates_ref[i+1]['theta'],
-                'phi': pcc_coordinates_ref[i+1]['phi'],
-                'length': pcc_coordinates_ref[i+1]['length']
-            })
-            continue
-
-        
-        for j in range(1, n_int_points):
-            pcc_coordinates_points.append({
-                'theta': pcc_coordinates_ref[i]['theta'] + j * theta_step,
-                'phi': pcc_coordinates_ref[i]['phi'] + j * phi_step,
-                'length': pcc_coordinates_ref[i]['length'] + j * length_step
-            })
 
 # This script tests an existing model with a given dataset
 #model_file = 'models/nn/nn_0x48_V2.keras'
@@ -130,10 +93,10 @@ try:
     # Send the "calibrate" command via serial
     ser.write("CALIBRATE".encode())
     print(f"<< CALIBRATE")
-    if not wait_confirm(ser):
+    if not wait_confirm(ser, "OK"):
         raise TimeoutError("Failed to receive expected response 'OK' from the module.")
 
-    pcc_coordinates = {'theta': 0, 'phi': 0, 'length': 0.0430}
+    pcc_coordinates = {'theta': 0, 'phi': 0, 'length': 0.0370}
 
     for p in np.arange(0, 2 * np.pi, np.pi / 4):
         pcc_coordinates['phi'] = p
