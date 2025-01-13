@@ -9,9 +9,9 @@ import json
 from processing_tof import get_data, normalize
 
 # This script retrains an existing model with a given dataset
-model_file = 'models/nn/nn_0x48_V2.keras'
-model_file_new = 'models/nn/nn_0x48_V2.keras'
-training_data = './dataset/241207/0x48_241207_4.csv'
+model_file = 'models/nn/nn_0x4A_V3.keras'
+model_file_new = 'models/nn/nn_0x4A_V3.keras'
+training_data = './dataset/250109/0x4A_250109_1.csv'
 
 h, l, h_avg, l_avg, h0, l0 = get_data(training_data)
 
