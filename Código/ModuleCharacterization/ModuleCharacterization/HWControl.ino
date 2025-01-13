@@ -93,9 +93,9 @@ uint32_t readHelios(uint8_t i) {
   helios.setInputMultiplexer(ADS122C04_MUX_AIN0_AVSS + i);
   delay(50);
 
-  float n_samples = 20;
-  float n_filter = 5.0;
-  uint32_t h = 0;
+  float n_samples = 10;
+  float n_filter = 4.0;
+  uint32_t h = helios.readADC();
 
   for (uint8_t n = 0; n < n_samples; ++n) {
     h = h * (n_filter-1) / n_filter + helios.readADC() / n_filter;

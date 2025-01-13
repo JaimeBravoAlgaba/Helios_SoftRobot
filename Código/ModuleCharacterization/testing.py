@@ -2,6 +2,13 @@ import numpy as np
 import serial
 import time
 
+from matplotlib import pyplot as plt
+import pandas as pd
+from keras import models as km
+
+from processing_tof import get_data
+from test_model_ai import denormalize
+
 def tofs2pcc(l, D):
     theta = np.zeros((len(l), 1))
     phi = np.zeros((len(l), 1))
@@ -37,51 +44,106 @@ def iKine(coords):
     
     return cable_lengths
 
+def wait_confirm(ser, expected_response="OK", max_iterations=1000):
+    iterations = 0
+    while iterations < max_iterations:
+        if ser.in_waiting > 0:
+            response = ser.readline().decode().strip()
+            print(f">> {response}")
+            if response == expected_response:
+                return True
+        time.sleep(0.1)
+        iterations += 1
+    return False
+
 # List of PCC coordinates to loop over
 pcc_coordinates_ref= [
-    {'theta': np.pi/4, 'phi': 0, 'length': 0.065},
-    {'theta': 0, 'phi':0, 'length': 0.065},
-    {'theta': np.pi/4, 'phi': np.pi/2, 'length': 0.065},
-    {'theta': 0, 'phi': np.pi/2, 'length': 0.065}
+    {'theta': 0, 'phi': 0, 'length': 0.0445},
+    {'theta': np.pi/6, 'phi': 0, 'length': 0.0445},
+    {'theta': np.pi/6, 'phi': 0, 'length': 0.040},
+    {'theta': 0, 'phi':0, 'length': 0.040},
+    {'theta': 0, 'phi':0, 'length': 0.035},
+    {'theta': np.pi/6, 'phi': 0, 'length': 0.035},
+    {'theta': np.pi/6, 'phi': np.pi/2, 'length': 0.035},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.035},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.040},
+    {'theta': np.pi/6, 'phi': np.pi/2, 'length': 0.040},
+    {'theta': np.pi/6, 'phi': np.pi/2, 'length': 0.045},
+    {'theta': 0, 'phi': np.pi/2, 'length': 0.045}
 ]
 
+# Increase pcc_coordinates_ref list with intermediary points when there is an increment in theta bigger than np.pi/36
+n_int_points = 9
+pcc_coordinates_points = []
+for i in range(len(pcc_coordinates_ref)-1):
+    if pcc_coordinates_ref[i]['theta'] != pcc_coordinates_ref[i+1]['theta'] or pcc_coordinates_ref[i]['phi'] != pcc_coordinates_ref[i+1]['phi'] or pcc_coordinates_ref[i]['length'] != pcc_coordinates_ref[i+1]['length']:
+        theta_step = (pcc_coordinates_ref[i+1]['theta'] - pcc_coordinates_ref[i]['theta']) / n_int_points
+        phi_step = (pcc_coordinates_ref[i+1]['phi'] - pcc_coordinates_ref[i]['phi']) / n_int_points
+        #length_step = (pcc_coordinates_ref[i+1]['length'] - pcc_coordinates_ref[i]['length']) / n_int_points
+        length_step = 0
+
+        if pcc_coordinates_ref[i]['length'] != pcc_coordinates_ref[i+1]['length']:
+            pcc_coordinates_points.append({
+                'theta': pcc_coordinates_ref[i]['theta'],
+                'phi': pcc_coordinates_ref[i]['phi'],
+                'length': pcc_coordinates_ref[i]['length']
+            })
+            pcc_coordinates_points.append({
+                'theta': pcc_coordinates_ref[i+1]['theta'],
+                'phi': pcc_coordinates_ref[i+1]['phi'],
+                'length': pcc_coordinates_ref[i+1]['length']
+            })
+            continue
+
+        
+        for j in range(1, n_int_points):
+            pcc_coordinates_points.append({
+                'theta': pcc_coordinates_ref[i]['theta'] + j * theta_step,
+                'phi': pcc_coordinates_ref[i]['phi'] + j * phi_step,
+                'length': pcc_coordinates_ref[i]['length'] + j * length_step
+            })
+
+# This script tests an existing model with a given dataset
+model_file = 'models/nn/nn_0x48_V2.keras'
+test_data = './dataset/241207/0x48_241207_5.csv'
+
+h, l, h_avg, l_avg, h0, l0 = get_data(test_data)
+
+# Load the model
+model = km.load_model(model_file)
+
 # Open serial port
-ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+ser = serial.Serial('/dev/ttyUSB1', 115200, timeout=1)
 time.sleep(2)  # Wait for the serial connection to initialize
 
-try:
+wait_confirm(ser, expected_response="START")
 
-    # Send the "calibrate" command via serial
-    ser.write("calibrate".encode())
-    while ser.in_waiting == 0:
-        time.sleep(0.1)
-    response = ser.readline().decode().strip()
-    print(f"Sent: calibrate, Received: {response}")
+# Wait until the module is initialized
+while True:
+    try:
 
-    # Initialize current cable lengths
-    current_cable_lengths = [0.065, 0.065, 0.065, 0.065]
+        # Send the "calibrate" command via serial
+        ser.write("CALIBRATE".encode())
+        print(f"<< CALIBRATE")
+        if not wait_confirm(ser):
+            raise TimeoutError("Failed to receive expected response 'OK' from the module.")
 
-    for pcc_coordinates in pcc_coordinates_ref:
-        # Compute the needed increment of cable lengths
-        cable_lengths = iKine(pcc_coordinates)
-        delta_cable_lengths = [new - old for new, old in zip(cable_lengths, current_cable_lengths)]
-        
-        # Send the cable lengths via serial
-        cable_lengths_str = ",".join([str(length) for length in delta_cable_lengths])
-        ser.write(cable_lengths_str.encode())
-        
-        # Capture the readings answered by the module
-        response = ser.readline().decode().strip()
-        while ser.in_waiting == 0:
+        # Initialize current cable lengths
+        current_cable_lengths = [0.0445, 0.0445, 0.0445, 0.0445]
+
+        for pcc_coordinates in pcc_coordinates_points:            
+            # Send the cable lengths via serial
+            pcc_ref_str = ",".join([str(pcc_coordinates['theta']), str(pcc_coordinates['phi']), str(pcc_coordinates['length'])])
+            pcc_ref_str= "REF_PCC:" + pcc_ref_str
+            ser.write(pcc_ref_str.encode())
             time.sleep(0.1)
-        response = ser.readline().decode().strip()
-        print(f"Sent: {cable_lengths_str}, Received: {response}")
+            print(f"<< {pcc_ref_str}")
+            if not wait_confirm(ser):
+                raise TimeoutError("Failed to receive expected response 'OK' from the module.")
+            
+            # Wait before sending the next set of coordinates
+            time.sleep(1)
 
-        current_cable_lengths = cable_lengths
-        
-        # Wait before sending the next set of coordinates
-        time.sleep(1)
-
-finally:
-    # Close the serial port
-    ser.close()
+    finally:
+        # Close the serial port
+        ser.close()
