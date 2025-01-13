@@ -212,6 +212,22 @@ void loop() {
           cableLengths[i] = dl[i] + cableLengths[i];
         }
       }
+
+      else if (cmd.startswith("REF_LEN:")) {
+        cmd.remove(0, String("REF_LEN:").length());
+
+        int firstComma  = cmd.indexOf(',');
+        int secondComma = cmd.indexOf(',', firstComma + 1);
+        int thirdComma  = cmd.indexOf(',', secondComma + 1);
+
+        dl[0] = cmd.substring(0, firstComma).toFloat() - cableLengths[0];
+        dn[0] = length2steps(dl[0]);
+        for (uint8_t i = 1; i < 4; ++i) {
+          dl[i] = cmd.substring(commas[i - 1] + 1, (i < 3) ? commas[i] : cmd.length()).toFloat() - cableLengths[i];
+          dn[i] = length2steps(dl[i]);
+          cableLengths[i] = dl[i] + cableLengths[i];
+        }
+      }
       else {
         Serial.println("ERROR");
         return;
