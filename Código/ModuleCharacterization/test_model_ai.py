@@ -6,13 +6,7 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import tensorflow as tf
 from keras import models as km
 
-from processing_tof import get_data, normalize
-
-def denormalize(x, x0, x_avg):
-    for i in range(len(x)):
-        x[i] = [(x[i][j] + x0[i] + 1) * x_avg for j in range(len(x[i]))]
-    
-    return x
+from utils import get_data, normalize, denormalize
 
 def fKine(l, D = 100):
     theta = np.zeros((len(l), 1))
