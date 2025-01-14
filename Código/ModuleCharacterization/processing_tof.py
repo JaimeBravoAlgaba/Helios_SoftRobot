@@ -119,7 +119,7 @@ def plot_data(l, h, l_avg, h_avg):
 
 if __name__ == '__main__':
     # File path
-    file_path = Path('./dataset/250109/0x4A_250109_445_1.csv')
+    file_path = Path('./dataset/250109/0x4A_250109_445_2.csv')
 
     # Plot the data
     h, l, h_avg, l_avg, h0, l0 = get_data(file_path)
