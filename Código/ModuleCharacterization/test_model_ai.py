@@ -31,6 +31,9 @@ def fKine(l, D = 100):
     
     return theta, phi, length
 
+def params2points(theta, phi, length):
+    return 0
+
 # This script tests an existing model with a given dataset
 model_file = 'models/nn/nn_0x4A_V3.keras'
 test_data = './dataset/250109/0x4A_250109_test.csv'
