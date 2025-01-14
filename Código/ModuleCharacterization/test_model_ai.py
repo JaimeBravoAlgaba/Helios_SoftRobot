@@ -1,6 +1,8 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import tensorflow as tf
 from keras import models as km
 
@@ -75,9 +77,58 @@ axs[1].grid(True)
 
 plt.tight_layout()
 
-# Compute the RMSE
+# Create a 4x1 grid of subplots to compare predicted and test TOF distances
+fig, axs = plt.subplots(4, 1)
+
+for i in range(4):
+    axs[i].plot(predicted_output[i], label=f'Predicted TOF distance l{i+1}')
+    axs[i].plot(expected_output[i], label=f'Current TOF distance l{i+1}')
+    axs[i].set_xlim([0, len(predicted_output[i])])
+    #axs[i].set_xlabel(f'# of Iterations')
+    axs[i].set_ylabel(f'Distance l{i+1} (mm)')
+    #axs[i].set_title(f'Predicted vs Test TOF Distance l{i+1}')
+    axs[i].legend()
+    axs[i].grid(True)
+
+    # Compute the RMSE
+    rmse = np.sqrt(np.mean((predicted_output[i] - expected_output[i]) ** 2))
+    print(f'RMSE for Length {i+1}:', rmse)
+
+    # Compute the median error
+    median_error = np.median(np.abs(predicted_output[i] - expected_output[i]))
+    print(f'Median Error for Length {i+1}:', median_error)
+
+    # Compute the standard deviation of the error
+    std_error = np.std(predicted_output[i] - expected_output[i])
+    print(f'Standard Deviation of Error for Length {i+1}:', std_error)
+
+    # Compute the MAE
+    mae = np.mean(np.abs(predicted_output[i] - expected_output[i]))
+    print(f'Mean Absolute Error for Length {i+1}:', mae)
+
+plt.tight_layout()
+
+# Create a box plot with the differences between predicted_output and expected_output
+differences = np.abs(predicted_output - expected_output)
+
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.boxplot(differences.T, labels=[f'l{i+1}' for i in range(differences.shape[0])])
+ax.set_title('Current vs Predicted TOF Distances')
+ax.set_ylabel('Error (mm)')
+ax.grid(True)
+
+plt.tight_layout()
+
+# Compute the RMSE, median error, and standard deviation of the error
 rmse = np.sqrt(np.mean((predicted_output - expected_output) ** 2))
 print('RMSE:', rmse)
+median_error = np.median(np.abs(predicted_output - expected_output))    
+print('Median Error:', median_error)
+std_error = np.std(predicted_output - expected_output)
+print('Standard Deviation of Error:', std_error)
+mae = np.mean(np.abs(predicted_output - expected_output))
+print('Mean Absolute Error:', mae)
+
 
 # Model summary
 model.summary()
@@ -99,26 +150,29 @@ phi_expected_deg = np.degrees(phi_expected)
 phi_predicted_deg = np.degrees(phi_predicted)
 
 # Plot theta expected and predicted
-axs[0].plot(theta_expected_deg, label='Theta Expected')
-axs[0].plot(theta_predicted_deg, label='Theta Predicted')
-axs[0].set_ylabel('Theta (degrees)')
-axs[0].set_title('Theta Expected and Predicted')
+axs[0].plot(theta_expected_deg, label='Expected $\\theta$')
+axs[0].plot(theta_predicted_deg, label='Predicted $\\theta$')
+axs[0].set_xlim([0, len(theta_expected_deg)])
+axs[0].set_ylabel('$\\theta$ (º)')
+#axs[0].set_title('Theta Expected and Predicted')
 axs[0].legend()
 axs[0].grid(True)
 
 # Plot phi expected and predicted
-axs[1].plot(phi_expected_deg, label='Phi Expected')
-axs[1].plot(phi_predicted_deg, label='Phi Predicted')
-axs[1].set_ylabel('Phi (degrees)')
-axs[1].set_title('Phi Expected and Predicted')
+axs[1].plot(phi_expected_deg, label='Expected $\\phi$')
+axs[1].plot(phi_predicted_deg, label='Predicted $\\phi$')
+axs[1].set_xlim([0, len(phi_expected_deg)])
+axs[1].set_ylabel('$\\phi$ (º)')
+#axs[1].set_title('Phi Expected and Predicted')
 axs[1].legend()
 axs[1].grid(True)
 
 # Plot length expected and predicted
-axs[2].plot(length_expected, label='Length Expected')
-axs[2].plot(length_predicted, label='Length Predicted')
+axs[2].plot(length_expected, label='Expected Length')
+axs[2].plot(length_predicted, label='Predicted Length')
+axs[2].set_xlim([0, len(length_expected)])
 axs[2].set_ylabel('Length (mm)')
-axs[2].set_title('Length Expected and Predicted')
+#axs[2].set_title('Length Expected and Predicted')
 axs[2].legend()
 axs[2].grid(True)
 
@@ -148,7 +202,13 @@ ax2.set_ylim([50, 70])
 
 abs_error_theta = np.abs(theta_predicted - theta_expected)
 abs_error_phi = np.abs(phi_predicted - phi_expected)
+# Remove errors greater than pi
+abs_error_phi = np.minimum(abs_error_phi, 2 * np.pi - abs_error_phi)
 abs_error_length = np.abs(length_predicted - length_expected)
+
+print('Absolute Error for Theta:', np.degrees(np.mean(abs_error_theta)))
+print('Absolute Error for Phi:', np.degrees(np.mean(abs_error_phi)))
+print('Absolute Error for Length:', np.mean(abs_error_length))
 
 # Plot absolute error for theta, phi, and length
 fig, axs = plt.subplots(3, 1, figsize=(10, 18))
@@ -195,4 +255,8 @@ ax.legend()
 ax.grid(True)
 
 plt.tight_layout()
+
+
+
+
 plt.show()
