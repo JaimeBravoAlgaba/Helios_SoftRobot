@@ -34,24 +34,6 @@ def tofs2pcc(l, D=100):
 
     return theta, phi, length
 
-def iKine(coords):
-    coords['phi'] = coords['phi'] + np.pi if coords['theta'] < 0 else coords['phi']
-    coords['theta'] = 0.0001 if abs(coords['theta']) < 1E-4 else abs(coords['theta'])
-    coords['length'] = 0.065 if coords['length'] > 0.065 else coords['length']
-
-    SEGMENTS_NUM = 1  # Example value, replace with actual
-    SEGMENTS_RC = 0.0225    # Example value, replace with actual
-    cableOffsets = [0, np.pi/2, np.pi, -np.pi/2]  # Example values, replace with actual
-
-    cable_lengths = []
-    for i in range(len(cableOffsets)):
-        length = 2 * np.sin(coords['theta'] / (2.0 * SEGMENTS_NUM)) * (
-            coords['length'] * SEGMENTS_NUM / coords['theta'] - SEGMENTS_RC * np.sin(coords['phi'] + cableOffsets[i])
-        )
-        cable_lengths.append(length)
-    
-    return cable_lengths
-
 def wait_confirm(ser, expected_response="NONE", max_iterations=1000):
     iterations = 0
     strict = True

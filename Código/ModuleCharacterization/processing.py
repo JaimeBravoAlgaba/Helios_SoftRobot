@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 
 from pathlib import Path
 from keras import models as km
-from utils import get_data, denormalize
+from utils import get_data, denormalize, parametric_arc
+from helios_kine import iKine, fKine
 
 def plot_data(l, h, l_avg, h_avg):
     # Plot the TOF distances
@@ -127,6 +128,28 @@ if __name__ == '__main__':
     plt.ylabel('TOF Distance')
     plt.title('Error')
     plt.legend()
+    plt.grid(True)
+    
+    e = np.zeros((len(expected_output[0]), 1))
+    
+    theta_expected, phi_expected, length_expected = fKine(np.transpose(expected_output), 100)
+    theta_predicted, phi_predicted, length_predicted = fKine(np.transpose(predicted_output), 100)
+
+    for i in range(len(expected_output[0])):
+        xe, ye, ze = parametric_arc(length_expected[i], theta_expected[i], phi_expected[i])
+        xp, yp, zp = parametric_arc(length_predicted[i], theta_predicted[i], phi_predicted[i])
+
+        e[i] = np.sqrt((xe[-1] - xp[-1])**2 + (ye[-1] - yp[-1])**2 + (ze[-1] - zp[-1])**2)
+
+    print('Mean Error:', np.mean(e))
+
+    
+    plt.figure(figsize=(10, 6))
+    plt.plot(e, label='Error')
+    plt.plot([np.mean(e)] * len(e), label='Mean Error', linestyle='--', color='red')
+    plt.xlabel('Sample Index')
+    plt.ylabel('Error')
+    plt.title('Tip Error')
     plt.grid(True)
 
     plt.show()

@@ -6,24 +6,8 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import tensorflow as tf
 from keras import models as km
 
-from utils import get_data, normalize, denormalize
-
-def fKine(l, D = 100):
-    theta = np.zeros((len(l), 1))
-    phi = np.zeros((len(l), 1))
-    length = np.zeros((len(l), 1))
-
-    for i in range(len(l)):
-        thetaX = np.arctan2(l[i][2]-l[i][0], D)
-        thetaY = np.arctan2(l[i][3]-l[i][1], D)
-        theta[i] = np.sqrt(thetaX**2 + thetaY**2)
-        phi[i] = np.arctan2(thetaY, thetaX)
-        if theta[i] < 1e-6:
-            length[i] = np.mean(l[i])
-        else:
-            length[i] = theta[i] * np.mean(l[i]) * np.tan(np.pi/2 - theta[i])
-    
-    return theta, phi, length
+from utils import get_data, denormalize
+from helios_kine import fKine
 
 def params2points(theta, phi, length):
     return 0
@@ -78,13 +62,17 @@ plt.tight_layout()
 fig, axs = plt.subplots(4, 1)
 
 for i in range(4):
-    axs[i].plot(predicted_output[i], label=f'Predicted TOF distance l{i+1}')
-    axs[i].plot(expected_output[i], label=f'Current TOF distance l{i+1}')
+    axs[i].plot(expected_output[i], label=f'Current TOF distance', linewidth=2)
+    axs[i].plot(predicted_output[i], label=f'Predicted TOF distance', linewidth=2)
     axs[i].set_xlim([0, len(predicted_output[i])])
-    #axs[i].set_xlabel(f'# of Iterations')
-    axs[i].set_ylabel(f'Distance l{i+1} (mm)')
-    #axs[i].set_title(f'Predicted vs Test TOF Distance l{i+1}')
-    axs[i].legend()
+    axs[i].set_ylabel(f'd{i+1} (mm)', fontsize=25)
+    if i == 3:
+        axs[i].tick_params(axis='both', which='major', labelsize=25)
+        axs[i].set_xlabel(f'Sample', fontsize=25)
+        fig.legend(['Expected', 'Predicted'], loc='upper center', ncol=2, fontsize=25)
+    else:
+        axs[i].tick_params(axis='y', which='major', labelsize=25)
+        axs[i].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
     axs[i].grid(True)
 
     # Compute the RMSE
@@ -103,15 +91,15 @@ for i in range(4):
     mae = np.mean(np.abs(predicted_output[i] - expected_output[i]))
     print(f'Mean Absolute Error for Length {i+1}:', mae)
 
-plt.tight_layout()
+fig.tight_layout()
 
 # Create a box plot with the differences between predicted_output and expected_output
 differences = np.abs(predicted_output - expected_output)
 
 fig, ax = plt.subplots(figsize=(10, 6))
-ax.boxplot(differences.T, labels=[f'l{i+1}' for i in range(differences.shape[0])])
-ax.set_title('Current vs Predicted TOF Distances')
-ax.set_ylabel('Error (mm)')
+ax.boxplot(differences.T, labels=[f'l{i+1}' for i in range(differences.shape[0])], patch_artist=True, linewidth=2)
+ax.set_title('Current vs Predicted TOF Distances', fontsize=25)
+ax.set_ylabel('Error (mm)', fontsize=25)
 ax.grid(True)
 
 plt.tight_layout()
