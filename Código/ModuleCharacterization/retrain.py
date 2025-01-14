@@ -4,9 +4,8 @@ from numpy import cos, sin, pi
 import tensorflow as tf
 from keras import models as km
 import pandas as pd
-import json
 
-from processing_tof import get_data, normalize
+from processing import get_data
 
 # This script retrains an existing model with a given dataset
 model_file = 'models/nn/nn_0x4A_V3.keras'
