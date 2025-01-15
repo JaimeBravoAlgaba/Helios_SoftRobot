@@ -9,8 +9,9 @@ from keras import models as km
 from utils import get_data, denormalize
 from helios_kine import fKine
 
-def params2points(theta, phi, length):
-    return 0
+# Change font of plots
+plt.rcParams["font.family"] = "Times New Roman"
+plt.rcParams.update({'font.size': 25})
 
 # This script tests an existing model with a given dataset
 model_file = 'models/nn/nn_0x4A_V3.keras'
@@ -97,8 +98,8 @@ fig.tight_layout()
 differences = np.abs(predicted_output - expected_output)
 
 fig, ax = plt.subplots(figsize=(10, 6))
-ax.boxplot(differences.T, labels=[f'l{i+1}' for i in range(differences.shape[0])], patch_artist=True, linewidth=2)
-ax.set_title('Current vs Predicted TOF Distances', fontsize=25)
+ax.boxplot(differences.T, labels=[f'd{i+1}' for i in range(differences.shape[0])], patch_artist=True, boxprops=dict(linewidth=2))
+#ax.set_title('Current vs Predicted TOF Distances', fontsize=25)
 ax.set_ylabel('Error (mm)', fontsize=25)
 ax.grid(True)
 
@@ -194,6 +195,15 @@ abs_error_length = np.abs(length_predicted - length_expected)
 print('Absolute Error for Theta:', np.degrees(np.mean(abs_error_theta)))
 print('Absolute Error for Phi:', np.degrees(np.mean(abs_error_phi)))
 print('Absolute Error for Length:', np.mean(abs_error_length))
+
+# Compute the standard deviations
+std_theta = np.std(theta_predicted - theta_expected)
+std_phi = np.std(phi_predicted - phi_expected)
+std_length = np.std(length_predicted - length_expected)
+
+print('Standard Deviation for Theta:', np.degrees(std_theta))
+print('Standard Deviation for Phi:', np.degrees(std_phi))
+print('Standard Deviation for Length:', std_length)
 
 # Plot absolute error for theta, phi, and length
 fig, axs = plt.subplots(3, 1, figsize=(10, 18))
