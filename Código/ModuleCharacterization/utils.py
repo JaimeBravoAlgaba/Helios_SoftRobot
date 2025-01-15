@@ -1,3 +1,4 @@
+from numpy import arange, sin, cos, sqrt, pi
 import pandas as pd
 
 def normalize(*args):
@@ -33,3 +34,12 @@ def get_data(file_path):
     l, l_avg, l0 = normalize(l0, l1, l2, l3)
 
     return h, l, h_avg, l_avg, h0, l0
+
+def parametric_arc(L=1, theta=pi/2, phi=0, N = 10):
+    R = L/theta
+    theta_i = arange(0, theta, theta/N)
+    z = [R*sin(theta_i[i]) for i in range(len(theta_i))]
+    x = [R - R*cos(theta_i[i]) for i in range(len(theta_i))]
+    y = x*sin(phi)
+    x = x*cos(phi)
+    return x, y, z
