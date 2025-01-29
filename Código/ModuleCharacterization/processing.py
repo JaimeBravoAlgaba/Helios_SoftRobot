@@ -7,6 +7,9 @@ from keras import models as km
 from utils import get_data, denormalize, parametric_arc
 from helios_kine import iKine, fKine
 
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 25
+
 def plot_data(l, h, l_avg, h_avg):
     # Plot the TOF distances
     plt.figure(figsize=(10, 6))
@@ -70,7 +73,7 @@ if __name__ == '__main__':
 
     # Plot the data
     h, l, h_avg, l_avg, h0, l0 = get_data(file_path)
-    plot_data(l, h, l_avg, h_avg)
+    #plot_data(l, h, l_avg, h_avg)
 
     # Load a model and predict the data
     model = km.load_model('models/nn/nn_0x4A_V3.keras')
@@ -87,6 +90,7 @@ if __name__ == '__main__':
     expected_output = denormalize(l, l0, l_avg)
     predicted_output = denormalize(predicted_output, l0, l_avg)
 
+    '''
     # Plot the predicted output vs the expected output
     plt.figure(figsize=(10, 6))
 
@@ -129,11 +133,16 @@ if __name__ == '__main__':
     plt.title('Error')
     plt.legend()
     plt.grid(True)
+    '''
     
     e = np.zeros((len(expected_output[0]), 1))
     
     theta_expected, phi_expected, length_expected = fKine(np.transpose(expected_output), 100)
     theta_predicted, phi_predicted, length_predicted = fKine(np.transpose(predicted_output), 100)
+
+    # For plotting the 3D points
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
 
     for i in range(len(expected_output[0])):
         xe, ye, ze = parametric_arc(length_expected[i], theta_expected[i], phi_expected[i])
@@ -141,8 +150,18 @@ if __name__ == '__main__':
 
         e[i] = np.sqrt((xe[-1] - xp[-1])**2 + (ye[-1] - yp[-1])**2 + (ze[-1] - zp[-1])**2)
 
-    print('Mean Error:', np.mean(e))
+        # Plot the 3D points
+        # Color points based on error magnitude
+        color = plt.cm.RdYlGn(1 - e[i] / np.max(e))  # Red for max error, green for min error
+        ax.scatter(xp[-1], yp[-1], zp[-1], color=color, s=20)
+        ax.scatter(xp[-1], yp[-1], zp[-1], color=color)
 
+    ax.set_xlabel('x (mm)')
+    ax.set_ylabel('y (mm)')
+    ax.set_zlabel('z (mm)')
+    #ax.set_title('3D Plot of Points with Error Coloring')
+
+    print('Mean Error:', np.mean(e))
     
     plt.figure(figsize=(10, 6))
     plt.plot(e, label='Error')
