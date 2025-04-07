@@ -10,8 +10,8 @@ import json
 from utils import get_data
 
 # This script trains a new model with a given dataset
-model_file = 'models/nn/nn_0x4A_V3.keras'
-training_data = './dataset/250109/0x4A_250109_2.csv'
+model_file = 'models/nn/nn_0x4A_V4.keras'
+training_data = './dataset/250109/0x4A_250109_train.csv'
 
 h, l, h_avg, l_avg, h0, l0 = get_data(training_data)
 

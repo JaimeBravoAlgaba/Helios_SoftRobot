@@ -9,7 +9,7 @@ def fKine(l, D = 100):
         thetaX = np.arctan2(l[i][2]-l[i][0], D)
         thetaY = np.arctan2(l[i][3]-l[i][1], D)
         theta[i] = np.sqrt(thetaX**2 + thetaY**2)
-        phi[i] = np.arctan2(thetaY, thetaX)
+        phi[i] = np.arctan2(thetaX, thetaY)
         if theta[i] < 1e-6:
             length[i] = np.mean(l[i])
         else:

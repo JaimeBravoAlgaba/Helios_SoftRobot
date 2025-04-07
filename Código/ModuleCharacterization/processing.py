@@ -69,14 +69,14 @@ def plot_data(l, h, l_avg, h_avg):
 
 if __name__ == '__main__':
     # File path
-    file_path = Path('./dataset/250109/0x4A_250109_3.csv')
+    file_path = Path('./dataset/250109/0x4A_250109_train.csv')
 
     # Plot the data
     h, l, h_avg, l_avg, h0, l0 = get_data(file_path)
     #plot_data(l, h, l_avg, h_avg)
 
     # Load a model and predict the data
-    model = km.load_model('models/nn/nn_0x4A_V3.keras')
+    model = km.load_model('models/nn/nn_0x4A_V.keras')
 
     # Prepare the test data
     x = np.array(h).T
@@ -144,22 +144,45 @@ if __name__ == '__main__':
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
+    xxe = []
+    yye = []
+    zze = []
+
+    xxp = []
+    yyp = []
+    zzp = []
+
+    e = np.zeros((len(expected_output[0]), 1))
+
     for i in range(len(expected_output[0])):
         xe, ye, ze = parametric_arc(length_expected[i], theta_expected[i], phi_expected[i])
         xp, yp, zp = parametric_arc(length_predicted[i], theta_predicted[i], phi_predicted[i])
+        # ax.plot(xp, yp, zp, 'k', alpha=0)
+
+        xxe.append(xe[-1])
+        yye.append(ye[-1])
+        zze.append(ze[-1])
+
+        xxp.append(xp[-1])
+        yyp.append(yp[-1])
+        zzp.append(zp[-1])
 
         e[i] = np.sqrt((xe[-1] - xp[-1])**2 + (ye[-1] - yp[-1])**2 + (ze[-1] - zp[-1])**2)
 
-        # Plot the 3D points
-        # Color points based on error magnitude
+    # Plot the 3D points
+    # Color points based on error magnitude
+    for i in range(len(expected_output[0])):
         color = plt.cm.RdYlGn(1 - e[i] / np.max(e))  # Red for max error, green for min error
-        ax.scatter(xp[-1], yp[-1], zp[-1], color=color, s=20)
-        ax.scatter(xp[-1], yp[-1], zp[-1], color=color)
+        ax.scatter(xxp[i], yyp[i], zzp[i], color=color, s=20)
 
-    ax.set_xlabel('x (mm)')
-    ax.set_ylabel('y (mm)')
-    ax.set_zlabel('z (mm)')
+    ax.plot(xxe, yye, zze, 'b', alpha=0.5)
+
+    ax.set_xlabel('x (mm)', labelpad=10)
+    ax.set_ylabel('y (mm)', labelpad=10)
+    ax.set_zlabel('z (mm)', labelpad=10)
     #ax.set_title('3D Plot of Points with Error Coloring')
+    ax.set_zlim(30, 60)
+    ax.set_box_aspect([1, 1, 1/4])  # Aspect ratio is 1:1:1 (equal)
 
     print('Mean Error:', np.mean(e))
     
@@ -170,5 +193,10 @@ if __name__ == '__main__':
     plt.ylabel('Error')
     plt.title('Tip Error')
     plt.grid(True)
+    # Add a color bar to the 3D plot
+    mappable = plt.cm.ScalarMappable(cmap=plt.cm.RdYlGn.reversed())
+    mappable.set_array([min(e), max(e)])
+    cbar = plt.colorbar(mappable, ax=ax, shrink=0.8, aspect=10)
+    cbar.set_label('Error (mm)')
 
     plt.show()
