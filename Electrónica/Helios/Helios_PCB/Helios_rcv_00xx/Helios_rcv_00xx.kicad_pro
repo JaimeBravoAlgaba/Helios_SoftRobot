@@ -512,8 +512,13 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
+<<<<<<< HEAD
       "step": "../../../../Modelos3D/Sensor/Helios/Helios_PCB/Helios_rcv_00xx.step",
       "svg": "",
+=======
+      "step": "C:/Users/jaime/Desktop/Helios_rcv_00xx.step",
+      "svg": "../../../../Modelos3D/Sensor/Helios/Helios_PCB/",
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
       "vrml": "Helios_PCB_receiver.wrl"
     },
     "page_layout_descr_file": ""

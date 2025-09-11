@@ -1,6 +1,8 @@
 **Helios SoftRobot**
 =====================================
 
+![Demo](Media/Vídeos/demo_movimiento.gif)
+
 **Instalación y Configuración**
 -------------------------------
 

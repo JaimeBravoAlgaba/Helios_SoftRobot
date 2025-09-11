@@ -69,7 +69,11 @@ def plot_data(l, h, l_avg, h_avg):
 
 if __name__ == '__main__':
     # File path
+<<<<<<< HEAD
     file_path = Path('./dataset/250109/0x4A_250109_3.csv')
+=======
+    file_path = Path('./dataset/250109/0x4A_250109_test.csv')
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 
     # Plot the data
     h, l, h_avg, l_avg, h0, l0 = get_data(file_path)
@@ -140,14 +144,28 @@ if __name__ == '__main__':
     theta_expected, phi_expected, length_expected = fKine(np.transpose(expected_output), 100)
     theta_predicted, phi_predicted, length_predicted = fKine(np.transpose(predicted_output), 100)
 
+<<<<<<< HEAD
     # For plotting the 3D points
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
+=======
+    # For plotting the 2D points (x and y coordinates only)
+    plt.figure(figsize=(10, 6))
+
+    xxe = []
+    yye = []
+
+    xxp = []
+    yyp = []
+
+    e = np.zeros((len(expected_output[0]), 1))
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 
     for i in range(len(expected_output[0])):
         xe, ye, ze = parametric_arc(length_expected[i], theta_expected[i], phi_expected[i])
         xp, yp, zp = parametric_arc(length_predicted[i], theta_predicted[i], phi_predicted[i])
 
+<<<<<<< HEAD
         e[i] = np.sqrt((xe[-1] - xp[-1])**2 + (ye[-1] - yp[-1])**2 + (ze[-1] - zp[-1])**2)
 
         # Plot the 3D points
@@ -162,6 +180,56 @@ if __name__ == '__main__':
     #ax.set_title('3D Plot of Points with Error Coloring')
 
     print('Mean Error:', np.mean(e))
+=======
+        xxe.append(xe[-1])
+        yye.append(ye[-1])
+
+        xxp.append(xp[-1])
+        yyp.append(yp[-1])
+
+        e[i] = np.sqrt((xe[-1] - xp[-1])**2 + (ye[-1] - yp[-1])**2 + (ze[-1] - zp[-1])**2)
+
+    # Create subplots for the 2D points
+    fig, axs = plt.subplots(1, 2, figsize=(16, 6))
+
+    # Plot the expected path points and line
+    axs[0].plot(xxe, yye, 'k', alpha = 0.2, linewidth=1, label='Expected Path Line')
+    axs[0].plot(xxe, yye, 'ob', alpha = 0.5, linewidth=1, label='Expected Path Points')
+    axs[0].set_title('Expected Path')
+    axs[0].set_xlabel('x (mm)')
+    axs[0].set_ylabel('y (mm)')
+    axs[0].grid(True)
+    axs[0].axis('equal')
+    axs[0].set_xlim(-25, 25)
+    axs[0].set_ylim(-25, 25)
+
+    # Plot the predicted path points with error coloring and line
+    axs[1].plot(xxp, yyp, 'k', alpha = 0.2, linewidth=1, label='Predicted Path Line')
+    for i in range(len(expected_output[0])):
+        color = plt.cm.RdYlGn(1 - e[i] / np.max(e))  # Red for max error, green for min error
+        axs[1].scatter(xxp[i], yyp[i], color=color, s=20)
+    axs[1].set_title('Predicted Path')
+    axs[1].set_xlabel('x (mm)')
+    axs[1].set_ylabel('y (mm)')
+    axs[1].grid(True)
+    axs[1].axis('equal')
+    axs[1].set_xlim(-25, 25)
+    axs[1].set_ylim(-25, 25)
+
+    # Add a colorbar to represent the error magnitude
+    #sm = plt.cm.ScalarMappable(cmap='RdYlGn_r', norm=plt.Normalize(vmin=0, vmax=np.max(e)))  # Use reversed colormap
+    #sm.set_array([])
+    #cbar = plt.colorbar(sm, ax=axs[1], orientation='vertical')
+    #cbar.set_label('Error Magnitude (mm))')
+
+    plt.xlabel('x (mm)')
+    plt.ylabel('y (mm)')
+    plt.grid(True)
+
+    print('Mean Error:', np.mean(e))
+    print('Standard Deviation Error:', np.std(e))
+    print('Max Error:', np.max(e))
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
     
     plt.figure(figsize=(10, 6))
     plt.plot(e, label='Error')
@@ -170,5 +238,11 @@ if __name__ == '__main__':
     plt.ylabel('Error')
     plt.title('Tip Error')
     plt.grid(True)
+<<<<<<< HEAD
 
     plt.show()
+=======
+    plt.legend()
+
+    plt.show()
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f

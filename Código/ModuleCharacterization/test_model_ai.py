@@ -98,13 +98,39 @@ fig.tight_layout()
 differences = np.abs(predicted_output - expected_output)
 
 fig, ax = plt.subplots(figsize=(10, 6))
+<<<<<<< HEAD
 ax.boxplot(differences.T, labels=[f'd{i+1}' for i in range(differences.shape[0])], patch_artist=True, boxprops=dict(linewidth=2))
 #ax.set_title('Current vs Predicted TOF Distances', fontsize=25)
+=======
+ax.boxplot(differences.T, labels=[f'd{i+1}' for i in range(differences.shape[0])], patch_artist=True, boxprops=dict(linewidth=2), whiskerprops=dict(linewidth=2), medianprops=dict(linewidth=3), capprops=dict(linewidth=2), flierprops=dict(marker='o', markersize=10))
+#ax.set_title('Current vs Predicted TOF Distances', fontsize=25)
+ax.set_xlabel('TOF Distances', fontsize=25)
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 ax.set_ylabel('Error (mm)', fontsize=25)
 ax.grid(True)
 
 plt.tight_layout()
 
+<<<<<<< HEAD
+=======
+theta_expected, phi_expected, length_expected = fKine(np.transpose(expected_output), 100)
+theta_predicted, phi_predicted, length_predicted = fKine(np.transpose(predicted_output), 100)
+
+# Plot theta expected and predicted
+fig, axs = plt.subplots(3, 1, figsize=(10, 18))
+
+# Convert theta and phi to degrees
+theta_expected_deg = np.degrees(theta_expected)
+theta_predicted_deg = np.degrees(theta_predicted)
+phi_expected_deg = np.degrees(phi_expected)
+phi_predicted_deg = np.degrees(phi_predicted)
+
+# Apply a moving average filter to smooth the length data. Use a window size of 5.
+window_size = 15
+length_expected = pd.Series(length_expected.flatten()).rolling(window=window_size, min_periods=1).mean()
+length_predicted = pd.Series(length_predicted.flatten()).rolling(window=window_size, min_periods=1).mean()
+
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 # Compute the RMSE, median error, and standard deviation of the error
 rmse = np.sqrt(np.mean((predicted_output - expected_output) ** 2))
 print('RMSE:', rmse)
@@ -115,6 +141,7 @@ print('Standard Deviation of Error:', std_error)
 mae = np.mean(np.abs(predicted_output - expected_output))
 print('Mean Absolute Error:', mae)
 
+<<<<<<< HEAD
 
 # Model summary
 model.summary()
@@ -135,6 +162,11 @@ theta_predicted_deg = np.degrees(theta_predicted)
 phi_expected_deg = np.degrees(phi_expected)
 phi_predicted_deg = np.degrees(phi_predicted)
 
+=======
+# Model summary
+model.summary()
+
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 # Plot theta expected and predicted
 #axs[0].plot(theta_expected_deg, label='Expected $\\theta$')
 #axs[0].plot(theta_predicted_deg, label='Predicted $\\theta$')
@@ -143,7 +175,10 @@ axs[0].plot(theta_predicted_deg)
 axs[0].set_xlim([0, len(theta_expected_deg)])
 axs[0].set_ylabel('$\\theta$ (º)')
 #axs[0].set_title('Theta Expected and Predicted')
+<<<<<<< HEAD
 axs[0].legend()
+=======
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 axs[0].grid(True)
 axs[0].tick_params(axis='y', which='major', labelsize=25)
 axs[0].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
@@ -156,7 +191,10 @@ axs[1].plot(phi_predicted_deg)
 axs[1].set_xlim([0, len(phi_expected_deg)])
 axs[1].set_ylabel('$\\phi$ (º)')
 #axs[1].set_title('Phi Expected and Predicted')
+<<<<<<< HEAD
 axs[1].legend()
+=======
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 axs[1].grid(True)
 axs[1].tick_params(axis='y', which='major', labelsize=25)
 axs[1].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
@@ -169,12 +207,16 @@ axs[2].plot(length_predicted)
 axs[2].set_xlim([0, len(length_expected)])
 axs[2].set_ylabel('Length (mm)')
 #axs[2].set_title('Length Expected and Predicted')
+<<<<<<< HEAD
 axs[2].legend()
+=======
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 axs[2].grid(True)
 axs[2].tick_params(axis='both', which='major', labelsize=25)
 axs[2].set_xlabel(f'Sample', fontsize=25)
 fig.legend(['Expected', 'Predicted'], loc='upper center', ncol=2, fontsize=25)
 
+<<<<<<< HEAD
 plt.tight_layout()
 
 # Plot theta vs phi expected and predicted
@@ -198,6 +240,65 @@ ax2.set_title('Length Expected and Predicted')
 ax2.legend()
 ax2.grid(True)
 ax2.set_ylim([50, 70])
+=======
+# Plot theta_x, theta_y, and length
+theta_x_expected_deg = theta_expected_deg * np.cos(phi_expected)
+theta_x_predicted_deg = theta_predicted_deg * np.cos(phi_predicted)
+theta_y_expected_deg = theta_expected_deg * np.sin(phi_expected)
+theta_y_predicted_deg = theta_predicted_deg * np.sin(phi_predicted)
+
+fig, axs = plt.subplots(3, 1, figsize=(10, 18))
+# Plot theta_x expected and predicted
+axs[0].plot(theta_x_expected_deg, label='Expected $\\theta_x$')
+axs[0].plot(theta_x_predicted_deg, label='Predicted $\\theta_x$')
+axs[0].set_xlim([0, len(theta_x_expected_deg)])
+axs[0].set_ylabel('$\\theta_x$ (º)')
+axs[0].set_title('Theta X Expected and Predicted')
+axs[0].grid(True)
+axs[0].tick_params(axis='y', which='major', labelsize=25)
+axs[0].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
+
+
+# Plot theta_y expected and predicted
+axs[1].plot(theta_y_expected_deg, label='Expected $\\theta_y$')
+axs[1].plot(theta_y_predicted_deg, label='Predicted $\\theta_y$')
+axs[1].set_xlim([0, len(theta_y_expected_deg)])
+axs[1].set_ylabel('$\\theta_y$ (º)')
+axs[1].set_title('Theta Y Expected and Predicted')
+axs[1].grid(True)
+axs[1].tick_params(axis='y', which='major', labelsize=25)
+axs[1].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
+
+# Plot length expected and predicted
+axs[2].plot(length_expected, label='Expected Length')
+axs[2].plot(length_predicted, label='Predicted Length')
+axs[2].set_xlim([0, len(length_expected)])
+axs[2].set_ylabel('Length (mm)')
+axs[2].set_title('Length Expected and Predicted')
+axs[2].grid(True)
+axs[2].tick_params(axis='both', which='major', labelsize=25)
+axs[2].set_xlabel(f'Sample', fontsize=25)
+fig.legend(['Expected', 'Predicted'], loc='upper center', ncol=2, fontsize=25)
+plt.tight_layout()
+
+# Plot the average TOF distances
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(np.mean(expected_output, axis=0), label='Expected Average TOF Distance')
+ax.plot(np.mean(predicted_output, axis=0), label='Predicted Average TOF Distance')
+ax.set_ylabel('Average TOF Distance (mm)')
+ax.set_title('Average TOF Distances')
+ax.legend()
+ax.grid(True)
+plt.tight_layout()
+
+# Polar plot to compare theta and phi
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(111, projection='polar')
+ax.plot(phi_expected, np.degrees(theta_expected), label='Expected')
+ax.plot(phi_predicted, np.degrees(theta_predicted), label='Predicted')
+ax.grid(True)
+ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=2)
+>>>>>>> ed1aaccf73484941a4d7412634a964a00399bd8f
 
 abs_error_theta = np.abs(theta_predicted - theta_expected)
 abs_error_phi = np.abs(phi_predicted - phi_expected)
