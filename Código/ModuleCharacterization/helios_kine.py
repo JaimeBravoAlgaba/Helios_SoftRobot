@@ -13,7 +13,7 @@ def fKine(l, D = 100):
         if theta[i] < 1e-6:
             length[i] = np.mean(l[i])
         else:
-            length[i] = theta[i] * np.mean(l[i]) * np.tan(np.pi/2 - theta[i])
+            length[i] = theta[i] * np.mean(l[i]) / np.tan(theta[i])
     
     return theta, phi, length
 

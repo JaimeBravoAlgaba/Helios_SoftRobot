@@ -100,6 +100,7 @@ differences = np.abs(predicted_output - expected_output)
 fig, ax = plt.subplots(figsize=(10, 6))
 ax.boxplot(differences.T, labels=[f'd{i+1}' for i in range(differences.shape[0])], patch_artist=True, boxprops=dict(linewidth=2), whiskerprops=dict(linewidth=2), medianprops=dict(linewidth=3), capprops=dict(linewidth=2), flierprops=dict(marker='o', markersize=10))
 #ax.set_title('Current vs Predicted TOF Distances', fontsize=25)
+ax.set_xlabel('TOF Distances', fontsize=25)
 ax.set_ylabel('Error (mm)', fontsize=25)
 ax.grid(True)
 
@@ -107,10 +108,6 @@ plt.tight_layout()
 
 theta_expected, phi_expected, length_expected = fKine(np.transpose(expected_output), 100)
 theta_predicted, phi_predicted, length_predicted = fKine(np.transpose(predicted_output), 100)
-
-# Wrap phi to pi
-phi_expected = np.mod(phi_expected, 2 * np.pi)
-phi_predicted = np.mod(phi_predicted, 2 * np.pi)
 
 # Plot theta expected and predicted
 fig, axs = plt.subplots(3, 1, figsize=(10, 18))
@@ -204,7 +201,6 @@ axs[1].grid(True)
 axs[1].tick_params(axis='y', which='major', labelsize=25)
 axs[1].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
 
-
 # Plot length expected and predicted
 axs[2].plot(length_expected, label='Expected Length')
 axs[2].plot(length_predicted, label='Predicted Length')
@@ -217,27 +213,23 @@ axs[2].set_xlabel(f'Sample', fontsize=25)
 fig.legend(['Expected', 'Predicted'], loc='upper center', ncol=2, fontsize=25)
 plt.tight_layout()
 
-# Plot theta vs phi expected and predicted
-# Create two subplots: one for theta vs phi and one for length
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 16))
+# Plot the average TOF distances
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(np.mean(expected_output, axis=0), label='Expected Average TOF Distance')
+ax.plot(np.mean(predicted_output, axis=0), label='Predicted Average TOF Distance')
+ax.set_ylabel('Average TOF Distance (mm)')
+ax.set_title('Average TOF Distances')
+ax.legend()
+ax.grid(True)
+plt.tight_layout()
 
-# Plot theta vs phi in a polar plot. Expected and predicted
-ax1 = plt.subplot(121, projection='polar')
-ax1.plot(phi_expected, np.degrees(theta_expected), label='Expected')
-ax1.plot(phi_predicted, np.degrees(theta_predicted), label='Predicted')
-ax1.set_title('Theta vs Phi Expected and Predicted')
-ax1.grid(True)
-ax1.legend()
-
-# Plot length expected and predicted
-ax2 = plt.subplot(122)
-ax2.plot(length_expected, label='Length Expected')
-ax2.plot(length_predicted, label='Length Predicted')
-ax2.set_ylabel('Length (mm)')
-ax2.set_title('Length Expected and Predicted')
-ax2.legend()
-ax2.grid(True)
-ax2.set_ylim([50, 70])
+# Polar plot to compare theta and phi
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(111, projection='polar')
+ax.plot(phi_expected, np.degrees(theta_expected), label='Expected')
+ax.plot(phi_predicted, np.degrees(theta_predicted), label='Predicted')
+ax.grid(True)
+ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=2)
 
 abs_error_theta = np.abs(theta_predicted - theta_expected)
 abs_error_phi = np.abs(phi_predicted - phi_expected)
